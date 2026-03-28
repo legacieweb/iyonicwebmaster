@@ -1,0 +1,1513 @@
+import express from 'express';
+import cors from 'cors';
+import pg from 'pg';
+const { Pool } = pg;
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+import multer from 'multer';
+import fs from 'fs';
+import nodemailer from 'nodemailer';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '../.env') });
+
+const app = express();
+const port = process.env.PORT || 5000;
+
+// Configure nodemailer
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER || 'iyonicpay@gmail.com',
+    pass: process.env.EMAIL_PASS || 'fhzwxumoymnakkww'
+  }
+});
+
+// Modern Email Template Builder
+const createEmailTemplate = (options) => {
+  const { 
+    title, 
+    subtitle, 
+    userName, 
+    content, 
+    actionText, 
+    actionUrl, 
+    footerText, 
+    type // 'welcome', 'notification', 'alert', 'success', 'info'
+  } = options;
+  
+  const currentYear = new Date().getFullYear();
+  
+  // Color scheme based on type
+  const colors = {
+    welcome: { primary: '#6366f1', secondary: '#4f46e5', gradient: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' },
+    notification: { primary: '#0ea5e9', secondary: '#0284c7', gradient: 'linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%)' },
+    alert: { primary: '#ef4444', secondary: '#dc2626', gradient: 'linear-gradient(135deg, #ef4444 0%, #f97316 100%)' },
+    success: { primary: '#22c55e', secondary: '#16a34a', gradient: 'linear-gradient(135deg, #22c55e 0%, #10b981 100%)' },
+    info: { primary: '#8b5cf6', secondary: '#7c3aed', gradient: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)' }
+  };
+  
+  const theme = colors[type] || colors.info;
+  
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+      background: #f8fafc; 
+      line-height: 1.6; 
+      color: #334155;
+    }
+    .email-wrapper { 
+      width: 100%; 
+      background: #f8fafc; 
+      padding: 40px 20px;
+    }
+    .email-container { 
+      max-width: 600px; 
+      margin: 0 auto; 
+      background: #ffffff; 
+      border-radius: 24px; 
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    }
+    .email-header { 
+      background: ${theme.gradient}; 
+      padding: 50px 40px; 
+      text-align: center;
+      position: relative;
+    }
+    .email-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>');
+      background-size: 200px;
+      opacity: 0.5;
+    }
+    .logo { 
+      position: relative; 
+      z-index: 1;
+    }
+    .logo-text { 
+      font-size: 32px; 
+      font-weight: 800; 
+      color: white; 
+      letter-spacing: -1px;
+    }
+    .email-header h1 { 
+      position: relative; 
+      z-index: 1;
+      font-size: 28px; 
+      font-weight: 700; 
+      color: white; 
+      margin-bottom: 8px;
+    }
+    .email-header p { 
+      position: relative; 
+      z-index: 1;
+      color: rgba(255, 255, 255, 0.9); 
+      font-size: 16px;
+    }
+    .email-body { 
+      padding: 50px 40px; 
+    }
+    .greeting { 
+      font-size: 24px; 
+      font-weight: 700; 
+      color: #1e293b; 
+      margin-bottom: 24px;
+    }
+    .content-text { 
+      font-size: 16px; 
+      color: #475569; 
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+    .content-box { 
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); 
+      border-radius: 16px; 
+      padding: 24px; 
+      margin: 24px 0;
+      border: 1px solid #e2e8f0;
+    }
+    .content-box h3 { 
+      font-size: 14px; 
+      font-weight: 600; 
+      color: #64748b; 
+      text-transform: uppercase; 
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .detail-row { 
+      display: flex; 
+      justify-content: space-between; 
+      padding: 12px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .detail-row:last-child { 
+      border-bottom: none;
+    }
+    .detail-label { 
+      font-weight: 600; 
+      color: #475569;
+    }
+    .detail-value { 
+      color: #1e293b;
+      font-weight: 500;
+    }
+    .cta-button { 
+      display: inline-block; 
+      background: ${theme.gradient}; 
+      color: white; 
+      padding: 16px 40px; 
+      border-radius: 12px; 
+      text-decoration: none; 
+      font-weight: 600; 
+      font-size: 16px;
+      margin: 24px 0;
+      box-shadow: 0 10px 30px ${theme.primary}40;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .cta-button:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px ${theme.primary}50;
+    }
+    .alert-box { 
+      background: ${theme.primary}10; 
+      border-left: 4px solid ${theme.primary}; 
+      padding: 20px; 
+      border-radius: 8px; 
+      margin: 20px 0;
+    }
+    .email-footer { 
+      background: #0f172a; 
+      padding: 40px; 
+      text-align: center;
+    }
+    .footer-logo { 
+      font-size: 24px; 
+      font-weight: 800; 
+      color: white; 
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+    .footer-text { 
+      color: #94a3b8; 
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .footer-links { 
+      margin-top: 20px;
+    }
+    .footer-links a { 
+      color: #6366f1; 
+      text-decoration: none; 
+      margin: 0 12px;
+      font-size: 14px;
+    }
+    .social-links { 
+      margin-top: 24px;
+    }
+    .social-links a { 
+      display: inline-block; 
+      width: 40px; 
+      height: 40px; 
+      background: rgba(255, 255, 255, 0.1); 
+      border-radius: 50%; 
+      line-height: 40px; 
+      color: white; 
+      text-decoration: none; 
+      margin: 0 6px;
+      font-size: 18px;
+    }
+    .divider { 
+      height: 1px; 
+      background: linear-gradient(90deg, transparent, #e2e8f0, transparent); 
+      margin: 30px 0;
+    }
+    @media (max-width: 600px) {
+      .email-header { padding: 40px 24px; }
+      .email-body { padding: 40px 24px; }
+      .email-footer { padding: 30px 24px; }
+      .detail-row { flex-direction: column; }
+      .detail-value { margin-top: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="email-container">
+      <div class="email-header">
+        <div class="logo">
+          <span class="logo-text">Iyonicorp</span>
+        </div>
+        <h1>${title}</h1>
+        ${subtitle ? `<p>${subtitle}</p>` : ''}
+      </div>
+      
+      <div class="email-body">
+        <p class="greeting">Hi ${userName || 'there'}! 👋</p>
+        
+        <div class="content-text">
+          ${content}
+        </div>
+        
+        ${actionText && actionUrl ? `
+          <center>
+            <a href="${actionUrl}" class="cta-button">${actionText}</a>
+          </center>
+        ` : ''}
+        
+        <div class="divider"></div>
+        
+        <p style="font-size: 14px; color: #94a3b8; text-align: center;">
+          ${footerText || 'If you have any questions, reply to this email or contact our support team.'}
+        </p>
+      </div>
+      
+      <div class="email-footer">
+        <div class="footer-logo">Iyonicorp</div>
+        <p class="footer-text">Defined by Innovation</p>
+        <p class="footer-text">© ${currentYear} Iyonicorp. All rights reserved.</p>
+        <div class="social-links">
+          <a href="https://twitter.com/iyonicorp">𝕏</a>
+          <a href="https://www.linkedin.com/company/iyonicorp">in</a>
+          <a href="https://www.instagram.com/iyonicorp">📷</a>
+          <a href="https://www.youtube.com/@iyonicorp">▶</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+};
+
+// Email helper function with modern templates
+const sendEmail = async (to, subject, html, type = 'info') => {
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER || 'iyonicpay@gmail.com',
+      to,
+      subject,
+      html
+    });
+    return true;
+  } catch (error) {
+    console.error('Email error:', error);
+    return false;
+  }
+};
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+// Configure multer for file uploads
+const uploadDir = path.join(__dirname, '../uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|pdf|doc|docx/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
+    if (extname && mimetype) {
+      return cb(null, true);
+    }
+    cb(new Error('Only images and PDF documents are allowed'));
+  }
+});
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+// Test database connection
+pool.query('SELECT NOW()', (err, res) => {
+  if (err) {
+    console.error('Database connection error:', err);
+  } else {
+    console.log('db connected');
+    // Ensure 'suspended' column exists for users
+    pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS suspended BOOLEAN DEFAULT false');
+    
+    // Ensure new project columns exist
+    pool.query('ALTER TABLE projects ADD COLUMN IF NOT EXISTS domain TEXT');
+    pool.query('ALTER TABLE projects ADD COLUMN IF NOT EXISTS progress_status TEXT');
+    pool.query('ALTER TABLE projects ADD COLUMN IF NOT EXISTS latest_update TEXT');
+    pool.query('ALTER TABLE projects ADD COLUMN IF NOT EXISTS recommended_modules JSONB');
+    
+    console.log('Database schema checks completed');
+  }
+});
+
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle pool client', err);
+});
+
+// Middleware for authentication
+const authenticate = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: 'No token provided' });
+
+  const token = authHeader.split(' ')[1];
+
+  // Allow mock admin token
+  if (token === 'admin-mock-token') {
+    req.userId = 'admin-id';
+    return next();
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+    if (err) return res.status(401).json({ message: 'Failed to authenticate token' });
+    
+    // Check if user is suspended
+    try {
+      const result = await pool.query('SELECT suspended FROM users WHERE id = $1', [decoded.id]);
+      if (result.rows.length > 0 && result.rows[0].suspended) {
+        return res.status(403).json({ message: 'Account suspended. Please contact support.' });
+      }
+    } catch (err) {
+      console.error('Auth suspension check error:', err);
+    }
+
+    req.userId = decoded.id;
+    next();
+  });
+};
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Auth Routes
+app.post('/api/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+  console.log('Login attempt:', { email, passwordReceived: !!password });
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
+    const user = result.rows[0];
+
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+      console.log('Login failed: Invalid credentials for', email);
+      return res.status(400).json({ 
+        message: 'Invalid email or password',
+        received: { email, hasPassword: !!password }
+      });
+    }
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    
+    // Send login notification email
+    const loginTime = new Date().toLocaleString();
+    sendEmail(
+      email,
+      'New Login to Your Iyonicorp Account',
+      createEmailTemplate({
+        title: 'New Login Detected',
+        subtitle: 'We noticed a new sign-in to your account',
+        userName: user.name || user.first_name || 'there',
+        content: `
+          <p>We noticed a new login to your Iyonicorp account. Here are the details:</p>
+          <div class="content-box">
+            <h3>Login Information</h3>
+            <div class="detail-row">
+              <span class="detail-label">Time</span>
+              <span class="detail-value">${loginTime}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">${email}</span>
+            </div>
+          </div>
+          <div class="alert-box">
+            <strong>🛡️ Security Notice:</strong><br>
+            If this was you, you can safely ignore this email. If you didn't log in, please secure your account immediately by changing your password.
+          </div>
+        `,
+        type: 'info'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        phone_number: user.phone_number,
+        membership_tier: user.membership_tier,
+        unlocked_tools: user.unlocked_tools,
+        activated_tools: user.activated_tools,
+        next_billing_date: user.next_billing_date,
+        subscription_status: user.subscription_status,
+        role: user.role,
+        created_at: user.created_at
+      }
+    });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post('/api/auth/signup', async (req, res) => {
+  const { email, password, first_name, last_name, phone_number } = req.body;
+  console.log('Signup attempt:', { email, hasPassword: !!password, first_name, last_name });
+  try {
+    if (!password) {
+      return res.status(400).json({ message: 'Password is required' });
+    }
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const name = `${first_name || ''} ${last_name || ''}`.trim() || email.split('@')[0];
+    const result = await pool.query(
+      'INSERT INTO users (email, password, first_name, last_name, phone_number, name, subscription_status) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, created_at',
+      [email, hashedPassword, first_name, last_name, phone_number, name, 'inactive']
+    );
+    const user = result.rows[0];
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    
+    // Send welcome email
+    sendEmail(
+      email,
+      'Welcome to Iyonicorp - Account Created Successfully!',
+      createEmailTemplate({
+        title: 'Welcome to Iyonicorp! 🎉',
+        subtitle: 'Your account has been created successfully',
+        userName: name,
+        content: `
+          <p>Thank you for joining Iyonicorp! We're thrilled to have you on board. Get ready to transform your digital presence with our cutting-edge solutions.</p>
+          <div class="content-box">
+            <h3>Your Account Details</h3>
+            <div class="detail-row">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">${email}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Name</span>
+              <span class="detail-value">${name}</span>
+            </div>
+          </div>
+          <p>Here's what you can do next:</p>
+          <p>✨ Explore our premium services and solutions</p>
+          <p>🎨 Browse our design templates and blueprints</p>
+          <p>🚀 Launch your custom web project</p>
+        `,
+        actionText: 'Explore Our Services',
+        actionUrl: 'https://iyonicorp.com',
+        type: 'welcome'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    // Notify admin
+    sendEmail(
+      'iyonicpay@gmail.com',
+      `New User Registration - ${email}`,
+      createEmailTemplate({
+        title: 'New User Registered 🚀',
+        subtitle: 'A new account has been created',
+        userName: 'Admin',
+        content: `
+          <p>A new user has registered on Iyonicorp:</p>
+          <div class="content-box">
+            <h3>User Information</h3>
+            <div class="detail-row">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">${email}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Name</span>
+              <span class="detail-value">${name}</span>
+            </div>
+          </div>
+        `,
+        type: 'notification'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    res.json({ token, user });
+  } catch (err) {
+    console.error('Signup error DETAILS:', err);
+    if (err.code === '23505') return res.status(400).json({ message: 'Email already exists' });
+    console.error('Signup error:', err);
+    res.status(500).json({ message: 'Server error: ' + err.message });
+  }
+});
+
+// User Routes
+app.get('/api/users', authenticate, async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, role, created_at FROM users ORDER BY created_at DESC'
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch all users error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/api/users/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  if (parseInt(id) !== req.userId) {
+    return res.status(403).json({ message: 'Forbidden' });
+  }
+  try {
+    const result = await pool.query(
+      'SELECT id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, role, created_at FROM users WHERE id = $1',
+      [id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Fetch user error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.patch('/api/users/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const isAdminRequest = req.userId === 'admin-id';
+  
+  // Only allow self-update or admin-update
+  if (!isAdminRequest && parseInt(id) !== req.userId) { 
+    return res.status(403).json({ message: 'Forbidden' });
+  }
+  
+  const fields = req.body;
+  // Allow admin to update any field, but restrict normal users
+  const restrictedKeys = ['role', 'suspended'];
+  const keys = Object.keys(fields).filter(k => {
+    if (k === 'id' || k === 'created_at') return false;
+    if (!isAdminRequest && restrictedKeys.includes(k)) return false;
+    return true;
+  });
+  
+  if (keys.length === 0) {
+    return res.status(400).json({ message: 'No fields to update' });
+  }
+
+  // Get current user data before update for comparison
+  const currentUserResult = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+  const currentUser = currentUserResult.rows[0];
+  
+  const values = keys.map(k => {
+    const val = fields[k];
+    // If value is an object or array, stringify it for JSONB columns
+    if (val && typeof val === 'object') {
+      return JSON.stringify(val);
+    }
+    // Convert Unix timestamps to ISO format string for timestamp columns
+    if (k === 'next_billing_date') {
+      // If it's already a string in ISO format, use it directly
+      if (typeof val === 'string') return val;
+      // If it's a number (Unix timestamp in seconds), convert to ISO string
+      if (typeof val === 'number') {
+        return new Date(val * 1000).toISOString();
+      }
+      return val;
+    }
+    return val;
+  });
+  
+  // Handle type casting for specific columns
+  const setClause = keys.map((key, i) => {
+    const paramNum = i + 1;
+    // Cast boolean fields
+    if (key === 'suspended' || key === 'is_admin') {
+      return `${key} = $${paramNum}::boolean`;
+    }
+    // Cast timestamp fields
+    if (key === 'next_billing_date') {
+      return `${key} = $${paramNum}::timestamp`;
+    }
+    return `${key} = $${paramNum}`;
+  }).join(', ');
+
+  try {
+    const result = await pool.query(
+      `UPDATE users SET ${setClause} WHERE id = $${keys.length + 1} RETURNING id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, role, created_at`,
+      [...values, id]
+    );
+    const updatedUser = result.rows[0];
+    
+    // Send email notifications based on what was updated
+    
+    // Check for suspension
+    if (isAdminRequest && fields.suspended !== undefined) {
+      if (fields.suspended === true) {
+        // Account suspended
+        sendEmail(
+          currentUser.email,
+          'Your Iyonicorp Account Has Been Suspended',
+          createEmailTemplate({
+            title: 'Account Suspended ⚠️',
+            subtitle: 'Your access has been temporarily restricted',
+            userName: currentUser.name || 'User',
+            content: `
+              <p>Your Iyonicorp account has been suspended. You may not be able to access certain features or services until the suspension is lifted.</p>
+              <div class="alert-box">
+                <strong>📋 What happened?</strong><br>
+                Your account has been temporarily restricted by an administrator.
+              </div>
+              <p>If you believe this was a mistake or would like to appeal this decision, please contact our support team. We're here to help resolve any issues.</p>
+            `,
+            actionText: 'Contact Support',
+            actionUrl: 'https://iyonicorp.com/contact',
+            type: 'alert'
+          })
+        ).catch(e => console.error('Email background error:', e));
+      } else if (fields.suspended === false) {
+        // Account reactivated
+        sendEmail(
+          currentUser.email,
+          'Your Iyonicorp Account Has Been Reactivated',
+          createEmailTemplate({
+            title: 'Account Reactivated! ✅',
+            subtitle: 'Welcome back! Your access has been restored',
+            userName: currentUser.name || 'User',
+            content: `
+              <p>Great news! Your Iyonicorp account has been reactivated and you now have full access to all your account features and services.</p>
+              <p>Thank you for your patience during the review process. We're glad to have you back!</p>
+              <div class="content-box">
+                <h3>What's Next?</h3>
+                <p>You can now:</p>
+                <p>✅ Access your dashboard</p>
+                <p>✅ Manage your projects</p>
+                <p>✅ Explore our services</p>
+              </div>
+            `,
+            actionText: 'Go to Dashboard',
+            actionUrl: 'https://iyonicorp.com/dashboard',
+            type: 'success'
+          })
+        ).catch(e => console.error('Email background error:', e));
+      }
+    }
+    
+    // Check for membership/subscription changes
+    if (fields.membership_tier !== undefined || fields.subscription_status !== undefined) {
+      const newTier = fields.membership_tier || currentUser.membership_tier;
+      const newStatus = fields.subscription_status || currentUser.subscription_status;
+      
+      sendEmail(
+        currentUser.email,
+        'Your Iyonicorp Membership Has Been Updated',
+        createEmailTemplate({
+          title: 'Membership Updated 🎉',
+          subtitle: 'Your subscription status has changed',
+          userName: currentUser.name || 'User',
+          content: `
+            <p>Great news! Your membership status has been updated. Here are your new plan details:</p>
+            <div class="content-box">
+              <h3>Plan Details</h3>
+              <div class="detail-row">
+                <span class="detail-label">Membership Tier</span>
+                <span class="detail-value">${newTier || 'Standard'}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Status</span>
+                <span class="detail-value">${newStatus}</span>
+              </div>
+            </div>
+            <p>Thank you for being part of Iyonicorp! Enjoy your enhanced experience.</p>
+          `,
+          actionText: 'View Full Details',
+          actionUrl: 'https://iyonicorp.com/dashboard',
+          type: 'success'
+        })
+      ).catch(e => console.error('Email background error:', e));
+    }
+    
+    res.json(updatedUser);
+  } catch (err) {
+    console.error('Update user error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.delete('/api/users/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Get user data before deletion
+    const userResult = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+    const user = userResult.rows[0];
+    
+    // Delete all related records first to avoid foreign key constraint issues
+    await pool.query('DELETE FROM projects WHERE userid = $1', [id]);
+    await pool.query('DELETE FROM orders WHERE userid = $1', [id]);
+    await pool.query('DELETE FROM support_tickets WHERE userid = $1', [id]);
+    await pool.query('DELETE FROM partnership_requests WHERE userid = $1', [id]);
+    await pool.query('DELETE FROM used_coupons WHERE user_id = $1', [id]);
+    await pool.query('DELETE FROM coupon_codes WHERE created_by = $1', [id]);
+    
+    // Finally delete the user
+    await pool.query('DELETE FROM users WHERE id = $1', [id]);
+    
+    // Send account deletion confirmation email
+    sendEmail(
+      user.email,
+      'Your Iyonicorp Account Has Been Deleted',
+      createEmailTemplate({
+        title: 'Account Deleted 🗑️',
+        subtitle: 'Your account has been permanently removed',
+        userName: user.name || 'User',
+        content: `
+          <p>Your Iyonicorp account has been permanently deleted. All your data, including projects, orders, and other information have been removed from our system.</p>
+          <div class="alert-box">
+            <strong>⚠️ Important:</strong><br>
+            This action cannot be undone. If you did not request this deletion, please contact our support team immediately.
+          </div>
+          <p>We'd love to have you back in the future! If you decide to return, simply sign up again.</p>
+          <p>Thank you for being part of Iyonicorp.</p>
+        `,
+        type: 'alert'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    res.status(204).end();
+  } catch (err) {
+    console.error('Delete user error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Projects Routes
+app.get('/api/projects', async (req, res) => {
+  const { userId } = req.query;
+  let query = 'SELECT * FROM projects';
+  let params = [];
+  
+  if (userId) {
+    query += ' WHERE userid = $1';
+    params.push(userId);
+  }
+
+  try {
+    const result = await pool.query(query, params);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch projects error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post('/api/projects', authenticate, async (req, res) => {
+  const { title, description, category, thumbnail, status, template, userId, data } = req.body;
+  try {
+    const projectData = data && typeof data === 'object' ? JSON.stringify(data) : (data || '{}');
+    const userIdToUse = userId || req.userId;
+    
+    // Get user info for email
+    const userResult = await pool.query('SELECT * FROM users WHERE id = $1', [userIdToUse]);
+    const user = userResult.rows[0];
+    
+    const result = await pool.query(
+      'INSERT INTO projects (title, description, category, thumbnail, status, template, userid, data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      [title, description, category, thumbnail, status || 'draft', template, userIdToUse, projectData]
+    );
+    const project = result.rows[0];
+    
+    // Send confirmation email to user
+    sendEmail(
+      user.email,
+      'Website Project Received - Iyonicorp',
+      createEmailTemplate({
+        title: 'Project Received! 🎨',
+        subtitle: 'Your website customization request is being reviewed',
+        userName: user.name || 'there',
+        content: `
+          <p>We've received your website customization request! Our team is excited to bring your vision to life.</p>
+          <div class="content-box">
+            <h3>Project Details</h3>
+            <div class="detail-row">
+              <span class="detail-label">Project Title</span>
+              <span class="detail-value">${title}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Category</span>
+              <span class="detail-value">${category || 'General'}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Description</span>
+              <span class="detail-value">${description || 'No description provided'}</span>
+            </div>
+          </div>
+          <p>Our team will review your requirements and reach out within 24-48 hours with next steps.</p>
+        `,
+        actionText: 'View Your Projects',
+        actionUrl: 'https://iyonicorp.com/dashboard',
+        type: 'success'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    // Notify admin
+    sendEmail(
+      'iyonicpay@gmail.com',
+      `New Website Project - ${title} - ${user.email}`,
+      createEmailTemplate({
+        title: 'New Project Submitted 🚀',
+        subtitle: 'A user has submitted a new website project',
+        userName: 'Admin',
+        content: `
+          <p>A new website project has been submitted and is awaiting review.</p>
+          <div class="content-box">
+            <h3>Project Information</h3>
+            <div class="detail-row">
+              <span class="detail-label">User</span>
+              <span class="detail-value">${user.email}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Project</span>
+              <span class="detail-value">${title}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Category</span>
+              <span class="detail-value">${category || 'General'}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Description</span>
+              <span class="detail-value">${description || 'N/A'}</span>
+            </div>
+          </div>
+        `,
+        type: 'notification'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    res.json(project);
+  } catch (err) {
+    console.error('Create project error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.patch('/api/projects/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const fields = req.body;
+  const keys = Object.keys(fields).filter(k => k !== 'id' && k !== 'created_at');
+  
+  const values = keys.map(k => {
+    const val = fields[k];
+    if (val && typeof val === 'object') {
+      return JSON.stringify(val);
+    }
+    return val;
+  });
+  
+  const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
+  
+  try {
+    const result = await pool.query(
+      `UPDATE projects SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`,
+      [...values, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Update project error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.delete('/api/projects/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM projects WHERE id = $1', [id]);
+    res.status(204).end();
+  } catch (err) {
+    console.error('Delete project error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Leads Routes
+app.get('/api/leads', authenticate, async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM leads ORDER BY created_at DESC');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch leads error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post('/api/leads', async (req, res) => {
+  const { name, email, message } = req.body;
+  try {
+    const result = await pool.query(
+      'INSERT INTO leads (name, email, message) VALUES ($1, $2, $3) RETURNING *',
+      [name, email, message]
+    );
+    
+    const adminEmail = 'iyonicpay@gmail.com';
+    const currentYear = new Date().getFullYear();
+    
+    // Send confirmation email to the user
+    sendEmail(
+      email,
+      'Welcome to Iyonicorp - We Received Your Message!',
+      createEmailTemplate({
+        title: 'Message Received! 📬',
+        subtitle: 'Thank you for reaching out to us',
+        userName: name,
+        content: `
+          <p>Thank you for reaching out to us! We've received your message and our team will get back to you within 24-48 hours.</p>
+          <div class="content-box">
+            <h3>Your Message</h3>
+            <p>${message || 'No message provided'}</p>
+          </div>
+          <p>In the meantime, feel free to explore our services and follow us on social media. We're excited to connect with you!</p>
+        `,
+        actionText: 'Explore Our Services',
+        actionUrl: 'https://iyonicorp.com',
+        type: 'success'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    // Send notification email to admin
+    sendEmail(
+      adminEmail,
+      `New Lead from ${name} - ${email}`,
+      createEmailTemplate({
+        title: 'New Lead Received 📬',
+        subtitle: 'Someone is reaching out to learn more',
+        userName: 'Admin',
+        content: `
+          <p>A new lead has been submitted through the contact form.</p>
+          <div class="content-box">
+            <h3>Lead Information</h3>
+            <div class="detail-row">
+              <span class="detail-label">Name</span>
+              <span class="detail-value">${name}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">${email}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Message</span>
+              <span class="detail-value">${message || 'No message provided'}</span>
+            </div>
+          </div>
+        `,
+        type: 'notification'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Create lead error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Orders Routes
+app.get('/api/orders', authenticate, async (req, res) => {
+  const { userId } = req.query;
+  let query = 'SELECT * FROM orders';
+  let params = [];
+  
+  if (userId) {
+    query += ' WHERE userid = $1';
+    params.push(userId);
+  }
+
+  try {
+    const result = await pool.query(query, params);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch orders error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post('/api/orders', authenticate, async (req, res) => {
+  const { order_number, service_id, service_name, plan_name, amount, status, userId, description } = req.body;
+  try {
+    const userIdToUse = userId || req.userId;
+    
+    // Get user info for email
+    const userResult = await pool.query('SELECT * FROM users WHERE id = $1', [userIdToUse]);
+    const user = userResult.rows[0];
+    
+    const result = await pool.query(
+      'INSERT INTO orders (order_number, service_id, service_name, plan_name, amount, status, userid, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      [order_number, service_id, service_name, plan_name, amount, status || 'pending', userIdToUse, description]
+    );
+    const order = result.rows[0];
+    
+    // Send order confirmation email
+    sendEmail(
+      user.email,
+      'Order Confirmed - Iyonicorp Membership',
+      createEmailTemplate({
+        title: 'Order Confirmed! 🛒',
+        subtitle: 'Thank you for your purchase',
+        userName: user.name || 'there',
+        content: `
+          <p>Thank you for your purchase! Your order has been confirmed and is being processed.</p>
+          <div class="content-box">
+            <h3>Order Details</h3>
+            <div class="detail-row">
+              <span class="detail-label">Order Number</span>
+              <span class="detail-value">${order_number}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Service</span>
+              <span class="detail-value">${service_name}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Plan</span>
+              <span class="detail-value">${plan_name}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Amount</span>
+              <span class="detail-value">${amount}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Status</span>
+              <span class="detail-value">${status || 'pending'}</span>
+            </div>
+          </div>
+          <p>You can view your order details and track progress in your dashboard.</p>
+        `,
+        actionText: 'View Order Details',
+        actionUrl: 'https://iyonicorp.com/dashboard',
+        type: 'success'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    // Notify admin
+    sendEmail(
+      'iyonicpay@gmail.com',
+      `New Order - ${order_number} - ${service_name}`,
+      createEmailTemplate({
+        title: 'New Order Received 🛒',
+        subtitle: 'A user has made a purchase',
+        userName: 'Admin',
+        content: `
+          <p>A new order has been placed on Iyonicorp.</p>
+          <div class="content-box">
+            <h3>Order Information</h3>
+            <div class="detail-row">
+              <span class="detail-label">User</span>
+              <span class="detail-value">${user.email}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Order #</span>
+              <span class="detail-value">${order_number}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Service</span>
+              <span class="detail-value">${service_name}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Plan</span>
+              <span class="detail-value">${plan_name}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Amount</span>
+              <span class="detail-value">${amount}</span>
+            </div>
+          </div>
+        `,
+        type: 'notification'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    res.json(order);
+  } catch (err) {
+    console.error('Create order error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.patch('/api/orders/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const fields = req.body;
+  const keys = Object.keys(fields).filter(k => k !== 'id' && k !== 'created_at');
+  
+  if (keys.length === 0) return res.status(400).json({ message: 'No fields to update' });
+
+  const values = keys.map(k => fields[k]);
+  const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
+
+  try {
+    const result = await pool.query(
+      `UPDATE orders SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`,
+      [...values, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Update order error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Support Tickets Routes
+app.post('/api/support-tickets', authenticate, async (req, res) => {
+  const { subject, message, priority, userId } = req.body;
+  try {
+    const result = await pool.query(
+      'INSERT INTO support_tickets (subject, message, priority, userid) VALUES ($1, $2, $3, $4) RETURNING *',
+      [subject, message, priority || 'medium', userId || req.userId]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Create support ticket error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Templates Routes
+app.get('/api/templates', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM templates');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch templates error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post('/api/templates', authenticate, async (req, res) => {
+  const { name, description, category, thumbnail, html_content, css_content, js_content, deployed, status } = req.body;
+  try {
+    const result = await pool.query(
+      'INSERT INTO templates (name, description, category, thumbnail, html_content, css_content, js_content, deployed, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+      [name, description, category, thumbnail, html_content, css_content, js_content, deployed || false, status || 'draft']
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Create template error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.patch('/api/templates/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const fields = req.body;
+  const keys = Object.keys(fields).filter(k => k !== 'id' && k !== 'created_at');
+  const values = keys.map(k => fields[k]);
+  
+  const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
+  
+  try {
+    const result = await pool.query(
+      `UPDATE templates SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`,
+      [...values, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Update template error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.delete('/api/templates/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM templates WHERE id = $1', [id]);
+    res.status(204).end();
+  } catch (err) {
+    console.error('Delete template error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Partnership Requests Routes
+// Upload endpoint for partnership documents
+app.post('/api/partnership-upload', authenticate, upload.single('document'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+    res.json({ 
+      path: `/uploads/${req.file.filename}`,
+      originalName: req.file.originalname,
+      filename: req.file.filename
+    });
+  } catch (err) {
+    console.error('Upload error:', err);
+    res.status(500).json({ message: 'Upload failed' });
+  }
+});
+
+app.post('/api/partnership-requests', authenticate, async (req, res) => {
+  const { 
+    businessName, 
+    businessType, 
+    description, 
+    credentials, 
+    userId,
+    annualRevenue,
+    revenueCurrency,
+    socialMediaFacebook,
+    socialMediaTwitter,
+    socialMediaInstagram,
+    socialMediaLinkedin,
+    website,
+    isRegistered,
+    registrationNumber,
+    registrationDocumentPath,
+    bankStatementPath,
+    mobileMoneyStatementPath
+  } = req.body;
+  
+  try {
+    // Ensure table exists with new schema
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS partnership_requests (
+        id SERIAL PRIMARY KEY,
+        userid INTEGER REFERENCES users(id),
+        business_name VARCHAR(255) NOT NULL,
+        business_type VARCHAR(100),
+        description TEXT,
+        credentials TEXT,
+        annual_revenue DECIMAL(15,2),
+        revenue_currency VARCHAR(10) DEFAULT 'USD',
+        social_media_facebook VARCHAR(255),
+        social_media_twitter VARCHAR(255),
+        social_media_instagram VARCHAR(255),
+        social_media_linkedin VARCHAR(255),
+        website VARCHAR(255),
+        is_registered BOOLEAN DEFAULT false,
+        registration_number VARCHAR(100),
+        registration_document_path VARCHAR(500),
+        bank_statement_path VARCHAR(500),
+        mobile_money_statement_path VARCHAR(500),
+        priority BOOLEAN DEFAULT false,
+        admin_notes TEXT,
+        status VARCHAR(50) DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `).catch(err => {
+      // Table might already exist, continue
+    });
+    
+    // Add new columns if they don't exist (migration)
+    try {
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS annual_revenue DECIMAL(15,2)`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS revenue_currency VARCHAR(10) DEFAULT 'USD'`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_facebook VARCHAR(255)`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_twitter VARCHAR(255)`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_instagram VARCHAR(255)`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_linkedin VARCHAR(255)`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS website VARCHAR(255)`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS is_registered BOOLEAN DEFAULT false`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS registration_number VARCHAR(100)`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS registration_document_path VARCHAR(500)`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS bank_statement_path VARCHAR(500)`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS mobile_money_statement_path VARCHAR(500)`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS priority BOOLEAN DEFAULT false`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS admin_notes TEXT`);
+      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`);
+    } catch (migrationErr) {
+      // Columns might already exist, ignore
+    }
+
+    const isRegisteredBool = isRegistered === 'true' || isRegistered === true;
+    
+    // Registered businesses get priority
+    const priority = isRegisteredBool;
+
+    const result = await pool.query(
+      `INSERT INTO partnership_requests 
+        (userid, business_name, business_type, description, credentials, 
+         annual_revenue, revenue_currency, social_media_facebook, social_media_twitter,
+         social_media_instagram, social_media_linkedin, website, is_registered,
+         registration_number, registration_document_path, bank_statement_path, 
+         mobile_money_statement_path, priority) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *`,
+      [
+        userId || req.userId, 
+        businessName, 
+        businessType, 
+        description, 
+        credentials,
+        annualRevenue ? parseFloat(annualRevenue) : null,
+        revenueCurrency || 'USD',
+        socialMediaFacebook,
+        socialMediaTwitter,
+        socialMediaInstagram,
+        socialMediaLinkedin,
+        website,
+        isRegisteredBool,
+        registrationNumber,
+        registrationDocumentPath,
+        bankStatementPath,
+        mobileMoneyStatementPath,
+        priority
+      ]
+    );
+    
+    // Get user info for email
+    const userResult = await pool.query('SELECT * FROM users WHERE id = $1', [userId || req.userId]);
+    const user = userResult.rows[0];
+    
+    // Send confirmation email to user
+    sendEmail(
+      user.email,
+      'Partnership Request Received - Iyonicorp',
+      createEmailTemplate({
+        title: 'Partnership Request Received! 🤝',
+        subtitle: 'Thank you for your interest in partnering with us',
+        userName: user.name || 'there',
+        content: `
+          <p>Thank you for your interest in partnering with Iyonicorp! We've received your application and our team is excited to review it.</p>
+          <div class="content-box">
+            <h3>Application Details</h3>
+            <div class="detail-row">
+              <span class="detail-label">Business Name</span>
+              <span class="detail-value">${businessName}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Business Type</span>
+              <span class="detail-value">${businessType || 'N/A'}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Status</span>
+              <span class="detail-value">Pending Review</span>
+            </div>
+          </div>
+          <p>Our team will contact you within 2-3 business days with the next steps. We're excited about the possibility of working together!</p>
+        `,
+        type: 'info'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    // Notify admin
+    sendEmail(
+      'iyonicpay@gmail.com',
+      `New Partnership Request - ${businessName} - ${user.email}`,
+      createEmailTemplate({
+        title: 'New Partnership Request 🤝',
+        subtitle: 'A business wants to partner with us',
+        userName: 'Admin',
+        content: `
+          <p>A new partnership request has been submitted and is awaiting review.</p>
+          <div class="content-box">
+            <h3>Partnership Details</h3>
+            <div class="detail-row">
+              <span class="detail-label">Applicant</span>
+              <span class="detail-value">${user.email}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Business Name</span>
+              <span class="detail-value">${businessName}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Business Type</span>
+              <span class="detail-value">${businessType || 'N/A'}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Annual Revenue</span>
+              <span class="detail-value">${annualRevenue ? `${revenueCurrency || 'USD'} ${annualRevenue}` : 'N/A'}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Website</span>
+              <span class="detail-value">${website || 'N/A'}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Registered Business</span>
+              <span class="detail-value">${isRegisteredBool ? 'Yes' : 'No'}</span>
+            </div>
+          </div>
+        `,
+        actionText: 'Review in Admin Panel',
+        actionUrl: 'https://iyonicorp.com/admin',
+        type: 'notification'
+      })
+    ).catch(e => console.error('Email background error:', e));
+    
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Create partnership request error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/api/partnership-requests', authenticate, async (req, res) => {
+  try {
+    // Order by priority (registered businesses first), then by date
+    const result = await pool.query(`
+      SELECT pr.*, u.email as "userEmail", u.name as "userName" 
+      FROM partnership_requests pr 
+      JOIN users u ON pr.userid = u.id 
+      ORDER BY pr.priority DESC, pr.created_at DESC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch partnership requests error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.patch('/api/partnership-requests/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const fields = req.body;
+  const keys = Object.keys(fields).filter(k => k !== 'id' && k !== 'created_at');
+  
+  if (keys.length === 0) return res.status(400).json({ message: 'No fields to update' });
+
+  const values = keys.map(k => fields[k]);
+  const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
+
+  try {
+    const result = await pool.query(
+      `UPDATE partnership_requests SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`,
+      [...values, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Update partnership request error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
+
