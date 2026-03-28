@@ -114,6 +114,16 @@ To use a custom domain:
 - Ensure all dependencies are in `package.json`
 - Verify Node.js version compatibility
 
+### Dependency Conflicts
+
+If you see errors like `ERESOLVE could not resolve` or peer dependency conflicts:
+
+The `render.yaml` is configured to use `--legacy-peer-deps` flag to handle the `react-paystack` package which doesn't fully support React 19. This is safe and won't affect functionality.
+
+If you encounter other dependency conflicts, you can:
+1. Update the conflicting package to a newer version
+2. Or add `--legacy-peer-deps` to the build command in `render.yaml`
+
 ### Database Connection Issues
 
 - Verify `DATABASE_URL` is correct
