@@ -19,14 +19,14 @@ const Contact = () => {
     {
       icon: Phone,
       label: 'Call us',
-      value: '+1 (555) 000-0000',
+      value: '+254 113203900',
       color: 'text-purple-600',
       bg: 'bg-purple-50'
     },
     {
       icon: MapPin,
       label: 'Visit us',
-      value: 'San Francisco, CA',
+      value: 'Nairobi, Kenya',
       color: 'text-emerald-600',
       bg: 'bg-emerald-50'
     },
@@ -162,7 +162,7 @@ const Contact = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-5 bg-neutral-900 text-white rounded-2xl font-bold hover:bg-neutral-800 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50 group"
+                  className="w-full py-5 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50 group shadow-lg shadow-blue-500/20"
                 >
                   {loading ? 'Sending...' : 'Send Message'}
                   {!loading && <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}

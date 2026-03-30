@@ -233,10 +233,10 @@ const Pricing = ({ onPlanClick }) => {
               <button 
                 onClick={() => onPlanClick?.(plan)}
                 disabled={currentUser?.membership_tier === plan.id}
-                className={`relative z-10 w-full py-4 bg-neutral-900 text-white rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 group-hover:bg-gradient-to-r ${plan.design?.gradient || 'from-neutral-900 to-neutral-800'} ${currentUser?.membership_tier === plan.id ? 'opacity-80 cursor-default' : ''}`}
+                className={`relative z-10 w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 hover:bg-blue-700 ${currentUser?.membership_tier === plan.id ? 'opacity-80 cursor-default' : ''}`}
               >
                 {currentUser?.membership_tier === plan.id ? 'Current Plan' : 'Select Plan'}
-                <Sparkles size={16} className="text-blue-400 group-hover:rotate-12 transition-transform" />
+                <Sparkles size={16} className="text-blue-200 group-hover:rotate-12 transition-transform" />
               </button>
             </div>
           ))}
@@ -258,7 +258,7 @@ const Pricing = ({ onPlanClick }) => {
               <p className="text-neutral-500 font-medium">We specialize in custom enterprise solutions and high-end integrations.</p>
             </div>
           </div>
-          <button className="flex-shrink-0 px-10 py-5 bg-neutral-900 text-white rounded-full font-black uppercase tracking-widest text-sm hover:bg-blue-600 transition-all flex items-center gap-2 group">
+          <button className="flex-shrink-0 px-10 py-5 bg-blue-600 text-white rounded-full font-black uppercase tracking-widest text-sm hover:bg-blue-700 transition-all flex items-center gap-2 group">
             Contact Expert
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </button>

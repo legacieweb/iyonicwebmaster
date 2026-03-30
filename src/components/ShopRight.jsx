@@ -51,7 +51,7 @@ const ShopRight = ({ onViewDetails }) => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={onViewDetails}
-              className="px-10 py-5 bg-neutral-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center gap-4 group shadow-xl hover:bg-blue-600 transition-colors"
+              className="px-10 py-5 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center gap-4 group shadow-xl hover:bg-blue-700 transition-colors"
             >
               View Details
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />

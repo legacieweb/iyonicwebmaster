@@ -55,10 +55,10 @@ const Partnership = ({ onLearnMore }) => {
             whileInView={{ opacity: 1, scale: 1 }}
             className="flex flex-row lg:flex-col items-center gap-4 lg:gap-6"
           >
-            <div className="w-16 h-16 lg:w-24 lg:h-24 bg-neutral-950 rounded-[24px] lg:rounded-[32px] flex items-center justify-center text-white shadow-2xl">
+            <div className="w-16 h-16 lg:w-24 lg:h-24 bg-blue-600 rounded-[24px] lg:rounded-[32px] flex items-center justify-center text-white shadow-2xl shadow-blue-500/20">
               <ShieldCheck size={28} className="lg:w-[40px] lg:h-[40px]" />
             </div>
-            <span className="text-[8px] lg:text-[10px] font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] text-neutral-400">Verified Partnership</span>
+            <span className="text-[8px] lg:text-[10px] font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] text-blue-600">Verified Partnership</span>
           </motion.div>
         </div>
 
@@ -72,7 +72,7 @@ const Partnership = ({ onLearnMore }) => {
               transition={{ delay: i * 0.1 }}
               className="group p-8 lg:p-12 bg-neutral-50 rounded-[32px] lg:rounded-[48px] border border-neutral-100 hover:bg-white hover:border-blue-600/20 hover:shadow-2xl transition-all duration-700"
             >
-              <div className="w-12 h-12 lg:w-16 lg:h-16 bg-white rounded-2xl lg:rounded-3xl flex items-center justify-center text-neutral-950 shadow-sm mb-8 lg:mb-10 group-hover:bg-neutral-950 group-hover:text-white transition-all duration-700">
+              <div className="w-12 h-12 lg:w-16 lg:h-16 bg-white rounded-2xl lg:rounded-3xl flex items-center justify-center text-neutral-950 shadow-sm mb-8 lg:mb-10 group-hover:bg-blue-600 group-hover:text-white transition-all duration-700">
                 <step.icon size={24} className="lg:w-[28px] lg:h-[28px]" />
               </div>
               <h4 className="text-2xl lg:text-3xl font-black text-neutral-950 mb-4 lg:mb-6 tracking-tighter uppercase italic">{step.title}</h4>
@@ -91,22 +91,22 @@ const Partnership = ({ onLearnMore }) => {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative bg-neutral-950 rounded-[40px] lg:rounded-[64px] p-8 md:p-16 lg:p-24 overflow-hidden group text-center"
+          className="relative bg-white border border-neutral-100 shadow-xl rounded-[40px] lg:rounded-[64px] p-8 md:p-16 lg:p-24 overflow-hidden group text-center"
         >
-          <div className="absolute top-0 right-0 p-12 text-white/5 group-hover:text-blue-600/10 transition-colors hidden md:block">
+          <div className="absolute top-0 right-0 p-12 text-blue-600/5 group-hover:text-blue-600/10 transition-colors hidden md:block">
             <Rocket size={240} />
           </div>
           
           <div className="relative z-10 max-w-3xl mx-auto">
-            <h3 className="text-3xl md:text-5xl lg:text-7xl font-black text-white mb-6 lg:mb-10 leading-tight tracking-tighter uppercase italic">
+            <h3 className="text-3xl md:text-5xl lg:text-7xl font-black text-neutral-950 mb-6 lg:mb-10 leading-tight tracking-tighter uppercase italic">
               Claim Your <span className="text-blue-600">Spot.</span>
             </h3>
-            <p className="text-lg lg:text-xl text-neutral-400 font-medium leading-relaxed mb-8 lg:mb-12">
+            <p className="text-lg lg:text-xl text-neutral-500 font-medium leading-relaxed mb-8 lg:mb-12">
               Join the Iyonicorp E-commerce Alliance today. Get your premium store, instant payouts, and zero maintenance stress.
             </p>
             <button 
               onClick={onLearnMore}
-              className="group w-full sm:w-auto px-8 lg:px-16 py-6 lg:py-8 bg-white text-neutral-950 rounded-[24px] lg:rounded-[32px] font-black text-[10px] lg:text-xs uppercase tracking-[0.2em] lg:tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl inline-flex items-center justify-center gap-4 lg:gap-6"
+              className="group w-full sm:w-auto px-8 lg:px-16 py-6 lg:py-8 bg-blue-600 text-white rounded-[24px] lg:rounded-[32px] font-black text-[10px] lg:text-xs uppercase tracking-[0.2em] lg:tracking-[0.3em] hover:bg-blue-700 transition-all shadow-2xl inline-flex items-center justify-center gap-4 lg:gap-6"
             >
               Explore Alliance Details
               <MousePointer2 size={18} className="lg:w-[20px] lg:h-[20px] group-hover:rotate-12 transition-transform" />

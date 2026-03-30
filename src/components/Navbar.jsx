@@ -20,7 +20,6 @@ const Navbar = ({ onLoginClick }) => {
     { label: 'Partnership', href: '/#partnership' },
     { label: 'Pricing', href: '/#pricing' },
     { label: 'Process', href: '/#how-it-works' },
-    { label: 'About', path: '/about' },
   ]
 
   useEffect(() => {
@@ -191,7 +190,7 @@ const Navbar = ({ onLoginClick }) => {
                 </button>
                 <button
                   onClick={() => onLoginClick('signup')}
-                  className="px-8 py-3.5 bg-neutral-950 text-white rounded-2xl text-xs font-black hover:bg-blue-600 hover:-translate-y-1 active:translate-y-0 transition-all shadow-[0_10px_20px_rgba(0,0,0,0.1)] flex items-center gap-3 group uppercase tracking-widest"
+                  className="px-8 py-3.5 bg-blue-600 text-white rounded-2xl text-xs font-black hover:bg-blue-700 hover:-translate-y-1 active:translate-y-0 transition-all shadow-[0_10px_20px_rgba(37,99,235,0.2)] flex items-center gap-3 group uppercase tracking-widest"
                 >
                   Sign Up
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />

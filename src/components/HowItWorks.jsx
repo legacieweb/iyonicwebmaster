@@ -102,35 +102,35 @@ const HowItWorks = () => {
           viewport={{ once: true }}
           className="mt-32 relative group"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-[64px] blur-3xl opacity-20 group-hover:opacity-30 transition-opacity duration-700" />
-          <div className="relative bg-neutral-900 border border-white/10 p-12 md:p-24 rounded-[64px] overflow-hidden flex flex-col items-center text-center">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-[64px] blur-3xl opacity-10 group-hover:opacity-20 transition-opacity duration-700" />
+          <div className="relative bg-white border border-neutral-100 p-12 md:p-24 rounded-[64px] overflow-hidden flex flex-col items-center text-center shadow-xl">
             {/* Visual Accents */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
+            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-50 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-50 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
             
             <div className="relative z-10 max-w-3xl">
               <motion.div 
                 animate={{ rotate: [0, 10, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                className="w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-3xl flex items-center justify-center text-white mb-10 mx-auto shadow-2xl shadow-blue-500/40"
+                className="w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-3xl flex items-center justify-center text-white mb-10 mx-auto shadow-2xl shadow-blue-500/20"
               >
                 <Rocket size={40} />
               </motion.div>
               
-              <h3 className="text-5xl md:text-7xl font-black text-white mb-8 leading-[1.1] tracking-tight">
-                Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 uppercase tracking-tighter">Ascend?</span>
+              <h3 className="text-5xl md:text-7xl font-black text-neutral-950 mb-8 leading-[1.1] tracking-tight">
+                Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 uppercase tracking-tighter">Ascend?</span>
               </h3>
               
-              <p className="text-xl md:text-2xl text-neutral-400 mb-12 leading-relaxed font-medium">
-                Join <span className="text-white font-bold">200+ global brands</span> who have scaled their digital impact through our precision-engineered process. Your transformation starts with a single click.
+              <p className="text-xl md:text-2xl text-neutral-500 mb-12 leading-relaxed font-medium">
+                Join <span className="text-blue-600 font-bold">200+ global brands</span> who have scaled their digital impact through our precision-engineered process. Your transformation starts with a single click.
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <button className="group w-full sm:w-auto px-12 py-6 bg-white text-neutral-900 rounded-full font-black text-xl hover:bg-blue-50 hover:scale-105 transition-all shadow-2xl flex items-center justify-center gap-3 active:scale-95">
+                <button className="group w-full sm:w-auto px-12 py-6 bg-blue-600 text-white rounded-full font-black text-xl hover:bg-blue-700 hover:scale-105 transition-all shadow-2xl flex items-center justify-center gap-3 active:scale-95">
                   Launch Your Project
                   <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform duration-300" />
                 </button>
-                <button className="w-full sm:w-auto px-12 py-6 bg-transparent border-2 border-white/10 text-white rounded-full font-black text-xl hover:bg-white/5 hover:border-white/20 transition-all flex items-center justify-center gap-3 active:scale-95">
+                <button className="w-full sm:w-auto px-12 py-6 bg-transparent border-2 border-neutral-200 text-neutral-900 rounded-full font-black text-xl hover:bg-neutral-50 hover:border-neutral-300 transition-all flex items-center justify-center gap-3 active:scale-95">
                   Explore Results
                 </button>
               </div>

@@ -107,7 +107,7 @@ const Services = ({ onServiceClick }) => {
                         </div>
 
                         <button
-                          className="w-full py-4 bg-neutral-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-all shadow-lg flex items-center justify-center gap-3"
+                          className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg flex items-center justify-center gap-3"
                         >
                           Explore Architectures
                           <ArrowRight size={18} />
