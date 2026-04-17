@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Check, ArrowRight, Star, TrendingUp, Sparkles, Shield, Zap, Mail, Lock } from 'lucide-react'
+import { Check, ArrowRight, Star, Sparkles, Mail } from 'lucide-react'
 import { PRICING_DATA } from '../utils/constants'
 import { MODULES, MEMBERSHIP_TIERS } from '../utils/membership'
 import { useAuth } from '../contexts/AuthContext'
@@ -34,7 +33,6 @@ const Pricing = ({ onPlanClick }) => {
     return `$${price.toLocaleString()} - $${maxPrice.toLocaleString()}`
   }
 
-  // Custom Unresistable Offers - Inclusive of Membership Tiers and Bundles
   const offers = [
     {
       id: 'basic',
@@ -129,29 +127,17 @@ const Pricing = ({ onPlanClick }) => {
     <section id="pricing" className="py-24 bg-white overflow-hidden relative">
       <div className="max-w-[1400px] mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
-          <motion.span 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-block text-sm font-bold text-blue-600 tracking-wider uppercase mb-4"
-          >
+          <span className="inline-block text-sm font-bold text-blue-600 tracking-wider uppercase mb-4">
             Membership Tiers
-          </motion.span>
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6"
-          >
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
             Precision Engineered <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Growth Plans</span>
-          </motion.h2>
+          </h2>
           <p className="text-neutral-500 max-w-2xl mx-auto font-medium">
             Select the infrastructure tier that matches your business ambition.
           </p>
         </div>
 
-        {/* Currency Switcher */}
         <div className="flex items-center justify-center gap-6 mb-16">
           <div className="flex gap-2 bg-neutral-50 p-1.5 rounded-2xl border border-neutral-100 shadow-sm">
             <button
@@ -173,12 +159,7 @@ const Pricing = ({ onPlanClick }) => {
           </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 justify-center"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 justify-center">
           {offers.map((plan, i) => (
             <div 
               key={i} 
@@ -186,10 +167,8 @@ const Pricing = ({ onPlanClick }) => {
                 plan.popular ? 'border-transparent ring-4 ring-blue-50 scale-105 z-20' : 'border-neutral-100'
               }`}
             >
-              {/* Design Background Pattern */}
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${plan.design?.pattern || ''}`} />
               
-              {/* Design Gradient Bar */}
               <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${plan.design?.gradient || 'from-blue-600 to-indigo-600'}`} />
 
               <div className={`absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-[10px] font-black tracking-widest uppercase flex items-center gap-1 z-20 transition-colors ${
@@ -240,15 +219,9 @@ const Pricing = ({ onPlanClick }) => {
               </button>
             </div>
           ))}
-        </motion.div>
+        </div>
 
-        {/* Dynamic Support/Consultation Footer */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mt-20 p-12 bg-neutral-50 rounded-[48px] border border-neutral-100 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left"
-        >
+        <div className="mt-20 p-12 bg-neutral-50 rounded-[48px] border border-neutral-100 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
           <div className="flex items-center gap-6">
             <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shadow-inner">
               <Mail size={32} />
@@ -262,7 +235,7 @@ const Pricing = ({ onPlanClick }) => {
             Contact Expert
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </button>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

@@ -1,5 +1,4 @@
 import { Linkedin, Twitter, Mail, ArrowRight, Instagram, Sparkles, MapPin, Phone, CheckCircle2 } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { submitLead } from '../utils/api'
@@ -65,12 +64,9 @@ const Footer = () => {
       ]
     },
     {
-      title: 'Expertise',
+      title: 'Services',
       links: [
         { name: 'Web Development', id: 'services' },
-        { name: 'Mobile Apps', id: 'services' },
-        { name: 'AI Solutions', id: 'services' },
-        { name: 'Digital Strategy', id: 'services' },
       ]
     },
     {
@@ -98,38 +94,31 @@ const Footer = () => {
       if (location.pathname === '/') {
         const element = document.getElementById(id)
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' })
+          element.scrollIntoView({ behavior: 'auto' })
         }
       } else {
-        // Navigate to home with state instead of hash in URL
         navigate('/', { state: { scrollTo: id } })
       }
     } else {
       navigate(`/${id}`)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: 'auto' })
     }
   }
 
   return (
     <footer className="bg-white text-neutral-500 pt-32 pb-16 overflow-hidden relative border-t border-neutral-100">
-      {/* Background Decor */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-50 rounded-full blur-[120px] -translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-indigo-50 rounded-full blur-[100px] translate-y-1/2" />
 
       <div className="max-w-7xl mx-auto px-8 relative z-10">
         <div className="grid lg:grid-cols-12 gap-16 mb-24">
           <div className="lg:col-span-5">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-4 mb-10 cursor-pointer group"
-              onClick={() => navigate('/')}
-            >
+            <div className="flex items-center gap-4 mb-10 cursor-pointer group" onClick={() => navigate('/')}>
               <div className="w-14 h-14 flex items-center justify-center transform -rotate-6 transition-transform group-hover:rotate-0 duration-500">
                 <img src="https://i.imgur.com/6nGQFtj.png" alt="Iyonicorp Logo" className="w-full h-full object-contain" />
               </div>
               <span className="text-3xl font-black text-neutral-950 tracking-tighter group-hover:text-blue-600 transition-colors">Iyonicorp</span>
-            </motion.div>
+            </div>
             
             <p className="text-xl text-neutral-500 mb-12 max-w-md leading-relaxed font-medium">
               We transform ambitious ideas into exceptional digital experiences through code, design, and innovation.
@@ -139,15 +128,14 @@ const Footer = () => {
               {socialLinks.map((link, index) => {
                 const Icon = link.icon
                 return (
-                  <motion.a
-                    whileHover={{ y: -5, scale: 1.1 }}
+                  <a
                     key={index}
                     href={link.href}
                     className="w-14 h-14 bg-neutral-50 hover:bg-blue-50 text-neutral-400 hover:text-blue-600 rounded-2xl flex items-center justify-center transition-all border border-neutral-100"
                     title={link.label}
                   >
                     <Icon size={22} />
-                  </motion.a>
+                  </a>
                 )
               })}
             </div>
@@ -162,47 +150,34 @@ const Footer = () => {
               <p className="text-neutral-500 mb-10 text-lg font-medium">Unlock exclusive digital insights and engineering breakthroughs.</p>
               
               <div className="relative max-w-md">
-                <AnimatePresence mode="wait">
-                  {isSuccess ? (
-                    <motion.div 
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="flex items-center gap-4 p-6 bg-blue-600/5 border border-blue-500/10 rounded-3xl text-blue-600 font-black text-xs uppercase tracking-widest"
+                {isSuccess ? (
+                  <div className="flex items-center gap-4 p-6 bg-blue-600/5 border border-blue-500/10 rounded-3xl text-blue-600 font-black text-xs uppercase tracking-widest">
+                    <CheckCircle2 size={24} className="text-blue-500" />
+                    Vision received. Welcome aboard.
+                  </div>
+                ) : (
+                  <form className="flex flex-col sm:flex-row gap-4" onSubmit={handleSubscribe}>
+                    <div className="relative flex-1">
+                      <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-neutral-400" size={18} />
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="your@email.com"
+                        className="w-full pl-16 pr-6 py-6 bg-white border border-neutral-200 rounded-3xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 transition-all text-sm font-bold shadow-sm"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="px-10 py-6 bg-blue-600 text-white rounded-3xl font-black text-xs uppercase tracking-[0.2em] hover:bg-blue-700 transition-all flex items-center justify-center gap-3 shadow-[0_20px_40px_rgba(37,99,235,0.15)] active:scale-95 disabled:opacity-50"
                     >
-                      <CheckCircle2 size={24} className="text-blue-500" />
-                      Vision received. Welcome aboard.
-                    </motion.div>
-                  ) : (
-                    <motion.form 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="flex flex-col sm:flex-row gap-4" 
-                      onSubmit={handleSubscribe}
-                    >
-                      <div className="relative flex-1">
-                        <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-neutral-400" size={18} />
-                        <input
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="your@email.com"
-                          className="w-full pl-16 pr-6 py-6 bg-white border border-neutral-200 rounded-3xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 transition-all text-sm font-bold shadow-sm"
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="px-10 py-6 bg-blue-600 text-white rounded-3xl font-black text-xs uppercase tracking-[0.2em] hover:bg-blue-700 transition-all flex items-center justify-center gap-3 shadow-[0_20px_40px_rgba(37,99,235,0.15)] active:scale-95 disabled:opacity-50"
-                      >
-                        {isSubmitting ? 'Syncing...' : 'Join Now'}
-                        <ArrowRight size={16} />
-                      </button>
-                    </motion.form>
-                  )}
-                </AnimatePresence>
+                      {isSubmitting ? 'Syncing...' : 'Join Now'}
+                      <ArrowRight size={16} />
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
           </div>
@@ -236,7 +211,7 @@ const Footer = () => {
                   <MapPin size={18} />
                 </div>
                 <p className="text-sm font-bold text-neutral-600 leading-relaxed">
-                  123 Design Tower,<br />San Francisco, CA 94103
+                  Nairobi,<br />Kenya
                 </p>
               </div>
               <div className="flex items-center gap-4 group">

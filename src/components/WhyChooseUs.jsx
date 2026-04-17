@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { Shield, Rocket, Zap, Heart, Award, Target, CheckCircle, Clock, Users, Headphones } from 'lucide-react'
 
 const WhyChooseUs = () => {
@@ -40,11 +39,7 @@ const WhyChooseUs = () => {
     <section id="why-choose-us" className="py-24 bg-neutral-50 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
+          <div>
             <span className="inline-block text-sm font-bold text-blue-600 tracking-wider uppercase mb-4">
               Why Iyonicorp
             </span>
@@ -77,14 +72,9 @@ const WhyChooseUs = () => {
                 )
               })}
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
+          <div className="relative">
             <div className="bg-white p-12 rounded-[40px] shadow-2xl shadow-blue-500/5 border border-neutral-100 relative z-10">
               <h3 className="text-2xl font-bold text-neutral-900 mb-8 text-center">Performance Metrics</h3>
               <div className="space-y-8">
@@ -95,12 +85,9 @@ const WhyChooseUs = () => {
                       <span className="text-xl font-bold text-neutral-900">{metric.value}</span>
                     </div>
                     <div className="h-2 bg-neutral-50 rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: '100%' }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.5, delay: i * 0.2 }}
+                      <div
                         className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full"
+                        style={{ width: '100%' }}
                       />
                     </div>
                   </div>
@@ -108,10 +95,9 @@ const WhyChooseUs = () => {
               </div>
             </div>
             
-            {/* Background elements */}
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-100 rounded-full blur-3xl opacity-50 -z-0" />
             <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-100 rounded-full blur-3xl opacity-50 -z-0" />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

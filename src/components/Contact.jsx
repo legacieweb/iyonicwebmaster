@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react'
 import { submitLead } from '../utils/api'
 
@@ -60,12 +59,7 @@ const Contact = () => {
     <section id="contact" className="py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-20">
-          {/* Left Column - Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
+          <div>
             <span className="inline-block text-sm font-bold text-blue-600 tracking-wider uppercase mb-4">
               Get in Touch
             </span>
@@ -93,15 +87,9 @@ const Contact = () => {
                 )
               })}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Right Column - Form */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
+          <div className="relative">
             <div className="bg-neutral-50 p-8 md:p-12 rounded-[40px] border border-neutral-100">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
@@ -144,20 +132,16 @@ const Contact = () => {
                   />
                 </div>
 
-                <AnimatePresence>
-                  {submitStatus && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className={`p-4 rounded-2xl flex items-center gap-3 ${
-                        submitStatus.type === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
-                      }`}
-                    >
-                      {submitStatus.type === 'success' ? <CheckCircle size={20} /> : <AlertCircle size={20} />}
-                      <span className="text-sm font-bold">{submitStatus.message}</span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {submitStatus && (
+                  <div
+                    className={`p-4 rounded-2xl flex items-center gap-3 ${
+                      submitStatus.type === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+                    }`}
+                  >
+                    {submitStatus.type === 'success' ? <CheckCircle size={20} /> : <AlertCircle size={20} />}
+                    <span className="text-sm font-bold">{submitStatus.message}</span>
+                  </div>
+                )}
 
                 <button
                   type="submit"
@@ -170,9 +154,8 @@ const Contact = () => {
               </form>
             </div>
             
-            {/* Decorative background circle */}
             <div className="absolute -z-10 -bottom-10 -right-10 w-64 h-64 bg-blue-50 rounded-full blur-3xl opacity-50" />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

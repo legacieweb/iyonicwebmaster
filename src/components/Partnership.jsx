@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { Sparkles, Zap, ArrowRight, Rocket, MousePointer2, ShieldCheck, HeartHandshake, Globe, Wallet, Clock, CreditCard } from 'lucide-react'
 
 const Partnership = ({ onLearnMore }) => {
@@ -28,48 +27,30 @@ const Partnership = ({ onLearnMore }) => {
       <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10 lg:gap-12 mb-20 lg:mb-32 border-b border-neutral-100 pb-16 lg:pb-24">
           <div className="max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="flex items-center gap-3 text-blue-600 mb-6 lg:mb-10 font-black uppercase tracking-[0.3em] lg:tracking-[0.4em] text-[8px] lg:text-[10px]"
-            >
+            <div className="flex items-center gap-3 text-blue-600 mb-6 lg:mb-10 font-black uppercase tracking-[0.3em] lg:tracking-[0.4em] text-[8px] lg:text-[10px]">
               <HeartHandshake size={14} className="md:w-4 md:h-4" />
               E-commerce Alliance
-            </motion.div>
-            <motion.h2 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-5xl sm:text-7xl lg:text-9xl font-black text-neutral-950 mb-8 lg:mb-10 leading-[0.9] lg:leading-[0.85] tracking-tighter uppercase italic"
-            >
+            </div>
+            <h2 className="text-5xl sm:text-7xl lg:text-9xl font-black text-neutral-950 mb-8 lg:mb-10 leading-[0.9] lg:leading-[0.85] tracking-tighter uppercase italic">
               The 7% <br />
               <span className="text-blue-600">Standard.</span>
-            </motion.h2>
+            </h2>
             <p className="text-lg md:text-2xl text-neutral-500 font-medium leading-relaxed max-w-2xl">
               We've eliminated the barriers to digital commerce. No upfront costs, no maintenance fees—just a single 7% performance fee that settles in 30 seconds.
             </p>
           </div>
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="flex flex-row lg:flex-col items-center gap-4 lg:gap-6"
-          >
+          <div className="flex flex-row lg:flex-col items-center gap-4 lg:gap-6">
             <div className="w-16 h-16 lg:w-24 lg:h-24 bg-blue-600 rounded-[24px] lg:rounded-[32px] flex items-center justify-center text-white shadow-2xl shadow-blue-500/20">
               <ShieldCheck size={28} className="lg:w-[40px] lg:h-[40px]" />
             </div>
             <span className="text-[8px] lg:text-[10px] font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] text-blue-600">Verified Partnership</span>
-          </motion.div>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6 lg:gap-12 mb-20 lg:mb-32">
           {steps.map((step, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
               className="group p-8 lg:p-12 bg-neutral-50 rounded-[32px] lg:rounded-[48px] border border-neutral-100 hover:bg-white hover:border-blue-600/20 hover:shadow-2xl transition-all duration-700"
             >
               <div className="w-12 h-12 lg:w-16 lg:h-16 bg-white rounded-2xl lg:rounded-3xl flex items-center justify-center text-neutral-950 shadow-sm mb-8 lg:mb-10 group-hover:bg-blue-600 group-hover:text-white transition-all duration-700">
@@ -82,17 +63,11 @@ const Partnership = ({ onLearnMore }) => {
               <div className="flex items-center gap-4 text-[8px] lg:text-[10px] font-black uppercase tracking-widest text-neutral-400 group-hover:text-blue-600 transition-colors">
                 Benefit 0{i + 1} <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform" />
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative bg-white border border-neutral-100 shadow-xl rounded-[40px] lg:rounded-[64px] p-8 md:p-16 lg:p-24 overflow-hidden group text-center"
-        >
+        <div className="relative bg-white border border-neutral-100 shadow-xl rounded-[40px] lg:rounded-[64px] p-8 md:p-16 lg:p-24 overflow-hidden group text-center">
           <div className="absolute top-0 right-0 p-12 text-blue-600/5 group-hover:text-blue-600/10 transition-colors hidden md:block">
             <Rocket size={240} />
           </div>
@@ -112,7 +87,7 @@ const Partnership = ({ onLearnMore }) => {
               <MousePointer2 size={18} className="lg:w-[20px] lg:h-[20px] group-hover:rotate-12 transition-transform" />
             </button>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

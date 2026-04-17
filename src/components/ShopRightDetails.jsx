@@ -1,12 +1,150 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingBag, ArrowLeft, Zap, Globe, Layout, ShieldCheck, CheckCircle2, DollarSign, Package, Star, ArrowRight, X, RefreshCw, TrendingUp } from 'lucide-react'
+import { ShoppingBag, ArrowLeft, Zap, Globe, Layout, ShieldCheck, CheckCircle2, DollarSign, Package, Star, ArrowRight, X, RefreshCw, TrendingUp, CreditCard, Bot, Plus, Minus, ShoppingCart } from 'lucide-react'
 
-const ShopRightDetails = ({ onBack }) => {
+const ProductCard = ({ product, onAddToCart }) => {
+  const [quantity, setQuantity] = useState(1)
+  const [selectedTier, setSelectedTier] = useState(0)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="bg-white rounded-[48px] overflow-hidden shadow-2xl border border-neutral-100"
+    >
+      <div className="relative h-64 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-8 flex items-center justify-center">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.05%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-50" />
+        <div className="relative z-10 text-center">
+          <div className="w-24 h-24 bg-white/10 backdrop-blur-sm rounded-[32px] flex items-center justify-center mx-auto mb-4 border border-white/20">
+            <Package size={48} className="text-white" />
+          </div>
+          <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter">{product.name}</h3>
+        </div>
+        
+        <div className="absolute top-6 left-6 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
+          <span className="text-xs font-black text-white uppercase tracking-widest">{product.badge}</span>
+        </div>
+        
+        {product.isNew && (
+          <div className="absolute top-6 right-6 px-4 py-2 bg-emerald-500 rounded-full">
+            <span className="text-xs font-black text-white uppercase tracking-widest">New Release</span>
+          </div>
+        )}
+      </div>
+
+      <div className="p-10">
+        <p className="text-neutral-600 font-medium leading-relaxed mb-8">{product.description}</p>
+
+        <div className="flex gap-3 mb-8">
+          {product.integrations.map((integration, i) => (
+            <div key={i} className="flex items-center gap-2 px-4 py-2 bg-neutral-50 rounded-xl">
+              {integration.icon === 'payment' && <CreditCard size={16} className="text-blue-600" />}
+              {integration.icon === 'bot' && <Bot size={16} className="text-purple-600" />}
+              <span className="text-xs font-bold text-neutral-700 uppercase tracking-widest">{integration.name}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="mb-8">
+          <div className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-4">Select Package</div>
+          <div className="grid grid-cols-3 gap-3">
+            {product.tiers.map((tier, i) => (
+              <button
+                key={i}
+                onClick={() => setSelectedTier(i)}
+                className={`p-4 rounded-2xl border-2 transition-all text-left ${
+                  selectedTier === i 
+                    ? 'border-blue-600 bg-blue-50' 
+                    : 'border-neutral-100 hover:border-neutral-200'
+                }`}
+              >
+                <div className="text-xs font-black text-neutral-900 uppercase tracking-wider mb-1">{tier.name}</div>
+                <div className="text-lg font-black text-blue-600 tracking-tighter">${tier.price}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between pt-8 border-t border-neutral-100">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 bg-neutral-50 rounded-2xl px-4 py-3">
+              <button 
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="w-8 h-8 rounded-lg bg-white border border-neutral-200 flex items-center justify-center hover:bg-neutral-100 transition-colors"
+              >
+                <Minus size={14} />
+              </button>
+              <span className="w-8 text-center font-black text-neutral-900">{quantity}</span>
+              <button 
+                onClick={() => setQuantity(quantity + 1)}
+                className="w-8 h-8 rounded-lg bg-white border border-neutral-200 flex items-center justify-center hover:bg-neutral-100 transition-colors"
+              >
+                <Plus size={14} />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <div>
+              <div className="text-xs font-black text-neutral-400 uppercase tracking-widest">Total</div>
+              <div className="text-2xl font-black text-neutral-900 tracking-tighter">
+                ${(product.tiers[selectedTier].price * quantity).toLocaleString()}
+              </div>
+            </div>
+            <button
+              onClick={() => onAddToCart(product, quantity, product.tiers[selectedTier])}
+              className="px-8 py-4 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center gap-3 hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20"
+            >
+              <ShoppingCart size={18} />
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+const ShopDetails = ({ onBack }) => {
+  const [cartItems, setCartItems] = useState([])
+  const [showCart, setShowCart] = useState(false)
   const [showWaitlistModal, setShowWaitlistModal] = useState(false)
-  const [waitlistType, setWaitlistType] = useState('seller') // 'seller' or 'buyer'
+  const [waitlistType, setWaitlistType] = useState('seller')
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
+
+  const products = [
+    {
+      id: 1,
+      name: 'Shop Enterprise',
+      badge: 'Premium',
+      isNew: true,
+      description: 'The complete merchant solution with full access to Shop, IyonicPay, and IyonicBots. Build your digital empire with enterprise-grade tools.',
+      integrations: [
+        { name: 'IyonicPay', icon: 'payment' },
+        { name: 'IyonicBots', icon: 'bot' },
+        { name: 'Shop', icon: 'shop' }
+      ],
+      tiers: [
+        { name: 'Starter', price: 299 },
+        { name: 'Pro', price: 599 },
+        { name: 'Elite', price: 999 }
+      ]
+    }
+  ]
+
+  const handleAddToCart = (product, quantity, tier) => {
+    const existingIndex = cartItems.findIndex(item => item.productId === product.id && item.tier.name === tier.name)
+    if (existingIndex > -1) {
+      const newCart = [...cartItems]
+      newCart[existingIndex].quantity += quantity
+      setCartItems(newCart)
+    } else {
+      setCartItems([...cartItems, { ...product, quantity, tier }])
+    }
+    setShowCart(true)
+  }
 
   const handlePreorder = (type) => {
     setWaitlistType(type)
@@ -15,7 +153,6 @@ const ShopRightDetails = ({ onBack }) => {
 
   const handleSubmitWaitlist = (e) => {
     e.preventDefault()
-    // Simulated submission
     console.log(`Submitted to waitlist: ${email} as ${waitlistType}`)
     setSubmitted(true)
     setTimeout(() => {
@@ -24,6 +161,8 @@ const ShopRightDetails = ({ onBack }) => {
       setEmail('')
     }, 2000)
   }
+
+const cartTotal = cartItems.reduce((sum, item) => sum + (item.tier.price * item.quantity), 0)
 
   return (
     <div className="min-h-screen bg-white">
@@ -60,7 +199,7 @@ const ShopRightDetails = ({ onBack }) => {
               </div>
               
               <h1 className="text-7xl lg:text-9xl font-black text-neutral-900 mb-10 tracking-tighter leading-[0.85] italic">
-                Shop<span className="text-blue-600">Right.</span>
+                Shop<span className="text-blue-600">.</span>
               </h1>
               
               <p className="text-2xl text-neutral-600 font-medium leading-relaxed mb-12 max-w-xl">
@@ -156,7 +295,7 @@ const ShopRightDetails = ({ onBack }) => {
             <div className="space-y-8">
               <h2 className="text-4xl font-black text-neutral-950 uppercase italic tracking-tighter">Everything you need to <span className="text-blue-600">Scale.</span></h2>
               <p className="text-lg text-neutral-600 leading-relaxed font-medium">
-                ShopRight empowers merchants to take full control of their online presence. From inventory management to real-time performance tracking, every feature is built to be intuitive, powerful, and beautiful.
+                Shop empowers merchants to take full control of their online presence. From inventory management to real-time performance tracking, every feature is built to be intuitive, powerful, and beautiful.
               </p>
               
               <div className="space-y-6">
@@ -188,7 +327,7 @@ const ShopRightDetails = ({ onBack }) => {
                       <div className="w-3 h-3 rounded-full bg-amber-400" />
                       <div className="w-3 h-3 rounded-full bg-emerald-400" />
                     </div>
-                    <div className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">ShopRight Live View</div>
+                    <div className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Shop Live View</div>
                   </div>
                   <div className="flex-1 p-12 flex flex-col items-center justify-center text-center">
                     <div className="w-24 h-24 bg-blue-600/5 rounded-[32px] flex items-center justify-center text-blue-600 mb-8 shadow-inner">
@@ -226,10 +365,10 @@ const ShopRightDetails = ({ onBack }) => {
               </div>
               <h3 className="text-3xl font-black text-neutral-950 uppercase italic tracking-tighter mb-4">Monthly Access</h3>
               <p className="text-neutral-500 text-sm mb-8 font-medium leading-relaxed">
-                Perfect for growing brands. Pay as you go with full access to the ShopRight merchant ecosystem.
+                Perfect for growing brands. Pay as you go with full access to the Shop merchant ecosystem.
               </p>
               <div className="mb-10">
-                <span className="text-5xl font-black text-neutral-950 tracking-tighter">$149</span>
+                <span className="text-5xl font-black text-neutral-950 tracking-tighter">$99</span>
                 <span className="text-neutral-400 font-bold ml-2 uppercase text-xs tracking-widest">/ Per Month</span>
                 <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mt-2">(Estimated Pricing)</p>
               </div>
@@ -265,7 +404,7 @@ const ShopRightDetails = ({ onBack }) => {
                 Full ownership. Deploy on your own servers or let us host. Lifetime license for elite enterprises.
               </p>
               <div className="mb-10">
-                <span className="text-5xl font-black text-neutral-900 tracking-tighter">$4,999</span>
+                <span className="text-5xl font-black text-neutral-900 tracking-tighter">$349,999</span>
                 <span className="text-neutral-400 font-bold ml-2 uppercase text-xs tracking-widest">/ One-time</span>
                 <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mt-2">(Special Pre-Order Offer)</p>
               </div>
@@ -284,6 +423,34 @@ const ShopRightDetails = ({ onBack }) => {
                 Pre-Order Software
               </button>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Product Section */}
+      <section className="py-32 bg-white">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 text-blue-600 text-[10px] font-black uppercase tracking-[0.3em] mb-6">
+              <Package size={14} />
+              Available Now
+            </div>
+            <h2 className="text-5xl font-black text-neutral-900 uppercase italic tracking-tighter mb-4">
+              Shop <span className="text-blue-600">Enterprise</span>
+            </h2>
+            <p className="text-neutral-500 text-lg font-medium max-w-2xl mx-auto">
+              The complete merchant ecosystem. Integrated with IyonicPay and IyonicBots for seamless commerce.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-10 max-w-5xl mx-auto">
+            {products.map((product, index) => (
+              <ProductCard 
+                key={product.id} 
+                product={product} 
+                onAddToCart={handleAddToCart}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -364,4 +531,4 @@ const ShopRightDetails = ({ onBack }) => {
   )
 }
 
-export default ShopRightDetails
+export default ShopDetails

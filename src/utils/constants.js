@@ -1,54 +1,42 @@
-import { Code, Smartphone, Cpu, CreditCard, Megaphone, Zap } from 'lucide-react'
+import { Code, ShoppingBag, Layout, Globe, Database, Smartphone, Zap, Shield, Activity, Cloud, Layers } from 'lucide-react'
 
 export const SERVICES = [
   {
     id: 'web-development',
     icon: Code,
-    title: 'Web Development',
-    description: 'Custom, responsive projects and web applications built with modular business logic.',
+    title: 'Custom Web Applications',
+    description: 'High-performance, scalable web applications built with modern frameworks and robust backend architectures tailored to your business needs.',
     moduleIds: ['crm', 'collaboration', 'inventory', 'cloud_infra', 'seo_basic', 'auth', 'db_basic'],
-    color: 'bg-blue-500'
+    color: 'bg-blue-600',
+    types: ['SaaS', 'Internal Tools', 'Portals', 'Dashboards']
   },
   {
-    id: 'mobile-apps',
-    icon: Smartphone,
-    title: 'Mobile Apps',
-    description: 'Native and cross-platform mobile applications for exceptional user experiences.',
-    moduleIds: ['crm', 'collaboration', 'analytics', 'push_notifs', 'biometric_auth', 'offline_sync'],
-    color: 'bg-purple-500'
+    id: 'ecommerce',
+    icon: ShoppingBag,
+    title: 'E-commerce Solutions',
+    description: 'Full-featured online stores with advanced inventory management, secure payments, and seamless user experiences to drive your sales.',
+    moduleIds: ['inventory', 'auth', 'db_basic', 'analytics'],
+    color: 'bg-indigo-600',
+    types: ['Retail', 'Marketplaces', 'B2B Stores', 'Subscriptions']
   },
   {
-    id: 'ai-automation',
-    icon: Cpu,
-    title: 'AI & Automation',
-    description: 'Intelligent systems designed to automate tasks and enhance user experiences.',
-    moduleIds: ['analytics', 'ai_assistant', 'automation', 'model_training', 'vision_ai'],
-    color: 'bg-indigo-500'
+    id: 'brand-presence',
+    icon: Globe,
+    title: 'Corporate & Portfolio',
+    description: 'Stunning, high-conversion websites that establish your brand authority and showcase your professional expertise to the world.',
+    moduleIds: ['seo_basic', 'collaboration', 'auth'],
+    color: 'bg-cyan-600',
+    types: ['Portfolios', 'Landing Pages', 'Business Profiles', 'Blogs']
   },
   {
-    id: 'payment-solutions',
-    icon: CreditCard,
-    title: 'Payment Solutions',
-    description: 'Seamless payment integration with top platforms for secure transactions.',
-    moduleIds: ['invoicing', 'global_payroll', 'security', 'fraud_prevention', 'subscription_mgmt', 'crypto_payments'],
-    color: 'bg-emerald-500'
-  },
-  {
-    id: 'digital-marketing',
-    icon: Megaphone,
-    title: 'Digital Marketing',
-    description: 'Strategic marketing solutions to amplify your reach and drive conversions.',
-    moduleIds: ['market_intel', 'analytics', 'crm', 'seo_basic', 'email_basic'],
-    color: 'bg-rose-500'
-  },
-  {
-    id: 'integrations',
-    icon: Zap,
-    title: 'Integrations',
-    description: 'Connect your tools and automate workflows for seamless operations.',
-    moduleIds: ['automation', 'compliance', 'security', 'api_gateway'],
-    color: 'bg-amber-500'
-  },
+    id: 'specialized-systems',
+    icon: Layers,
+    title: 'Specialized Systems',
+    description: 'Niche solutions for specific industries including booking systems, automated workflows, and data-intensive platforms.',
+    moduleIds: ['automation', 'security', 'compliance', 'cloud_infra'],
+    color: 'bg-slate-900',
+    types: ['Booking', 'Real Estate', 'Logistics', 'Education']
+  }
 ]
 
 export const PRICING_DATA = {
@@ -100,151 +88,117 @@ export const PRICING_DATA = {
       }
     }
   ],
-  'payment-solutions': [
+  'ecommerce': [
     {
-      name: 'Gateway Lite',
-      price: 250,
-      maxPrice: 500,
-      description: 'Seamless integration with Stripe, PayPal, Paystack, or Flutterwave.',
-      moduleIds: ['invoicing', 'security', 'subscription_mgmt'],
-      color: 'emerald',
-      tag: 'Lite Range',
+      name: 'Starter Shop',
+      category: 'Small Business',
+      price: 450,
+      maxPrice: 1200,
+      description: 'Perfect for small boutiques and specialized retailers starting their online journey.',
+      moduleIds: ['inventory', 'auth', 'db_basic'],
+      tag: 'Quick Start',
+      color: 'blue',
       design: {
-        gradient: 'from-emerald-500 to-teal-400',
+        gradient: 'from-blue-600 to-cyan-500',
         pattern: 'bg-grid-white/[0.02]',
-        shadow: 'hover:shadow-emerald-500/20'
+        shadow: 'hover:shadow-blue-500/20'
       }
     },
     {
-      name: 'Fintech Core',
-      price: 750,
-      maxPrice: 3000,
-      description: 'Advanced financial systems with recurring billing and multi-gateways.',
-      moduleIds: ['invoicing', 'security', 'global_payroll', 'crypto_payments'],
+      name: 'Retail Engine',
+      category: 'E-commerce & Retail',
+      price: 950,
+      maxPrice: 3500,
+      description: 'Full-scale ecommerce websites with advanced checkout and inventory management.',
+      moduleIds: ['crm', 'collaboration', 'inventory', 'cloud_infra', 'auth'],
+      tag: 'Most Popular',
       popular: true,
-      color: 'teal',
+      color: 'purple',
       design: {
-        gradient: 'from-teal-600 to-cyan-700',
+        gradient: 'from-purple-600 to-indigo-600',
         pattern: 'bg-dot-white/[0.05]',
-        shadow: 'hover:shadow-teal-500/20'
-      }
-    }
-  ],
-  'digital-marketing': [
-    {
-      name: 'Traffic Wave',
-      price: 500,
-      maxPrice: 1500,
-      period: '/mo',
-      description: 'Full-funnel marketing to drive serious traffic and leads.',
-      moduleIds: ['market_intel', 'analytics', 'email_basic'],
-      color: 'orange',
-      design: {
-        gradient: 'from-orange-500 to-red-500',
-        pattern: 'bg-grid-white/[0.02]',
-        shadow: 'hover:shadow-orange-500/20'
+        shadow: 'hover:shadow-purple-500/20'
       }
     },
     {
-      name: 'Brand Dominance',
-      price: 600,
-      maxPrice: 2500,
-      period: '/mo',
-      description: 'Scale your business with aggressive multi-channel marketing.',
-      moduleIds: ['market_intel', 'analytics', 'crm', 'seo_basic', 'email_basic'],
-      popular: true,
-      color: 'rose',
-      design: {
-        gradient: 'from-rose-600 to-pink-600',
-        pattern: 'bg-dot-white/[0.05]',
-        shadow: 'hover:shadow-rose-500/20'
-      }
-    }
-  ],
-  'ai-automation': [
-    {
-      name: 'Agent Zero',
-      price: 250,
-      maxPrice: 1250,
-      description: 'Intelligent workflows to save hours of manual labor.',
-      moduleIds: ['analytics', 'ai_assistant'],
-      color: 'emerald',
-      design: {
-        gradient: 'from-green-500 to-emerald-600',
-        pattern: 'bg-grid-white/[0.02]',
-        shadow: 'hover:shadow-green-500/20'
-      }
-    },
-    {
-      name: 'Neural Enterprise',
-      price: 1250,
-      maxPrice: 5000,
-      description: 'End-to-end AI transformation for your business operations.',
-      moduleIds: ['analytics', 'ai_assistant', 'automation', 'vision_ai'],
-      popular: true,
+      name: 'Global Marketplace',
+      category: 'Enterprise',
+      price: 4500,
+      maxPrice: 15000,
+      description: 'Multi-vendor platforms with complex logistics, international payments, and AI insights.',
+      moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth', 'analytics', 'global_payroll'],
+      tag: 'Enterprise',
       color: 'indigo',
       design: {
-        gradient: 'from-indigo-700 to-purple-800',
-        pattern: 'bg-dot-white/[0.05]',
+        gradient: 'from-indigo-600 to-blue-700',
+        pattern: 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))]',
         shadow: 'hover:shadow-indigo-500/20'
       }
     }
   ],
-  'mobile-apps': [
+  'brand-presence': [
     {
-      name: 'Native MVP',
-      price: 450,
-      maxPrice: 1500,
-      description: 'Native experience for iOS and Android built on React Native.',
-      moduleIds: ['crm', 'collaboration', 'push_notifs'],
-      color: 'sky',
+      name: 'Identity Pack',
+      category: 'Personal',
+      price: 150,
+      maxPrice: 500,
+      description: 'Sleek portfolios and personal brands that stand out from the crowd.',
+      moduleIds: ['seo_basic', 'auth'],
+      tag: 'Personal',
+      color: 'blue',
       design: {
-        gradient: 'from-sky-500 to-blue-600',
+        gradient: 'from-blue-600 to-cyan-500',
         pattern: 'bg-grid-white/[0.02]',
-        shadow: 'hover:shadow-sky-500/20'
+        shadow: 'hover:shadow-blue-500/20'
       }
     },
     {
-      name: 'Mobile Empire',
-      price: 700,
-      maxPrice: 4000,
-      description: 'Full-featured enterprise mobile ecosystem with complex logic.',
-      moduleIds: ['crm', 'collaboration', 'analytics', 'offline_sync', 'biometric_auth'],
+      name: 'Business Pro',
+      category: 'Corporate',
+      price: 600,
+      maxPrice: 1500,
+      description: 'Professional corporate websites with lead generation and brand storytelling.',
+      moduleIds: ['crm', 'collaboration', 'seo_basic', 'auth'],
+      tag: 'Corporate',
       popular: true,
       color: 'purple',
       design: {
-        gradient: 'from-purple-700 to-fuchsia-800',
+        gradient: 'from-purple-600 to-indigo-600',
         pattern: 'bg-dot-white/[0.05]',
         shadow: 'hover:shadow-purple-500/20'
       }
     }
   ],
-  'integrations': [
+  'specialized-systems': [
     {
-      name: 'Sync Logic',
-      price: 750,
-      maxPrice: 2000,
-      description: 'Seamless API integrations between your existing tools.',
-      moduleIds: ['automation', 'security', 'api_gateway'],
-      color: 'amber',
+      name: 'Booking Hub',
+      category: 'Services',
+      price: 800,
+      maxPrice: 2500,
+      description: 'Advanced appointment and reservation systems for any service industry.',
+      moduleIds: ['crm', 'collaboration', 'inventory', 'db_basic'],
+      tag: 'Service-Ready',
+      color: 'blue',
       design: {
-        gradient: 'from-amber-500 to-orange-500',
+        gradient: 'from-blue-600 to-cyan-500',
         pattern: 'bg-grid-white/[0.02]',
-        shadow: 'hover:shadow-amber-500/20'
+        shadow: 'hover:shadow-blue-500/20'
       }
     },
     {
-      name: 'System Weave',
-      price: 1250,
-      maxPrice: 4500,
-      description: 'Connect your entire tech stack into a unified powerhouse.',
-      moduleIds: ['automation', 'security', 'compliance'],
+      name: 'Custom Workflow',
+      category: 'Automation',
+      price: 1500,
+      maxPrice: 8000,
+      description: 'Tailored business automation and data management platforms built to your specs.',
+      moduleIds: ['automation', 'cloud_infra', 'security', 'compliance'],
+      tag: 'Tailored',
       popular: true,
-      color: 'orange',
+      color: 'indigo',
       design: {
-        gradient: 'from-orange-600 to-amber-700',
-        pattern: 'bg-dot-white/[0.05]',
-        shadow: 'hover:shadow-orange-500/20'
+        gradient: 'from-indigo-600 to-blue-700',
+        pattern: 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))]',
+        shadow: 'hover:shadow-indigo-500/20'
       }
     }
   ]

@@ -1,10 +1,8 @@
-import { motion } from 'framer-motion'
 import { ShoppingBag, ArrowRight, Zap, Globe, Layout, ShieldCheck } from 'lucide-react'
 
 const ShopRight = ({ onViewDetails }) => {
   return (
     <section className="py-24 bg-white overflow-hidden relative" id="shopright">
-      {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-full">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/5 blur-[120px] rounded-full" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/5 blur-[120px] rounded-full" />
@@ -12,19 +10,14 @@ const ShopRight = ({ onViewDetails }) => {
 
       <div className="max-w-7xl mx-auto px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
+          <div>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] mb-8">
               <ShoppingBag size={14} />
-              New Launch: ShopRight
+              New Launch: Shop
             </div>
             
             <h2 className="text-5xl lg:text-7xl font-black text-neutral-900 mb-8 tracking-tighter leading-none italic">
-              ShopRight <span className="text-blue-600">by Iyonicorp.</span>
+              Shop <span className="text-blue-600">by Iyonicorp.</span>
             </h2>
             
             <p className="text-xl text-neutral-600 mb-12 font-medium leading-relaxed max-w-xl">
@@ -47,29 +40,21 @@ const ShopRight = ({ onViewDetails }) => {
               ))}
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <button
               onClick={onViewDetails}
               className="px-10 py-5 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center gap-4 group shadow-xl hover:bg-blue-700 transition-colors"
             >
               View Details
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </motion.button>
-          </motion.div>
+            </button>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="relative"
-          >
+          <div className="relative">
             <div className="relative z-10 bg-white p-2 rounded-[48px] shadow-2xl border border-neutral-100">
               <div className="bg-neutral-50 rounded-[40px] overflow-hidden aspect-[4/3] flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-600/5 via-transparent to-transparent opacity-50" />
                 <div className="relative text-center p-12">
-                  <ShoppingBag size={80} className="mx-auto text-blue-600 mb-8 animate-bounce" />
+                  <ShoppingBag size={80} className="mx-auto text-blue-600 mb-8" />
                   <div className="text-2xl font-black text-neutral-900 uppercase italic tracking-tighter mb-4">Merchant Dashboard</div>
                   <div className="w-32 h-1 bg-blue-600 mx-auto rounded-full mb-8" />
                   <div className="space-y-3">
@@ -80,24 +65,15 @@ const ShopRight = ({ onViewDetails }) => {
               </div>
             </div>
             
-            {/* Floating Elements */}
-            <motion.div 
-              animate={{ y: [0, -20, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-10 -right-10 bg-blue-600 p-8 rounded-[32px] shadow-2xl z-20"
-            >
+            <div className="absolute -top-10 -right-10 bg-blue-600 p-8 rounded-[32px] shadow-2xl z-20">
               <Zap size={32} className="text-white" />
-            </motion.div>
+            </div>
             
-            <motion.div 
-              animate={{ y: [0, 20, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute -bottom-10 -left-10 bg-white border border-neutral-100 p-8 rounded-[32px] shadow-2xl z-20"
-            >
+            <div className="absolute -bottom-10 -left-10 bg-white border border-neutral-100 p-8 rounded-[32px] shadow-2xl z-20">
               <div className="text-blue-600 font-black text-2xl tracking-tighter italic">99.9%</div>
               <div className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Uptime Guaranteed</div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
