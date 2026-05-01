@@ -1,58 +1,26 @@
-import { Shield, Rocket, Zap, Heart, Award, Target, CheckCircle, Clock, Users, Headphones } from 'lucide-react'
+import { WHY_CHOOSE_US_CONTENT, WHY_CHOOSE_US_FEATURES, WHY_CHOOSE_US_METRICS } from '../utils/constants'
 
 const WhyChooseUs = () => {
-  const features = [
-    {
-      icon: Shield,
-      title: 'Security First',
-      description: 'Enterprise-grade protocols with 24/7 monitoring and compliance.',
-      color: 'blue'
-    },
-    {
-      icon: Rocket,
-      title: 'Fast Delivery',
-      description: 'Agile methodology ensures rapid deployment without compromises.',
-      color: 'purple'
-    },
-    {
-      icon: Zap,
-      title: 'Modern Stack',
-      description: 'Leveraging the latest frameworks for future-proof solutions.',
-      color: 'indigo'
-    },
-    {
-      icon: Heart,
-      title: 'Client Centric',
-      description: 'Your success is our priority. We work as your dedicated partner.',
-      color: 'rose'
-    }
-  ]
-
-  const metrics = [
-    { label: 'Uptime Guarantee', value: '99.9%' },
-    { label: 'Project Success', value: '100%' },
-    { label: 'Client Retention', value: '95%' },
-    { label: 'Support Response', value: '< 2h' },
-  ]
-
   return (
     <section id="why-choose-us" className="py-24 bg-neutral-50 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div>
             <span className="inline-block text-sm font-bold text-blue-600 tracking-wider uppercase mb-4">
-              Why Iyonicorp
+              {WHY_CHOOSE_US_CONTENT.subtitle}
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-8 leading-tight">
-              We don't just build, <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">we empower</span>
+              {WHY_CHOOSE_US_CONTENT.title.split(',')[0]}, <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                {WHY_CHOOSE_US_CONTENT.title.split(',')[1]}
+              </span>
             </h2>
             <p className="text-lg text-neutral-500 mb-12 leading-relaxed">
-              Choosing the right partner is the difference between a project that just exists and one that thrives. We bring a decade of expertise and a relentless focus on your ROI.
+              {WHY_CHOOSE_US_CONTENT.description}
             </p>
 
             <div className="grid sm:grid-cols-2 gap-8">
-              {features.map((feature, i) => {
+              {WHY_CHOOSE_US_FEATURES.map((feature, i) => {
                 const Icon = feature.icon
                 return (
                   <div key={i} className="flex gap-4">
@@ -60,7 +28,8 @@ const WhyChooseUs = () => {
                       feature.color === 'blue' ? 'bg-blue-50 text-blue-600' :
                       feature.color === 'purple' ? 'bg-purple-50 text-purple-600' :
                       feature.color === 'indigo' ? 'bg-indigo-50 text-indigo-600' :
-                      'bg-rose-50 text-rose-600'
+                      feature.color === 'rose' ? 'bg-rose-50 text-rose-600' :
+                      'bg-blue-50 text-blue-600'
                     }`}>
                       <Icon size={24} />
                     </div>
@@ -78,7 +47,7 @@ const WhyChooseUs = () => {
             <div className="bg-white p-12 rounded-[40px] shadow-2xl shadow-blue-500/5 border border-neutral-100 relative z-10">
               <h3 className="text-2xl font-bold text-neutral-900 mb-8 text-center">Performance Metrics</h3>
               <div className="space-y-8">
-                {metrics.map((metric, i) => (
+                {WHY_CHOOSE_US_METRICS.map((metric, i) => (
                   <div key={i}>
                     <div className="flex justify-between items-end mb-2">
                       <span className="text-sm font-bold text-neutral-400 uppercase tracking-wider">{metric.label}</span>

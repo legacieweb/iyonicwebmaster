@@ -1,27 +1,7 @@
-import { Sparkles, Zap, ArrowRight, Rocket, MousePointer2, ShieldCheck, HeartHandshake, Globe, Wallet, Clock, CreditCard } from 'lucide-react'
+import { PARTNERSHIP_CONTENT, PARTNERSHIP_STEPS } from '../utils/constants'
+import { MousePointer2, ShieldCheck, HeartHandshake, ArrowRight, Rocket } from 'lucide-react'
 
 const Partnership = ({ onLearnMore }) => {
-  const steps = [
-    {
-      icon: Rocket,
-      title: 'Zero Upfront',
-      description: 'We build your high-conversion storefront with zero initial investment. We only win when you win.',
-      color: 'blue'
-    },
-    {
-      icon: Zap,
-      title: '30s Settlement',
-      description: 'Get paid instantly. Sales are settled to your mobile money wallet within 30 seconds of purchase.',
-      color: 'indigo'
-    },
-    {
-      icon: HeartHandshake,
-      title: '7% All-In',
-      description: 'One flat fee covers everything: hosting, maintenance, transactions, and ongoing support.',
-      color: 'purple'
-    }
-  ]
-
   return (
     <section id="partnership" className="py-24 md:py-40 bg-white overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
@@ -29,14 +9,14 @@ const Partnership = ({ onLearnMore }) => {
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 text-blue-600 mb-6 lg:mb-10 font-black uppercase tracking-[0.3em] lg:tracking-[0.4em] text-[8px] lg:text-[10px]">
               <HeartHandshake size={14} className="md:w-4 md:h-4" />
-              E-commerce Alliance
+              {PARTNERSHIP_CONTENT.subtitle}
             </div>
             <h2 className="text-5xl sm:text-7xl lg:text-9xl font-black text-neutral-950 mb-8 lg:mb-10 leading-[0.9] lg:leading-[0.85] tracking-tighter uppercase italic">
-              The 7% <br />
-              <span className="text-blue-600">Standard.</span>
+              {PARTNERSHIP_CONTENT.title.split(' ')[0]} {PARTNERSHIP_CONTENT.title.split(' ')[1]} <br />
+              <span className="text-blue-600">{PARTNERSHIP_CONTENT.title.split(' ').slice(2).join(' ')}</span>
             </h2>
             <p className="text-lg md:text-2xl text-neutral-500 font-medium leading-relaxed max-w-2xl">
-              We've eliminated the barriers to digital commerce. No upfront costs, no maintenance fees—just a single 7% performance fee that settles in 30 seconds.
+              {PARTNERSHIP_CONTENT.description}
             </p>
           </div>
           <div className="flex flex-row lg:flex-col items-center gap-4 lg:gap-6">
@@ -48,7 +28,7 @@ const Partnership = ({ onLearnMore }) => {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6 lg:gap-12 mb-20 lg:mb-32">
-          {steps.map((step, i) => (
+          {PARTNERSHIP_STEPS.map((step, i) => (
             <div
               key={i}
               className="group p-8 lg:p-12 bg-neutral-50 rounded-[32px] lg:rounded-[48px] border border-neutral-100 hover:bg-white hover:border-blue-600/20 hover:shadow-2xl transition-all duration-700"

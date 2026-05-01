@@ -355,27 +355,61 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
-  }
+  },
+  max: 20, // Maximum number of clients in the pool
+  idleTimeoutMillis: 30000, // How long a client is allowed to remain idle before being closed
+  connectionTimeoutMillis: 10000, // How long to wait when connecting a new client
+  keepAlive: true // Add keepalive to prevent idle connection termination
 });
 
+// Handle pool errors
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle database client', err);
+});
+
+// Retry helper for database queries
+const queryWithRetry = async (text, params, retries = 2) => {
+  for (let i = 0; i <= retries; i++) {
+    try {
+      return await pool.query(text, params);
+    } catch (err) {
+      const isTransient = err.code === 'ECONNRESET' || 
+                         err.code === 'ETIMEDOUT' || 
+                         err.code === 'ENOTFOUND' ||
+                         err.message.includes('Connection terminated unexpectedly') ||
+                         err.message.includes('Client network socket disconnected');
+      
+      if (i === retries || !isTransient) throw err;
+      
+      console.warn(`Database query failed (attempt ${i + 1}/${retries + 1}), retrying...`, err.message);
+      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1))); // Exponential-ish backoff
+    }
+  }
+};
+
 // Test database connection
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
-    console.error('Database connection error:', err);
-  } else {
+// Test and Initialize database schema
+async function initializeDatabase() {
+  try {
+    await queryWithRetry('SELECT NOW()');
     console.log('db connected');
+    
     // Ensure 'suspended' column exists for users
-    pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS suspended BOOLEAN DEFAULT false');
+    await queryWithRetry('ALTER TABLE users ADD COLUMN IF NOT EXISTS suspended BOOLEAN DEFAULT false');
     
     // Ensure new project columns exist
-    pool.query('ALTER TABLE projects ADD COLUMN IF NOT EXISTS domain TEXT');
-    pool.query('ALTER TABLE projects ADD COLUMN IF NOT EXISTS progress_status TEXT');
-    pool.query('ALTER TABLE projects ADD COLUMN IF NOT EXISTS latest_update TEXT');
-    pool.query('ALTER TABLE projects ADD COLUMN IF NOT EXISTS recommended_modules JSONB');
+    await queryWithRetry('ALTER TABLE projects ADD COLUMN IF NOT EXISTS domain TEXT');
+    await queryWithRetry('ALTER TABLE projects ADD COLUMN IF NOT EXISTS progress_status TEXT');
+    await queryWithRetry('ALTER TABLE projects ADD COLUMN IF NOT EXISTS latest_update TEXT');
+    await queryWithRetry('ALTER TABLE projects ADD COLUMN IF NOT EXISTS recommended_modules JSONB');
     
     console.log('Database schema checks completed');
+  } catch (err) {
+    console.error('Database initialization error:', err);
   }
-});
+}
+
+initializeDatabase();
 
 pool.on('error', (err) => {
   console.error('Unexpected error on idle pool client', err);
@@ -399,7 +433,7 @@ const authenticate = (req, res, next) => {
     
     // Check if user is suspended
     try {
-      const result = await pool.query('SELECT suspended FROM users WHERE id = $1', [decoded.id]);
+      const result = await queryWithRetry('SELECT suspended FROM users WHERE id = $1', [decoded.id]);
       if (result.rows.length > 0 && result.rows[0].suspended) {
         return res.status(403).json({ message: 'Account suspended. Please contact support.' });
       }
@@ -422,7 +456,7 @@ app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
   console.log('Login attempt:', { email, passwordReceived: !!password });
   try {
-    const result = await pool.query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
+    const result = await queryWithRetry('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
     const user = result.rows[0];
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
@@ -499,7 +533,7 @@ app.post('/api/auth/signup', async (req, res) => {
     }
     const hashedPassword = bcrypt.hashSync(password, 10);
     const name = `${first_name || ''} ${last_name || ''}`.trim() || email.split('@')[0];
-    const result = await pool.query(
+    const result = await queryWithRetry(
       'INSERT INTO users (email, password, first_name, last_name, phone_number, name, subscription_status) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, created_at',
       [email, hashedPassword, first_name, last_name, phone_number, name, 'inactive']
     );
@@ -576,7 +610,7 @@ app.post('/api/auth/signup', async (req, res) => {
 // User Routes
 app.get('/api/users', authenticate, async (req, res) => {
   try {
-    const result = await pool.query(
+    const result = await queryWithRetry(
       'SELECT id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, role, created_at FROM users ORDER BY created_at DESC'
     );
     res.json(result.rows);
@@ -592,7 +626,7 @@ app.get('/api/users/:id', authenticate, async (req, res) => {
     return res.status(403).json({ message: 'Forbidden' });
   }
   try {
-    const result = await pool.query(
+    const result = await queryWithRetry(
       'SELECT id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, role, created_at FROM users WHERE id = $1',
       [id]
     );
@@ -629,7 +663,7 @@ app.patch('/api/users/:id', authenticate, async (req, res) => {
   }
 
   // Get current user data before update for comparison
-  const currentUserResult = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+  const currentUserResult = await queryWithRetry('SELECT * FROM users WHERE id = $1', [id]);
   const currentUser = currentUserResult.rows[0];
   
   const values = keys.map(k => {
@@ -666,7 +700,7 @@ app.patch('/api/users/:id', authenticate, async (req, res) => {
   }).join(', ');
 
   try {
-    const result = await pool.query(
+    const result = await queryWithRetry(
       `UPDATE users SET ${setClause} WHERE id = $${keys.length + 1} RETURNING id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, role, created_at`,
       [...values, id]
     );
@@ -771,19 +805,31 @@ app.delete('/api/users/:id', authenticate, async (req, res) => {
   const { id } = req.params;
   try {
     // Get user data before deletion
-    const userResult = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+    const userResult = await queryWithRetry('SELECT * FROM users WHERE id = $1', [id]);
     const user = userResult.rows[0];
     
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
     // Delete all related records first to avoid foreign key constraint issues
-    await pool.query('DELETE FROM projects WHERE userid = $1', [id]);
-    await pool.query('DELETE FROM orders WHERE userid = $1', [id]);
-    await pool.query('DELETE FROM support_tickets WHERE userid = $1', [id]);
-    await pool.query('DELETE FROM partnership_requests WHERE userid = $1', [id]);
-    await pool.query('DELETE FROM used_coupons WHERE user_id = $1', [id]);
-    await pool.query('DELETE FROM coupon_codes WHERE created_by = $1', [id]);
+    await queryWithRetry('DELETE FROM projects WHERE userid = $1', [id]);
+    await queryWithRetry('DELETE FROM orders WHERE user_id = $1', [id]);
+    await queryWithRetry('DELETE FROM support_tickets WHERE userid = $1', [id]);
+    await queryWithRetry('DELETE FROM partnership_requests WHERE userid = $1', [id]);
+    
+    // Handle coupons - complex foreign key relationships
+    // 1. Delete usages where this user was the one who used a coupon
+    await queryWithRetry('DELETE FROM used_coupons WHERE user_id = $1', [id]);
+    
+    // 2. Delete usages of coupons that were created by this user (to allow deleting the coupons)
+    await queryWithRetry('DELETE FROM used_coupons WHERE coupon_id IN (SELECT id FROM coupon_codes WHERE created_by = $1)', [id]);
+    
+    // 3. Delete coupons created by this user
+    await queryWithRetry('DELETE FROM coupon_codes WHERE created_by = $1', [id]);
     
     // Finally delete the user
-    await pool.query('DELETE FROM users WHERE id = $1', [id]);
+    await queryWithRetry('DELETE FROM users WHERE id = $1', [id]);
     
     // Send account deletion confirmation email
     sendEmail(
@@ -825,7 +871,7 @@ app.get('/api/projects', async (req, res) => {
   }
 
   try {
-    const result = await pool.query(query, params);
+    const result = await queryWithRetry(query, params);
     res.json(result.rows);
   } catch (err) {
     console.error('Fetch projects error:', err);
@@ -840,10 +886,10 @@ app.post('/api/projects', authenticate, async (req, res) => {
     const userIdToUse = userId || req.userId;
     
     // Get user info for email
-    const userResult = await pool.query('SELECT * FROM users WHERE id = $1', [userIdToUse]);
+    const userResult = await queryWithRetry('SELECT * FROM users WHERE id = $1', [userIdToUse]);
     const user = userResult.rows[0];
     
-    const result = await pool.query(
+    const result = await queryWithRetry(
       'INSERT INTO projects (title, description, category, thumbnail, status, template, userid, data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
       [title, description, category, thumbnail, status || 'draft', template, userIdToUse, projectData]
     );
@@ -939,7 +985,7 @@ app.patch('/api/projects/:id', authenticate, async (req, res) => {
   const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
   
   try {
-    const result = await pool.query(
+    const result = await queryWithRetry(
       `UPDATE projects SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`,
       [...values, id]
     );
@@ -953,7 +999,7 @@ app.patch('/api/projects/:id', authenticate, async (req, res) => {
 app.delete('/api/projects/:id', authenticate, async (req, res) => {
   const { id } = req.params;
   try {
-    await pool.query('DELETE FROM projects WHERE id = $1', [id]);
+    await queryWithRetry('DELETE FROM projects WHERE id = $1', [id]);
     res.status(204).end();
   } catch (err) {
     console.error('Delete project error:', err);
@@ -964,7 +1010,7 @@ app.delete('/api/projects/:id', authenticate, async (req, res) => {
 // Leads Routes
 app.get('/api/leads', authenticate, async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM leads ORDER BY created_at DESC');
+    const result = await queryWithRetry('SELECT * FROM leads ORDER BY created_at DESC');
     res.json(result.rows);
   } catch (err) {
     console.error('Fetch leads error:', err);
@@ -975,7 +1021,7 @@ app.get('/api/leads', authenticate, async (req, res) => {
 app.post('/api/leads', async (req, res) => {
   const { name, email, message } = req.body;
   try {
-    const result = await pool.query(
+    const result = await queryWithRetry(
       'INSERT INTO leads (name, email, message) VALUES ($1, $2, $3) RETURNING *',
       [name, email, message]
     );
@@ -1042,6 +1088,17 @@ app.post('/api/leads', async (req, res) => {
   }
 });
 
+app.delete('/api/leads/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  try {
+    await queryWithRetry('DELETE FROM leads WHERE id = $1', [id]);
+    res.status(204).end();
+  } catch (err) {
+    console.error('Delete lead error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Orders Routes
 app.get('/api/orders', authenticate, async (req, res) => {
   const { userId } = req.query;
@@ -1049,12 +1106,12 @@ app.get('/api/orders', authenticate, async (req, res) => {
   let params = [];
   
   if (userId) {
-    query += ' WHERE userid = $1';
+    query += ' WHERE user_id = $1';
     params.push(userId);
   }
 
   try {
-    const result = await pool.query(query, params);
+    const result = await queryWithRetry(query, params);
     res.json(result.rows);
   } catch (err) {
     console.error('Fetch orders error:', err);
@@ -1068,11 +1125,11 @@ app.post('/api/orders', authenticate, async (req, res) => {
     const userIdToUse = userId || req.userId;
     
     // Get user info for email
-    const userResult = await pool.query('SELECT * FROM users WHERE id = $1', [userIdToUse]);
+    const userResult = await queryWithRetry('SELECT * FROM users WHERE id = $1', [userIdToUse]);
     const user = userResult.rows[0];
     
-    const result = await pool.query(
-      'INSERT INTO orders (order_number, service_id, service_name, plan_name, amount, status, userid, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+    const result = await queryWithRetry(
+      'INSERT INTO orders (order_number, service_id, service_name, plan_name, amount, status, user_id, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
       [order_number, service_id, service_name, plan_name, amount, status || 'pending', userIdToUse, description]
     );
     const order = result.rows[0];
@@ -1174,7 +1231,7 @@ app.patch('/api/orders/:id', authenticate, async (req, res) => {
   const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
 
   try {
-    const result = await pool.query(
+    const result = await queryWithRetry(
       `UPDATE orders SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`,
       [...values, id]
     );
@@ -1189,7 +1246,7 @@ app.patch('/api/orders/:id', authenticate, async (req, res) => {
 app.post('/api/support-tickets', authenticate, async (req, res) => {
   const { subject, message, priority, userId } = req.body;
   try {
-    const result = await pool.query(
+    const result = await queryWithRetry(
       'INSERT INTO support_tickets (subject, message, priority, userid) VALUES ($1, $2, $3, $4) RETURNING *',
       [subject, message, priority || 'medium', userId || req.userId]
     );
@@ -1203,7 +1260,7 @@ app.post('/api/support-tickets', authenticate, async (req, res) => {
 // Templates Routes
 app.get('/api/templates', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM templates');
+    const result = await queryWithRetry('SELECT * FROM templates');
     res.json(result.rows);
   } catch (err) {
     console.error('Fetch templates error:', err);
@@ -1214,7 +1271,7 @@ app.get('/api/templates', async (req, res) => {
 app.post('/api/templates', authenticate, async (req, res) => {
   const { name, description, category, thumbnail, html_content, css_content, js_content, deployed, status } = req.body;
   try {
-    const result = await pool.query(
+    const result = await queryWithRetry(
       'INSERT INTO templates (name, description, category, thumbnail, html_content, css_content, js_content, deployed, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
       [name, description, category, thumbnail, html_content, css_content, js_content, deployed || false, status || 'draft']
     );
@@ -1234,7 +1291,7 @@ app.patch('/api/templates/:id', authenticate, async (req, res) => {
   const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
   
   try {
-    const result = await pool.query(
+    const result = await queryWithRetry(
       `UPDATE templates SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`,
       [...values, id]
     );
@@ -1248,7 +1305,7 @@ app.patch('/api/templates/:id', authenticate, async (req, res) => {
 app.delete('/api/templates/:id', authenticate, async (req, res) => {
   const { id } = req.params;
   try {
-    await pool.query('DELETE FROM templates WHERE id = $1', [id]);
+    await queryWithRetry('DELETE FROM templates WHERE id = $1', [id]);
     res.status(204).end();
   } catch (err) {
     console.error('Delete template error:', err);
@@ -1297,7 +1354,7 @@ app.post('/api/partnership-requests', authenticate, async (req, res) => {
   
   try {
     // Ensure table exists with new schema
-    await pool.query(`
+    await queryWithRetry(`
       CREATE TABLE IF NOT EXISTS partnership_requests (
         id SERIAL PRIMARY KEY,
         userid INTEGER REFERENCES users(id),
@@ -1329,21 +1386,21 @@ app.post('/api/partnership-requests', authenticate, async (req, res) => {
     
     // Add new columns if they don't exist (migration)
     try {
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS annual_revenue DECIMAL(15,2)`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS revenue_currency VARCHAR(10) DEFAULT 'USD'`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_facebook VARCHAR(255)`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_twitter VARCHAR(255)`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_instagram VARCHAR(255)`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_linkedin VARCHAR(255)`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS website VARCHAR(255)`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS is_registered BOOLEAN DEFAULT false`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS registration_number VARCHAR(100)`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS registration_document_path VARCHAR(500)`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS bank_statement_path VARCHAR(500)`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS mobile_money_statement_path VARCHAR(500)`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS priority BOOLEAN DEFAULT false`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS admin_notes TEXT`);
-      await pool.query(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS annual_revenue DECIMAL(15,2)`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS revenue_currency VARCHAR(10) DEFAULT 'USD'`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_facebook VARCHAR(255)`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_twitter VARCHAR(255)`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_instagram VARCHAR(255)`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS social_media_linkedin VARCHAR(255)`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS website VARCHAR(255)`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS is_registered BOOLEAN DEFAULT false`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS registration_number VARCHAR(100)`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS registration_document_path VARCHAR(500)`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS bank_statement_path VARCHAR(500)`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS mobile_money_statement_path VARCHAR(500)`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS priority BOOLEAN DEFAULT false`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS admin_notes TEXT`);
+      await queryWithRetry(`ALTER TABLE partnership_requests ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`);
     } catch (migrationErr) {
       // Columns might already exist, ignore
     }
@@ -1353,7 +1410,7 @@ app.post('/api/partnership-requests', authenticate, async (req, res) => {
     // Registered businesses get priority
     const priority = isRegisteredBool;
 
-    const result = await pool.query(
+    const result = await queryWithRetry(
       `INSERT INTO partnership_requests 
         (userid, business_name, business_type, description, credentials, 
          annual_revenue, revenue_currency, social_media_facebook, social_media_twitter,
@@ -1384,7 +1441,7 @@ app.post('/api/partnership-requests', authenticate, async (req, res) => {
     );
     
     // Get user info for email
-    const userResult = await pool.query('SELECT * FROM users WHERE id = $1', [userId || req.userId]);
+    const userResult = await queryWithRetry('SELECT * FROM users WHERE id = $1', [userId || req.userId]);
     const user = userResult.rows[0];
     
     // Send confirmation email to user
@@ -1472,7 +1529,7 @@ app.post('/api/partnership-requests', authenticate, async (req, res) => {
 app.get('/api/partnership-requests', authenticate, async (req, res) => {
   try {
     // Order by priority (registered businesses first), then by date
-    const result = await pool.query(`
+    const result = await queryWithRetry(`
       SELECT pr.*, u.email as "userEmail", u.name as "userName" 
       FROM partnership_requests pr 
       JOIN users u ON pr.userid = u.id 
@@ -1496,7 +1553,7 @@ app.patch('/api/partnership-requests/:id', authenticate, async (req, res) => {
   const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
 
   try {
-    const result = await pool.query(
+    const result = await queryWithRetry(
       `UPDATE partnership_requests SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`,
       [...values, id]
     );

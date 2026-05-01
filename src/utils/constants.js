@@ -1,4 +1,152 @@
-import { Code, ShoppingBag, Layout, Globe, Database, Smartphone, Zap, Shield, Activity, Cloud, Layers } from 'lucide-react'
+import { 
+  Code, ShoppingBag, Layout, Globe, Database, Smartphone, Zap, Shield, 
+  Activity, Cloud, Layers, Lightbulb, Rocket, Heart, Star, Mail, ArrowRight,
+  Award, Target, CheckCircle, Clock, Users, Headphones, HeartHandshake, ShieldCheck,
+  Phone, MapPin
+} from 'lucide-react'
+
+export const SERVICES_CONTENT = {
+  subtitle: 'Our Expertise',
+  title: 'Custom Web Development Solutions',
+  description: 'From high-conversion landing pages to complex enterprise architectures, we build websites that drive growth and deliver exceptional user experiences.'
+}
+
+export const HOW_IT_WORKS_STEPS = [
+  {
+    title: 'Consultation',
+    description: 'We discuss your requirements, goals, and vision to understand the project scope.',
+    icon: Lightbulb,
+    color: 'blue'
+  },
+  {
+    title: 'Design',
+    description: 'We create wireframes and mockups based on your requirements and brand identity.',
+    icon: Layout,
+    color: 'purple'
+  },
+  {
+    title: 'Development',
+    description: 'We build your website with clean, scalable code using modern frameworks.',
+    icon: Code,
+    color: 'indigo'
+  },
+  {
+    title: 'Launch',
+    description: 'We deploy your website and ensure everything works perfectly.',
+    icon: Rocket,
+    color: 'emerald'
+  }
+]
+
+export const WHY_CHOOSE_US_CONTENT = {
+  subtitle: 'Why Iyonicorp',
+  title: "We don't just build, we empower",
+  description: 'Choosing the right partner is the difference between a project that just exists and one that thrives. We bring a decade of expertise and a relentless focus on your ROI.'
+}
+
+export const WHY_CHOOSE_US_FEATURES = [
+  {
+    icon: Shield,
+    title: 'Security First',
+    description: 'Enterprise-grade protocols with 24/7 monitoring and compliance.',
+    color: 'blue'
+  },
+  {
+    icon: Rocket,
+    title: 'Fast Delivery',
+    description: 'Agile methodology ensures rapid deployment without compromises.',
+    color: 'purple'
+  },
+  {
+    icon: Zap,
+    title: 'Modern Stack',
+    description: 'Leveraging the latest frameworks for future-proof solutions.',
+    color: 'indigo'
+  },
+  {
+    icon: Heart,
+    title: 'Client Centric',
+    description: 'Your success is our priority. We work as your dedicated partner.',
+    color: 'rose'
+  }
+]
+
+export const WHY_CHOOSE_US_METRICS = [
+  { label: 'Uptime Guarantee', value: '99.9%' },
+  { label: 'Project Success', value: '100%' },
+  { label: 'Client Retention', value: '95%' },
+  { label: 'Support Response', value: '< 2h' },
+]
+
+export const PARTNERSHIP_CONTENT = {
+  subtitle: 'E-commerce Alliance',
+  title: 'The 7% Standard.',
+  description: "We've eliminated the barriers to digital commerce. No upfront costs, no maintenance fees—just a single 7% performance fee that settles in 30 seconds."
+}
+
+export const PARTNERSHIP_STEPS = [
+  {
+    icon: Rocket,
+    title: 'Zero Upfront',
+    description: 'We build your high-conversion storefront with zero initial investment. We only win when you win.',
+    color: 'blue'
+  },
+  {
+    icon: Zap,
+    title: '30s Settlement',
+    description: 'Get paid instantly. Sales are settled to your mobile money wallet within 30 seconds of purchase.',
+    color: 'indigo'
+  },
+  {
+    icon: HeartHandshake,
+    title: '7% All-In',
+    description: 'One flat fee covers everything: hosting, maintenance, transactions, and ongoing support.',
+    color: 'purple'
+  }
+]
+
+export const SHOPRIGHT_CONTENT = {
+  subtitle: 'New Launch: Shop',
+  title: 'Shop by Iyonicorp.',
+  description: "The ultimate merchant ecosystem. Sell products, manage inventory, and track performance with a precision-engineered online store that reflects your brand's excellence."
+}
+
+export const SHOPRIGHT_FEATURES = [
+  { icon: Layout, text: 'Custom Storefronts' },
+  { icon: Zap, text: 'Instant Performance' },
+  { icon: Globe, text: 'Global Reach' },
+  { icon: ShieldCheck, text: 'Secure Transactions' }
+]
+
+export const CONTACT_CONTENT = {
+  subtitle: 'Get in Touch',
+  title: "Let's build something exceptional together",
+  description: "Have a vision? We have the expertise to bring it to life. Reach out and let's start a conversation about your next big project."
+}
+
+export const CONTACT_INFO = [
+  {
+    icon: Mail,
+    label: 'Email us',
+    value: 'hello@iyonicorp.com',
+    color: 'text-blue-600',
+    bg: 'bg-blue-50'
+  },
+  {
+    icon: Phone,
+    label: 'Call us',
+    value: '+254 113203900',
+    color: 'text-purple-600',
+    bg: 'bg-purple-50'
+  },
+  {
+    icon: MapPin,
+    label: 'Visit us',
+    value: 'Nairobi, Kenya',
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-50'
+  },
+]
 
 export const SERVICES = [
   {
@@ -8,7 +156,9 @@ export const SERVICES = [
     description: 'High-performance, scalable web applications built with modern frameworks and robust backend architectures tailored to your business needs.',
     moduleIds: ['crm', 'collaboration', 'inventory', 'cloud_infra', 'seo_basic', 'auth', 'db_basic'],
     color: 'bg-blue-600',
-    types: ['SaaS', 'Internal Tools', 'Portals', 'Dashboards']
+    types: ['SaaS', 'Internal Tools', 'Portals', 'Dashboards'],
+    architecture: 'Next.js / React',
+    minPrice: 100
   },
   {
     id: 'ecommerce',
@@ -17,7 +167,9 @@ export const SERVICES = [
     description: 'Full-featured online stores with advanced inventory management, secure payments, and seamless user experiences to drive your sales.',
     moduleIds: ['inventory', 'auth', 'db_basic', 'analytics'],
     color: 'bg-indigo-600',
-    types: ['Retail', 'Marketplaces', 'B2B Stores', 'Subscriptions']
+    types: ['Retail', 'Marketplaces', 'B2B Stores', 'Subscriptions'],
+    architecture: 'Next.js / React',
+    minPrice: 450
   },
   {
     id: 'brand-presence',
@@ -26,7 +178,9 @@ export const SERVICES = [
     description: 'Stunning, high-conversion websites that establish your brand authority and showcase your professional expertise to the world.',
     moduleIds: ['seo_basic', 'collaboration', 'auth'],
     color: 'bg-cyan-600',
-    types: ['Portfolios', 'Landing Pages', 'Business Profiles', 'Blogs']
+    types: ['Portfolios', 'Landing Pages', 'Business Profiles', 'Blogs'],
+    architecture: 'Next.js / React',
+    minPrice: 150
   },
   {
     id: 'specialized-systems',
@@ -35,7 +189,9 @@ export const SERVICES = [
     description: 'Niche solutions for specific industries including booking systems, automated workflows, and data-intensive platforms.',
     moduleIds: ['automation', 'security', 'compliance', 'cloud_infra'],
     color: 'bg-slate-900',
-    types: ['Booking', 'Real Estate', 'Logistics', 'Education']
+    types: ['Booking', 'Real Estate', 'Logistics', 'Education'],
+    architecture: 'Next.js / React',
+    minPrice: 800
   }
 ]
 

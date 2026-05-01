@@ -122,175 +122,179 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
             </div>
 
             {/* Right Side: Form */}
-            <div className="flex-1 bg-white p-8 sm:p-12 relative flex flex-col justify-center">
+            <div className="flex-1 bg-white relative flex flex-col min-h-0 overflow-hidden">
               <button 
                 onClick={onClose}
-                className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all z-20"
+                className="absolute top-4 right-4 sm:top-8 sm:right-8 w-10 h-10 flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all z-30 bg-white/80 backdrop-blur-sm sm:bg-transparent"
               >
                 <X size={20} />
               </button>
 
-              <div className="max-w-md mx-auto w-full">
-                <div className="mb-10 text-center sm:text-left">
-                  <h2 className="text-3xl sm:text-4xl font-black text-black tracking-tighter uppercase italic mb-2">
-                    {isSignup ? 'Initialize Account' : 'Secure Login'}
-                    <span className="text-cyan-600">.</span>
-                  </h2>
-                  <p className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">
-                    {isSignup ? 'Enter your credentials to begin evolution' : 'Provide your security key for authentication'}
-                  </p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <AnimatePresence mode="wait">
-                    {isSignup && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="space-y-5 overflow-hidden"
-                      >
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">First Name</label>
-                            <div className="relative group">
-                              <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-cyan-600 transition-colors" size={16} />
-                              <input
-                                type="text"
-                                name="firstName"
-                                value={formData.firstName}
-                                onChange={handleChange}
-                                placeholder="John"
-                                className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-300 focus:outline-none focus:border-cyan-600 focus:bg-white transition-all font-bold text-sm shadow-sm shadow-transparent focus:shadow-cyan-500/5"
-                              />
-                            </div>
-                          </div>
-                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Last Name</label>
-                            <div className="relative group">
-                              <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-cyan-600 transition-colors" size={16} />
-                              <input
-                                type="text"
-                                name="lastName"
-                                value={formData.lastName}
-                                onChange={handleChange}
-                                placeholder="Doe"
-                                className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-300 focus:outline-none focus:border-cyan-600 focus:bg-white transition-all font-bold text-sm shadow-sm shadow-transparent focus:shadow-cyan-500/5"
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="space-y-1.5">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
-                          <div className="relative group">
-                            <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-cyan-600 transition-colors" size={16} />
-                            <input
-                              required
-                              type="tel"
-                              name="phoneNumber"
-                              value={formData.phoneNumber}
-                              onChange={handleChange}
-                              placeholder="+1 (555) 000-0000"
-                              className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-300 focus:outline-none focus:border-cyan-600 focus:bg-white transition-all font-bold text-sm shadow-sm shadow-transparent focus:shadow-cyan-500/5"
-                            />
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Email Identity</label>
-                    <div className="relative group">
-                      <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-cyan-600 transition-colors" size={16} />
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="name@company.com"
-                        className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-300 focus:outline-none focus:border-cyan-600 focus:bg-white transition-all font-bold text-sm shadow-sm shadow-transparent focus:shadow-cyan-500/5"
-                      />
+              <div className="flex-1 overflow-y-auto custom-scrollbar">
+                <div className="min-h-full flex flex-col px-6 py-12 sm:p-12 md:p-16">
+                  <div className="max-w-md mx-auto w-full my-auto">
+                    <div className="mb-10 text-center sm:text-left">
+                      <h2 className="text-3xl sm:text-4xl font-black text-black tracking-tighter uppercase italic mb-2">
+                        {isSignup ? 'Initialize Account' : 'Secure Login'}
+                        <span className="text-cyan-600">.</span>
+                      </h2>
+                      <p className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">
+                        {isSignup ? 'Enter your credentials to begin evolution' : 'Provide your security key for authentication'}
+                      </p>
                     </div>
-                  </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Security Key</label>
-                    <div className="relative group">
-                      <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-cyan-600 transition-colors" size={16} />
-                      <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="••••••••"
-                        className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-300 focus:outline-none focus:border-cyan-600 focus:bg-white transition-all font-bold text-sm shadow-sm shadow-transparent focus:shadow-cyan-500/5"
-                      />
-                    </div>
-                  </div>
-
-                  <AnimatePresence>
-                    {localError && (
-                      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-3 p-4 bg-rose-50 border border-rose-100 rounded-2xl text-rose-600 text-[10px] font-black uppercase tracking-widest">
-                        <AlertCircle size={14} /> {localError}
-                      </motion.div>
-                    )}
-                    {successMessage && (
-                      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl text-emerald-600 text-[10px] font-black uppercase tracking-widest">
-                        <Sparkles size={14} /> {successMessage}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <motion.button
-                    whileHover={{ scale: 1.01, translateY: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    type="submit"
-                    disabled={isLoading || successMessage}
-                    className="relative w-full py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-4 group transition-all duration-300 overflow-hidden shadow-xl shadow-slate-900/20 active:shadow-none disabled:opacity-50 mt-6"
-                  >
-                    {/* Animated gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-indigo-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
-                    <span className="relative z-10 flex items-center gap-3">
-                      {isLoading ? (
-                        <div className="flex items-center gap-3">
-                          <RefreshCw className="animate-spin" size={16} />
-                          Verifying...
-                        </div>
-                      ) : (
-                        <>
-                          {isSignup ? 'Initialize' : 'Authenticate'}
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                      <AnimatePresence mode="wait">
+                        {isSignup && (
                           <motion.div
-                            animate={{ x: [0, 5, 0] }}
-                            transition={{ repeat: Infinity, duration: 1.5 }}
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="space-y-5 overflow-hidden"
                           >
-                            <ArrowRight size={16} />
-                          </motion.div>
-                        </>
-                      )}
-                    </span>
-                    
-                    {/* Outer glow on hover */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl bg-cyan-500/30 -z-10" />
-                  </motion.button>
-                </form>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                              <div className="space-y-1.5">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">First Name</label>
+                                <div className="relative group">
+                                  <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-cyan-600 transition-colors" size={16} />
+                                  <input
+                                    type="text"
+                                    name="firstName"
+                                    value={formData.firstName}
+                                    onChange={handleChange}
+                                    placeholder="John"
+                                    className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-300 focus:outline-none focus:border-cyan-600 focus:bg-white transition-all font-bold text-sm shadow-sm shadow-transparent focus:shadow-cyan-500/5"
+                                  />
+                                </div>
+                              </div>
+                              <div className="space-y-1.5">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Last Name</label>
+                                <div className="relative group">
+                                  <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-cyan-600 transition-colors" size={16} />
+                                  <input
+                                    type="text"
+                                    name="lastName"
+                                    value={formData.lastName}
+                                    onChange={handleChange}
+                                    placeholder="Doe"
+                                    className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-300 focus:outline-none focus:border-cyan-600 focus:bg-white transition-all font-bold text-sm shadow-sm shadow-transparent focus:shadow-cyan-500/5"
+                                  />
+                                </div>
+                              </div>
+                            </div>
 
-                <div className="mt-8 pt-8 border-t border-slate-50 flex flex-col items-center gap-6">
-                  <button 
-                    onClick={() => setIsSignup(!isSignup)}
-                    className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-black transition-all duration-300"
-                  >
-                    <span>{isSignup ? 'Already have access?' : 'Need an account?'}</span>
-                    <span className="text-cyan-600 group-hover:underline underline-offset-4">
-                      {isSignup ? 'Secure Login' : 'Initialize Signup'}
-                    </span>
-                  </button>
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
+                              <div className="relative group">
+                                <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-cyan-600 transition-colors" size={16} />
+                                <input
+                                  required
+                                  type="tel"
+                                  name="phoneNumber"
+                                  value={formData.phoneNumber}
+                                  onChange={handleChange}
+                                  placeholder="+1 (555) 000-0000"
+                                  className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-300 focus:outline-none focus:border-cyan-600 focus:bg-white transition-all font-bold text-sm shadow-sm shadow-transparent focus:shadow-cyan-500/5"
+                                />
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Email Identity</label>
+                        <div className="relative group">
+                          <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-cyan-600 transition-colors" size={16} />
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="name@company.com"
+                            className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-300 focus:outline-none focus:border-cyan-600 focus:bg-white transition-all font-bold text-sm shadow-sm shadow-transparent focus:shadow-cyan-500/5"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Security Key</label>
+                        <div className="relative group">
+                          <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-cyan-600 transition-colors" size={16} />
+                          <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="••••••••"
+                            className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-300 focus:outline-none focus:border-cyan-600 focus:bg-white transition-all font-bold text-sm shadow-sm shadow-transparent focus:shadow-cyan-500/5"
+                          />
+                        </div>
+                      </div>
+
+                      <AnimatePresence>
+                        {localError && (
+                          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-3 p-4 bg-rose-50 border border-rose-100 rounded-2xl text-rose-600 text-[10px] font-black uppercase tracking-widest">
+                            <AlertCircle size={14} /> {localError}
+                          </motion.div>
+                        )}
+                        {successMessage && (
+                          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl text-emerald-600 text-[10px] font-black uppercase tracking-widest">
+                            <Sparkles size={14} /> {successMessage}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      <motion.button
+                        whileHover={{ scale: 1.01, translateY: -2 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="submit"
+                        disabled={isLoading || successMessage}
+                        className="relative w-full py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-4 group transition-all duration-300 overflow-hidden shadow-xl shadow-slate-900/20 active:shadow-none disabled:opacity-50 mt-6"
+                      >
+                        {/* Animated gradient overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-indigo-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        
+                        <span className="relative z-10 flex items-center gap-3">
+                          {isLoading ? (
+                            <div className="flex items-center gap-3">
+                              <RefreshCw className="animate-spin" size={16} />
+                              Verifying...
+                            </div>
+                          ) : (
+                            <>
+                              {isSignup ? 'Initialize' : 'Authenticate'}
+                              <motion.div
+                                animate={{ x: [0, 5, 0] }}
+                                transition={{ repeat: Infinity, duration: 1.5 }}
+                              >
+                                <ArrowRight size={16} />
+                              </motion.div>
+                            </>
+                          )}
+                        </span>
+                        
+                        {/* Outer glow on hover */}
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl bg-cyan-500/30 -z-10" />
+                      </motion.button>
+                    </form>
+
+                    <div className="mt-8 pt-8 border-t border-slate-50 flex flex-col items-center gap-6">
+                      <button 
+                        onClick={() => setIsSignup(!isSignup)}
+                        className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-black transition-all duration-300"
+                      >
+                        <span>{isSignup ? 'Already have access?' : 'Need an account?'}</span>
+                        <span className="text-cyan-600 group-hover:underline underline-offset-4">
+                          {isSignup ? 'Secure Login' : 'Initialize Signup'}
+                        </span>
+                      </button>
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

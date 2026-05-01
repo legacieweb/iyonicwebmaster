@@ -1,6 +1,5 @@
 import { ArrowRight, Check } from 'lucide-react'
-import { SERVICES } from '../utils/constants'
-import { MODULES } from '../utils/membership'
+import { SERVICES, SERVICES_CONTENT, PRICING_DATA } from '../utils/constants'
 
 const Services = ({ onServiceClick }) => {
   return (
@@ -9,21 +8,27 @@ const Services = ({ onServiceClick }) => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div className="max-w-2xl">
             <span className="inline-block text-sm font-bold text-blue-600 tracking-wider uppercase mb-4">
-              Our Expertise
+              {SERVICES_CONTENT.subtitle}
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 leading-tight">
-              Custom Web Development <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Solutions</span>
+              {SERVICES_CONTENT.title.split(' ').slice(0, -1).join(' ')} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                {SERVICES_CONTENT.title.split(' ').slice(-1)}
+              </span>
             </h2>
           </div>
           <p className="text-neutral-500 max-w-sm mb-2 font-medium">
-            From high-conversion landing pages to complex enterprise architectures, we build digital products that drive growth and deliver exceptional user experiences.
+            {SERVICES_CONTENT.description}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {SERVICES.map((service, index) => {
             const Icon = service.icon
+            const servicePlans = PRICING_DATA[service.id] || []
+            const minPrice = servicePlans.length > 0 
+              ? Math.min(...servicePlans.map(p => p.price))
+              : service.minPrice || 200
             
             return (
               <div
@@ -40,7 +45,7 @@ const Services = ({ onServiceClick }) => {
                     </div>
                     <div className="flex flex-col items-end">
                       <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Architecture</span>
-                      <span className="text-xs font-bold text-neutral-400">Next.js / React</span>
+                      <span className="text-xs font-bold text-neutral-400">{service.architecture || 'Next.js / React'}</span>
                     </div>
                   </div>
                   
@@ -63,7 +68,7 @@ const Services = ({ onServiceClick }) => {
                   <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-100 mt-auto">
                     <div className="flex items-center justify-between mb-4">
                       <div className="text-[9px] font-black text-neutral-400 uppercase tracking-widest">Investment starts at</div>
-                      <div className="font-black text-blue-600 text-lg">$100</div>
+                      <div className="font-black text-blue-600 text-lg">${minPrice}</div>
                     </div>
                     
                     <button

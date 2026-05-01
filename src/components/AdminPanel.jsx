@@ -39,28 +39,14 @@ const AdminPanel = ({ onBack }) => {
     const loadData = async () => {
       try {
         setLoading(true)
-        const [leadsData, projectsData, usersData, ordersData, partnershipData] = await Promise.all([
-          fetchLeads().catch(err => {
-            if (err.response?.status === 401) return []
-            throw err
-          }), 
-          fetchAllProjects().catch(err => {
-            if (err.response?.status === 401) return []
-            throw err
-          }),
-          fetchAllUsers().catch(err => {
-            if (err.response?.status === 404 || err.response?.status === 401) return []
-            throw err
-          }),
-          fetchUserOrders().catch(err => {
-            if (err.response?.status === 401) return []
-            return []
-          }),
-          fetchPartnershipRequests().catch(err => {
-            if (err.response?.status === 401) return []
-            return []
-          })
-        ])
+        
+        // Fetch sequentially or in smaller chunks if Neon is cold to avoid ETIMEDOUT/ECONNRESET
+        const leadsData = await fetchLeads().catch(err => { if (err.response?.status === 401) return []; throw err; })
+        const projectsData = await fetchAllProjects().catch(err => { if (err.response?.status === 401) return []; throw err; })
+        const usersData = await fetchAllUsers().catch(err => { if (err.response?.status === 404 || err.response?.status === 401) return []; throw err; })
+        const ordersData = await fetchUserOrders().catch(err => { if (err.response?.status === 401) return []; return []; })
+        const partnershipData = await fetchPartnershipRequests().catch(err => { if (err.response?.status === 401) return []; return []; })
+        
         setLeads(leadsData || [])
         setProjects(projectsData || [])
         setUsers(usersData || [])
@@ -115,32 +101,44 @@ const AdminPanel = ({ onBack }) => {
   }
 
   const handleDeleteLead = async (id) => {
+    if (processing[id]) return
     try {
+      setProcessing(prev => ({ ...prev, [id]: true }))
       await deleteLead(id)
       setLeads(prev => prev.filter((l) => l.id !== id))
       setDeleteConfirm(null)
     } catch (err) {
       setError('Failed to delete lead')
+    } finally {
+      setProcessing(prev => ({ ...prev, [id]: false }))
     }
   }
 
   const handleDeleteProject = async (id) => {
+    if (processing[id]) return
     try {
+      setProcessing(prev => ({ ...prev, [id]: true }))
       await deleteProject(id)
       setProjects(prev => prev.filter((p) => p.id !== id))
       setDeleteConfirm(null)
     } catch (err) {
       setError('Failed to delete project')
+    } finally {
+      setProcessing(prev => ({ ...prev, [id]: false }))
     }
   }
 
   const handleDeleteUser = async (id) => {
+    if (processing[id]) return
     try {
+      setProcessing(prev => ({ ...prev, [id]: true }))
       await deleteUser(id)
       setUsers(prev => prev.filter((u) => u.id !== id))
       setDeleteConfirm(null)
     } catch (err) {
       setError('Failed to delete user')
+    } finally {
+      setProcessing(prev => ({ ...prev, [id]: false }))
     }
   }
 
@@ -159,18 +157,24 @@ const AdminPanel = ({ onBack }) => {
   }
 
   const handleEditLead = async (id) => {
+    if (processing[id]) return
     try {
+      setProcessing(prev => ({ ...prev, [id]: true }))
       await updateLead(id, editData[id] || {})
       setLeads(leads.map((l) => (l.id === id ? { ...l, ...editData[id] } : l)))
       setEditingId(null)
       setEditData({})
     } catch (err) {
       setError('Failed to update lead')
+    } finally {
+      setProcessing(prev => ({ ...prev, [id]: false }))
     }
   }
 
   const handleEditProject = async (id, directData = null) => {
+    if (processing[id]) return
     try {
+      setProcessing(prev => ({ ...prev, [id]: true }))
       const currentProject = projects.find(p => p.id === id);
       const updatedData = directData || editData[id] || {};
       
@@ -182,9 +186,15 @@ const AdminPanel = ({ onBack }) => {
       await updateProject(id, updatedData)
       setProjects(projects.map((p) => (p.id === id ? { ...p, ...updatedData } : p)))
       setEditingId(null)
-      setEditData({})
+      setEditData(prev => {
+        const newData = { ...prev };
+        delete newData[id];
+        return newData;
+      })
     } catch (err) {
       setError('Failed to update project')
+    } finally {
+      setProcessing(prev => ({ ...prev, [id]: false }))
     }
   }
 
@@ -1362,10 +1372,20 @@ const AdminPanel = ({ onBack }) => {
                                       />
                                       <div className="flex gap-4 mt-6">
                                         <button
+                                          disabled={processing[lead.id]}
                                           onClick={() => handleEditLead(lead.id)}
-                                          className="flex-1 px-8 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-blue-700 transition-all"
+                                          className={`flex-1 px-8 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all ${
+                                            processing[lead.id] ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
+                                          }`}
                                         >
-                                          Commit Changes
+                                          {processing[lead.id] ? (
+                                            <div className="flex items-center justify-center gap-2">
+                                              <Loader size={12} className="animate-spin" />
+                                              Committing...
+                                            </div>
+                                          ) : (
+                                            'Commit Changes'
+                                          )}
                                         </button>
                                         <button
                                           onClick={() => setEditingId(null)}
@@ -1502,51 +1522,74 @@ const AdminPanel = ({ onBack }) => {
                                           </div>
 
                                           {/* Update Functions */}
-                                          <div className="lg:col-span-2 bg-slate-50 p-8 rounded-[2.5rem] border border-slate-100 grid md:grid-cols-2 gap-6">
-                                            <div className="space-y-4">
-                                              <div>
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Transmission Progress</p>
-                                                <input 
-                                                  type="text"
-                                                  placeholder="e.g. 95% Complete"
-                                                  defaultValue={project.progress_status || ''}
-                                                  onBlur={(e) => {
-                                                    if (e.target.value !== project.progress_status) {
-                                                      handleEditProject(project.id, { progress_status: e.target.value });
-                                                    }
-                                                  }}
-                                                  className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                                                />
+                                          <div className="lg:col-span-2 bg-slate-50 p-8 rounded-[2.5rem] border border-slate-100 space-y-6">
+                                            <div className="grid md:grid-cols-2 gap-6">
+                                              <div className="space-y-4">
+                                                <div>
+                                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Transmission Progress</p>
+                                                  <input 
+                                                    type="text"
+                                                    placeholder="e.g. 95% Complete"
+                                                    value={editData[project.id]?.progress_status ?? project.progress_status ?? ''}
+                                                    onChange={(e) => setEditData(prev => ({
+                                                      ...prev,
+                                                      [project.id]: { ...prev[project.id], progress_status: e.target.value }
+                                                    }))}
+                                                    className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                                  />
+                                                </div>
+                                                <div>
+                                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Latest Update Log</p>
+                                                  <textarea 
+                                                    rows="3"
+                                                    placeholder="System patches deployed..."
+                                                    value={editData[project.id]?.latest_update ?? project.latest_update ?? ''}
+                                                    onChange={(e) => setEditData(prev => ({
+                                                      ...prev,
+                                                      [project.id]: { ...prev[project.id], latest_update: e.target.value }
+                                                    }))}
+                                                    className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
+                                                  />
+                                                </div>
                                               </div>
-                                              <div>
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Latest Update Log</p>
-                                                <textarea 
-                                                  rows="3"
-                                                  placeholder="System patches deployed..."
-                                                  defaultValue={project.latest_update || ''}
-                                                  onBlur={(e) => {
-                                                    if (e.target.value !== project.latest_update) {
-                                                      handleEditProject(project.id, { latest_update: e.target.value });
-                                                    }
-                                                  }}
-                                                  className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
-                                                />
-                                              </div>
-                                            </div>
 
-                                            <div className="space-y-4">
-                                              <div>
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Recommended Upgrades (Comma Separated)</p>
-                                                <input 
-                                                  type="text"
-                                                  placeholder="AI CORE, SEO, EDGE"
-                                                  defaultValue={project.recommended_modules?.join(', ') || ''}
-                                                  onBlur={(e) => {
-                                                    const modules = e.target.value.split(',').map(m => m.trim()).filter(Boolean);
-                                                    handleEditProject(project.id, { recommended_modules: modules });
+                                              <div className="space-y-4">
+                                                <div>
+                                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Recommended Upgrades (Comma Separated)</p>
+                                                  <input 
+                                                    type="text"
+                                                    placeholder="AI CORE, SEO, EDGE"
+                                                    value={editData[project.id]?.recommended_modules_str ?? project.recommended_modules?.join(', ') ?? ''}
+                                                    onChange={(e) => setEditData(prev => ({
+                                                      ...prev,
+                                                      [project.id]: { ...prev[project.id], recommended_modules_str: e.target.value }
+                                                    }))}
+                                                    className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                                  />
+                                                </div>
+                                                <button
+                                                  disabled={processing[project.id]}
+                                                  onClick={() => {
+                                                    const data = { ...editData[project.id] };
+                                                    if (data.recommended_modules_str !== undefined) {
+                                                      data.recommended_modules = data.recommended_modules_str.split(',').map(m => m.trim()).filter(Boolean);
+                                                      delete data.recommended_modules_str;
+                                                    }
+                                                    handleEditProject(project.id, data);
                                                   }}
-                                                  className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                                                />
+                                                  className={`w-full py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all ${
+                                                    processing[project.id] ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 active:scale-95 shadow-lg shadow-blue-100'
+                                                  }`}
+                                                >
+                                                  {processing[project.id] ? (
+                                                    <div className="flex items-center justify-center gap-2">
+                                                      <Loader size={12} className="animate-spin" />
+                                                      Synchronizing...
+                                                    </div>
+                                                  ) : (
+                                                    'Synchronize Diagnostic Data'
+                                                  )}
+                                                </button>
                                               </div>
                                             </div>
                                           </div>
@@ -1595,6 +1638,7 @@ const AdminPanel = ({ onBack }) => {
               </p>
               <div className="flex flex-col gap-4">
                 <button
+                  disabled={processing[deleteConfirm.id]}
                   onClick={() => {
                     if (deleteConfirm.type === 'lead') {
                       handleDeleteLead(deleteConfirm.id)
@@ -1604,9 +1648,20 @@ const AdminPanel = ({ onBack }) => {
                       handleDeleteProject(deleteConfirm.id)
                     }
                   }}
-                  className="w-full px-8 py-4 bg-rose-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-rose-700 transition-all shadow-lg shadow-rose-200"
+                  className={`w-full px-8 py-4 bg-rose-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-lg ${
+                    processing[deleteConfirm.id] 
+                      ? 'opacity-50 cursor-not-allowed' 
+                      : 'hover:bg-rose-700 shadow-rose-200'
+                  }`}
                 >
-                  Confirm Termination
+                  {processing[deleteConfirm.id] ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Decommissioning...
+                    </div>
+                  ) : (
+                    'Confirm Termination'
+                  )}
                 </button>
                 <button
                   onClick={() => setDeleteConfirm(null)}

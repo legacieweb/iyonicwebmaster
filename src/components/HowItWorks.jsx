@@ -1,33 +1,6 @@
-import { Lightbulb, Code, Layout, Rocket } from 'lucide-react'
+import { HOW_IT_WORKS_STEPS } from '../utils/constants'
 
 const HowItWorks = () => {
-  const steps = [
-    {
-      title: 'Consultation',
-      description: 'We discuss your requirements, goals, and vision to understand the project scope.',
-      icon: Lightbulb,
-      color: 'blue'
-    },
-    {
-      title: 'Design',
-      description: 'We create wireframes and mockups based on your requirements and brand identity.',
-      icon: Layout,
-      color: 'purple'
-    },
-    {
-      title: 'Development',
-      description: 'We build your website with clean, scalable code using modern frameworks.',
-      icon: Code,
-      color: 'indigo'
-    },
-    {
-      title: 'Launch',
-      description: 'We deploy your website and ensure everything works perfectly.',
-      icon: Rocket,
-      color: 'emerald'
-    }
-  ]
-
   return (
     <section id="how-it-works" className="py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
@@ -45,7 +18,7 @@ const HowItWorks = () => {
           <div className="absolute top-1/2 left-0 w-full h-0.5 bg-neutral-100 -translate-y-1/2 hidden lg:block" />
 
           <div className="grid lg:grid-cols-4 gap-12 relative z-10">
-            {steps.map((step, index) => {
+            {HOW_IT_WORKS_STEPS.map((step, index) => {
               const Icon = step.icon
               return (
                 <div

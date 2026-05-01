@@ -1,4 +1,5 @@
-import { ShoppingBag, ArrowRight, Zap, Globe, Layout, ShieldCheck } from 'lucide-react'
+import { SHOPRIGHT_CONTENT, SHOPRIGHT_FEATURES } from '../utils/constants'
+import { ShoppingBag, ArrowRight, Zap } from 'lucide-react'
 
 const ShopRight = ({ onViewDetails }) => {
   return (
@@ -13,24 +14,19 @@ const ShopRight = ({ onViewDetails }) => {
           <div>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] mb-8">
               <ShoppingBag size={14} />
-              New Launch: Shop
+              {SHOPRIGHT_CONTENT.subtitle}
             </div>
             
             <h2 className="text-5xl lg:text-7xl font-black text-neutral-900 mb-8 tracking-tighter leading-none italic">
-              Shop <span className="text-blue-600">by Iyonicorp.</span>
+              {SHOPRIGHT_CONTENT.title.split(' ')[0]} <span className="text-blue-600">{SHOPRIGHT_CONTENT.title.split(' ').slice(1).join(' ')}</span>
             </h2>
             
             <p className="text-xl text-neutral-600 mb-12 font-medium leading-relaxed max-w-xl">
-              The ultimate merchant ecosystem. Sell products, manage inventory, and track performance with a precision-engineered online store that reflects your brand's excellence.
+              {SHOPRIGHT_CONTENT.description}
             </p>
 
             <div className="grid grid-cols-2 gap-6 mb-12">
-              {[
-                { icon: Layout, text: 'Custom Storefronts' },
-                { icon: Zap, text: 'Instant Performance' },
-                { icon: Globe, text: 'Global Reach' },
-                { icon: ShieldCheck, text: 'Secure Transactions' }
-              ].map((feature, i) => (
+              {SHOPRIGHT_FEATURES.map((feature, i) => (
                 <div key={i} className="flex items-center gap-3 text-neutral-700">
                   <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
                     <feature.icon size={16} />

@@ -1,35 +1,12 @@
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react'
+import { CONTACT_CONTENT, CONTACT_INFO } from '../utils/constants'
+import { Send, CheckCircle, AlertCircle } from 'lucide-react'
 import { submitLead } from '../utils/api'
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [loading, setLoading] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null)
-
-  const contactInfo = [
-    {
-      icon: Mail,
-      label: 'Email us',
-      value: 'hello@iyonicorp.com',
-      color: 'text-blue-600',
-      bg: 'bg-blue-50'
-    },
-    {
-      icon: Phone,
-      label: 'Call us',
-      value: '+254 113203900',
-      color: 'text-purple-600',
-      bg: 'bg-purple-50'
-    },
-    {
-      icon: MapPin,
-      label: 'Visit us',
-      value: 'Nairobi, Kenya',
-      color: 'text-emerald-600',
-      bg: 'bg-emerald-50'
-    },
-  ]
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -61,18 +38,20 @@ const Contact = () => {
         <div className="grid lg:grid-cols-2 gap-20">
           <div>
             <span className="inline-block text-sm font-bold text-blue-600 tracking-wider uppercase mb-4">
-              Get in Touch
+              {CONTACT_CONTENT.subtitle}
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-8 leading-tight">
-              Let's build something <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">exceptional</span> together
+              {CONTACT_CONTENT.title.split(' ').slice(0, -2).join(' ')} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                {CONTACT_CONTENT.title.split(' ').slice(-2, -1)}
+              </span> {CONTACT_CONTENT.title.split(' ').slice(-1)}
             </h2>
             <p className="text-lg text-neutral-500 mb-12 leading-relaxed max-w-lg">
-              Have a vision? We have the expertise to bring it to life. Reach out and let's start a conversation about your next big project.
+              {CONTACT_CONTENT.description}
             </p>
 
             <div className="space-y-8">
-              {contactInfo.map((info, i) => {
+              {CONTACT_INFO.map((info, i) => {
                 const Icon = info.icon
                 return (
                   <div key={i} className="flex items-center gap-6 group">
