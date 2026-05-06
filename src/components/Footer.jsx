@@ -60,6 +60,7 @@ const Footer = () => {
       links: [
         { name: 'About Us', id: 'about' },
         { name: 'Process', id: 'how-it-works' },
+        { name: 'Partnership', id: 'partnership' },
         { name: 'Careers', id: 'careers' },
       ]
     },
@@ -90,51 +91,51 @@ const Footer = () => {
   const handleLinkClick = (e, id) => {
     e.preventDefault()
     
-    if (['how-it-works', 'services', 'pricing'].includes(id)) {
+    if (['how-it-works', 'services', 'pricing', 'partnership'].includes(id)) {
       if (location.pathname === '/') {
         const element = document.getElementById(id)
         if (element) {
-          element.scrollIntoView({ behavior: 'auto' })
+          element.scrollIntoView({ behavior: 'smooth' })
         }
       } else {
         navigate('/', { state: { scrollTo: id } })
       }
     } else {
       navigate(`/${id}`)
-      window.scrollTo({ top: 0, behavior: 'auto' })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
   return (
-    <footer className="bg-white text-neutral-500 pt-32 pb-16 overflow-hidden relative border-t border-neutral-100">
+    <footer className="bg-white text-neutral-500 pt-20 md:pt-32 pb-16 overflow-hidden relative border-t border-neutral-100">
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-50 rounded-full blur-[120px] -translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-indigo-50 rounded-full blur-[100px] translate-y-1/2" />
 
-      <div className="max-w-7xl mx-auto px-8 relative z-10">
-        <div className="grid lg:grid-cols-12 gap-16 mb-24">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 mb-24">
           <div className="lg:col-span-5">
-            <div className="flex items-center gap-4 mb-10 cursor-pointer group" onClick={() => navigate('/')}>
-              <div className="w-14 h-14 flex items-center justify-center transform -rotate-6 transition-transform group-hover:rotate-0 duration-500">
+            <div className="flex items-center gap-4 mb-8 md:mb-10 cursor-pointer group" onClick={() => navigate('/')}>
+              <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center transform -rotate-6 transition-transform group-hover:rotate-0 duration-500">
                 <img src="https://i.imgur.com/6nGQFtj.png" alt="Iyonicorp Logo" className="w-full h-full object-contain" />
               </div>
-              <span className="text-3xl font-black text-neutral-950 tracking-tighter group-hover:text-blue-600 transition-colors">Iyonicorp</span>
+              <span className="text-2xl md:text-3xl font-black text-neutral-950 tracking-tighter group-hover:text-blue-600 transition-colors">Iyonicorp</span>
             </div>
             
-            <p className="text-xl text-neutral-500 mb-12 max-w-md leading-relaxed font-medium">
+            <p className="text-lg md:text-xl text-neutral-500 mb-8 md:mb-12 max-w-md leading-relaxed font-medium">
               We transform ambitious ideas into exceptional digital experiences through code, design, and innovation.
             </p>
 
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               {socialLinks.map((link, index) => {
                 const Icon = link.icon
                 return (
                   <a
                     key={index}
                     href={link.href}
-                    className="w-14 h-14 bg-neutral-50 hover:bg-blue-50 text-neutral-400 hover:text-blue-600 rounded-2xl flex items-center justify-center transition-all border border-neutral-100"
+                    className="w-12 h-12 md:w-14 md:h-14 bg-neutral-50 hover:bg-blue-50 text-neutral-400 hover:text-blue-600 rounded-2xl flex items-center justify-center transition-all border border-neutral-100"
                     title={link.label}
                   >
-                    <Icon size={22} />
+                    <Icon size={20} className="md:w-[22px] md:h-[22px]" />
                   </a>
                 )
               })}
@@ -142,12 +143,12 @@ const Footer = () => {
           </div>
 
           <div className="lg:col-span-7">
-            <div className="bg-neutral-50 p-10 md:p-16 rounded-[48px] border border-neutral-100 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-8 text-blue-600/5 group-hover:text-blue-500/10 transition-colors">
+            <div className="bg-neutral-50 p-8 md:p-16 rounded-[32px] md:rounded-[48px] border border-neutral-100 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-8 text-blue-600/5 group-hover:text-blue-500/10 transition-colors hidden sm:block">
                 <Sparkles size={120} />
               </div>
-              <h3 className="text-3xl font-black text-neutral-950 mb-4 tracking-tight">Join the Inner Circle.</h3>
-              <p className="text-neutral-500 mb-10 text-lg font-medium">Unlock exclusive digital insights and engineering breakthroughs.</p>
+              <h3 className="text-2xl md:text-3xl font-black text-neutral-950 mb-4 tracking-tight">Join the Inner Circle.</h3>
+              <p className="text-neutral-500 mb-8 md:mb-10 text-base md:text-lg font-medium">Unlock exclusive digital insights and engineering breakthroughs.</p>
               
               <div className="relative max-w-md">
                 {isSuccess ? (
@@ -165,13 +166,13 @@ const Footer = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="your@email.com"
-                        className="w-full pl-16 pr-6 py-6 bg-white border border-neutral-200 rounded-3xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 transition-all text-sm font-bold shadow-sm"
+                        className="w-full pl-16 pr-6 py-5 md:py-6 bg-white border border-neutral-200 rounded-2xl md:rounded-3xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 transition-all text-sm font-bold shadow-sm"
                       />
                     </div>
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-10 py-6 bg-blue-600 text-white rounded-3xl font-black text-xs uppercase tracking-[0.2em] hover:bg-blue-700 transition-all flex items-center justify-center gap-3 shadow-[0_20px_40px_rgba(37,99,235,0.15)] active:scale-95 disabled:opacity-50"
+                      className="px-8 md:px-10 py-5 md:py-6 bg-blue-600 text-white rounded-2xl md:rounded-3xl font-black text-xs uppercase tracking-[0.2em] hover:bg-blue-700 transition-all flex items-center justify-center gap-3 shadow-[0_20px_40px_rgba(37,99,235,0.15)] active:scale-95 disabled:opacity-50"
                     >
                       {isSubmitting ? 'Syncing...' : 'Join Now'}
                       <ArrowRight size={16} />
@@ -183,11 +184,11 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-24">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-y-12 gap-x-8 mb-24">
           {footerSections.map((section, i) => (
-            <div key={i}>
-              <h4 className="text-neutral-950 text-[10px] font-black uppercase tracking-[0.3em] mb-10 opacity-40">{section.title}</h4>
-              <ul className="space-y-6">
+            <div key={i} className={i === 0 ? 'col-span-1' : ''}>
+              <h4 className="text-neutral-950 text-[10px] font-black uppercase tracking-[0.3em] mb-8 md:mb-10 opacity-40">{section.title}</h4>
+              <ul className="space-y-4 md:space-y-6">
                 {section.links.map((link, j) => (
                   <li key={j}>
                     <a 
@@ -203,8 +204,8 @@ const Footer = () => {
             </div>
           ))}
           
-          <div className="col-span-2 lg:col-span-1">
-            <h4 className="text-neutral-950 text-[10px] font-black uppercase tracking-[0.3em] mb-10 opacity-40">Headquarters</h4>
+          <div className="col-span-2 md:col-span-1 lg:col-span-1">
+            <h4 className="text-neutral-950 text-[10px] font-black uppercase tracking-[0.3em] mb-8 md:mb-10 opacity-40">Headquarters</h4>
             <div className="space-y-6">
               <div className="flex items-start gap-4 group">
                 <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 flex-shrink-0 group-hover:bg-blue-100 transition-colors">
@@ -224,18 +225,10 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="pt-16 border-t border-neutral-100 flex flex-col md:flex-row justify-between items-center gap-10">
-          <p className="text-xs font-black text-neutral-400 uppercase tracking-[0.2em]">
+        <div className="pt-16 border-t border-neutral-100 flex flex-col md:flex-row justify-between items-center gap-8 md:gap-10 text-center md:text-left">
+          <p className="text-[10px] md:text-xs font-black text-neutral-400 uppercase tracking-[0.2em]">
             © {currentYear} Iyonicorp. Defined by Innovation.
           </p>
-          <div className="flex items-center gap-8">
-            <div className="flex gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.3)]" />
-              <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Systems Operational</span>
-            </div>
-            <div className="h-4 w-[1px] bg-neutral-100" />
-            <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Built with precision</span>
-          </div>
         </div>
       </div>
     </footer>

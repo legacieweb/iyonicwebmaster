@@ -6,9 +6,9 @@ import {
 } from 'lucide-react'
 
 export const SERVICES_CONTENT = {
-  subtitle: 'Our Expertise',
-  title: 'Custom Web Development Solutions',
-  description: 'From high-conversion landing pages to complex enterprise architectures, we build websites that drive growth and deliver exceptional user experiences.'
+  subtitle: 'Our Specialization',
+  title: 'Premium Web Development Services',
+  description: 'We specialize exclusively in high-end web development, delivering precision-engineered digital solutions. Every project comes with a comprehensive branding package to ensure your business stands out from day one.'
 }
 
 export const HOW_IT_WORKS_STEPS = [
@@ -152,46 +152,24 @@ export const SERVICES = [
   {
     id: 'web-development',
     icon: Code,
-    title: 'Custom Web Applications',
-    description: 'High-performance, scalable web applications built with modern frameworks and robust backend architectures tailored to your business needs.',
+    title: 'Precision Web Development',
+    description: 'Bespoke digital experiences crafted with industry-leading technology. We handle everything from the initial architecture to the final deployment, ensuring a seamless, high-performance web presence for your brand.',
     moduleIds: ['crm', 'collaboration', 'inventory', 'cloud_infra', 'seo_basic', 'auth', 'db_basic'],
     color: 'bg-blue-600',
-    types: ['SaaS', 'Internal Tools', 'Portals', 'Dashboards'],
+    types: ['SaaS', 'E-commerce', 'Portfolios', 'Corporate'],
     architecture: 'Next.js / React',
     minPrice: 100
   },
   {
-    id: 'ecommerce',
-    icon: ShoppingBag,
-    title: 'E-commerce Solutions',
-    description: 'Full-featured online stores with advanced inventory management, secure payments, and seamless user experiences to drive your sales.',
-    moduleIds: ['inventory', 'auth', 'db_basic', 'analytics'],
+    id: 'branding-package',
+    icon: Award,
+    title: 'Branding Bundle',
+    description: 'Elevate your visual identity. Our professional branding suite includes everything you need to stand out: custom logo design, high-impact posters, and professional flyers.',
+    moduleIds: ['design', 'marketing'],
     color: 'bg-indigo-600',
-    types: ['Retail', 'Marketplaces', 'B2B Stores', 'Subscriptions'],
-    architecture: 'Next.js / React',
-    minPrice: 450
-  },
-  {
-    id: 'brand-presence',
-    icon: Globe,
-    title: 'Corporate & Portfolio',
-    description: 'Stunning, high-conversion websites that establish your brand authority and showcase your professional expertise to the world.',
-    moduleIds: ['seo_basic', 'collaboration', 'auth'],
-    color: 'bg-cyan-600',
-    types: ['Portfolios', 'Landing Pages', 'Business Profiles', 'Blogs'],
-    architecture: 'Next.js / React',
+    types: ['Logo Design', 'Posters', 'Flyers', 'Social Media'],
+    architecture: 'Custom Design',
     minPrice: 150
-  },
-  {
-    id: 'specialized-systems',
-    icon: Layers,
-    title: 'Specialized Systems',
-    description: 'Niche solutions for specific industries including booking systems, automated workflows, and data-intensive platforms.',
-    moduleIds: ['automation', 'security', 'compliance', 'cloud_infra'],
-    color: 'bg-slate-900',
-    types: ['Booking', 'Real Estate', 'Logistics', 'Education'],
-    architecture: 'Next.js / React',
-    minPrice: 800
   }
 ]
 
@@ -199,12 +177,12 @@ export const PRICING_DATA = {
   'web-development': [
     {
       name: 'Launch Pad',
-      category: 'Personal & Portfolio',
+      category: 'Entry Level',
       price: 100,
-      maxPrice: 300,
-      description: 'Personal websites including portfolios, blogs, and high-conversion landing pages.',
+      maxPrice: 400,
+      description: 'Perfect for landing pages, simple portfolios, and startup presence.',
       moduleIds: ['crm', 'collaboration', 'auth'],
-      tag: 'Flexible Range',
+      tag: 'Startup Ready',
       color: 'blue',
       design: {
         gradient: 'from-blue-600 to-cyan-500',
@@ -214,59 +192,11 @@ export const PRICING_DATA = {
     },
     {
       name: 'Service Suite',
-      category: 'Professional Services',
-      price: 450,
-      maxPrice: 900,
-      description: 'The ultimate solution for all service-based websites: spas, rentals, and hotel bookings.',
-      moduleIds: ['crm', 'collaboration', 'inventory', 'db_basic'],
-      tag: 'Most Popular',
-      popular: true,
-      color: 'purple',
-      design: {
-        gradient: 'from-purple-600 to-indigo-600',
-        pattern: 'bg-dot-white/[0.05]',
-        shadow: 'hover:shadow-purple-500/20'
-      }
-    },
-    {
-      name: 'Retail Engine',
-      category: 'E-commerce & Retail',
-      price: 950,
-      maxPrice: 3500,
-      description: 'Full-scale ecommerce websites with advanced checkout and inventory management.',
-      moduleIds: ['crm', 'collaboration', 'inventory', 'cloud_infra', 'auth'],
-      tag: 'Enterprise',
-      color: 'indigo',
-      design: {
-        gradient: 'from-indigo-600 to-blue-700',
-        pattern: 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))]',
-        shadow: 'hover:shadow-indigo-500/20'
-      }
-    }
-  ],
-  'ecommerce': [
-    {
-      name: 'Starter Shop',
-      category: 'Small Business',
+      category: 'Professional',
       price: 450,
       maxPrice: 1200,
-      description: 'Perfect for small boutiques and specialized retailers starting their online journey.',
-      moduleIds: ['inventory', 'auth', 'db_basic'],
-      tag: 'Quick Start',
-      color: 'blue',
-      design: {
-        gradient: 'from-blue-600 to-cyan-500',
-        pattern: 'bg-grid-white/[0.02]',
-        shadow: 'hover:shadow-blue-500/20'
-      }
-    },
-    {
-      name: 'Retail Engine',
-      category: 'E-commerce & Retail',
-      price: 950,
-      maxPrice: 3500,
-      description: 'Full-scale ecommerce websites with advanced checkout and inventory management.',
-      moduleIds: ['crm', 'collaboration', 'inventory', 'cloud_infra', 'auth'],
+      description: 'Comprehensive business solutions with advanced functionality.',
+      moduleIds: ['crm', 'collaboration', 'inventory', 'db_basic'],
       tag: 'Most Popular',
       popular: true,
       color: 'purple',
@@ -277,12 +207,12 @@ export const PRICING_DATA = {
       }
     },
     {
-      name: 'Global Marketplace',
+      name: 'Enterprise Engine',
       category: 'Enterprise',
-      price: 4500,
-      maxPrice: 15000,
-      description: 'Multi-vendor platforms with complex logistics, international payments, and AI insights.',
-      moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth', 'analytics', 'global_payroll'],
+      price: 1500,
+      maxPrice: 10000,
+      description: 'High-performance, scalable systems for large scale operations.',
+      moduleIds: ['crm', 'collaboration', 'inventory', 'cloud_infra', 'auth'],
       tag: 'Enterprise',
       color: 'indigo',
       design: {
@@ -292,68 +222,20 @@ export const PRICING_DATA = {
       }
     }
   ],
-  'brand-presence': [
+  'branding-package': [
     {
-      name: 'Identity Pack',
-      category: 'Personal',
+      name: 'Pro Branding',
+      category: 'Professional',
       price: 150,
       maxPrice: 500,
-      description: 'Sleek portfolios and personal brands that stand out from the crowd.',
-      moduleIds: ['seo_basic', 'auth'],
-      tag: 'Personal',
-      color: 'blue',
-      design: {
-        gradient: 'from-blue-600 to-cyan-500',
-        pattern: 'bg-grid-white/[0.02]',
-        shadow: 'hover:shadow-blue-500/20'
-      }
-    },
-    {
-      name: 'Business Pro',
-      category: 'Corporate',
-      price: 600,
-      maxPrice: 1500,
-      description: 'Professional corporate websites with lead generation and brand storytelling.',
-      moduleIds: ['crm', 'collaboration', 'seo_basic', 'auth'],
-      tag: 'Corporate',
-      popular: true,
-      color: 'purple',
-      design: {
-        gradient: 'from-purple-600 to-indigo-600',
-        pattern: 'bg-dot-white/[0.05]',
-        shadow: 'hover:shadow-purple-500/20'
-      }
-    }
-  ],
-  'specialized-systems': [
-    {
-      name: 'Booking Hub',
-      category: 'Services',
-      price: 800,
-      maxPrice: 2500,
-      description: 'Advanced appointment and reservation systems for any service industry.',
-      moduleIds: ['crm', 'collaboration', 'inventory', 'db_basic'],
-      tag: 'Service-Ready',
-      color: 'blue',
-      design: {
-        gradient: 'from-blue-600 to-cyan-500',
-        pattern: 'bg-grid-white/[0.02]',
-        shadow: 'hover:shadow-blue-500/20'
-      }
-    },
-    {
-      name: 'Custom Workflow',
-      category: 'Automation',
-      price: 1500,
-      maxPrice: 8000,
-      description: 'Tailored business automation and data management platforms built to your specs.',
-      moduleIds: ['automation', 'cloud_infra', 'security', 'compliance'],
-      tag: 'Tailored',
+      description: 'Complete visual identity package for your business.',
+      moduleIds: ['design', 'marketing'],
+      tag: 'Best Value',
       popular: true,
       color: 'indigo',
       design: {
-        gradient: 'from-indigo-600 to-blue-700',
-        pattern: 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))]',
+        gradient: 'from-indigo-600 to-purple-500',
+        pattern: 'bg-grid-white/[0.02]',
         shadow: 'hover:shadow-indigo-500/20'
       }
     }
@@ -856,5 +738,130 @@ export const CATALOG_ITEMS = {
       moduleIds: ['automation', 'security', 'compliance'],
       minTier: 'premium_plus'
     }
+  ],
+  'Pro Branding': [
+    {
+      id: 'logo-1',
+      name: 'Minimalist Tech',
+      type: 'Logo Design',
+      description: 'Clean, modern minimalist logo design for technology startups.',
+      price: 150,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'basic'
+    },
+    {
+      id: 'logo-2',
+      name: 'Organic Wellness',
+      type: 'Logo Design',
+      description: 'Earth-toned, organic logo design for health and wellness brands.',
+      price: 150,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'basic'
+    },
+    {
+      id: 'logo-3',
+      name: 'Luxury Real Estate',
+      type: 'Logo Design',
+      description: 'Elegant and sophisticated branding for high-end property management.',
+      price: 250,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'premium'
+    },
+    {
+      id: 'logo-4',
+      name: 'Cyberpunk Gaming',
+      type: 'Logo Design',
+      description: 'Futuristic, neon-themed branding for gaming and streaming channels.',
+      price: 200,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'basic'
+    },
+    {
+      id: 'logo-5',
+      name: 'Corporate Finance',
+      type: 'Logo Design',
+      description: 'Strong, professional identity for financial services and consulting.',
+      price: 300,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'premium'
+    },
+    {
+      id: 'logo-6',
+      name: 'Artisan Coffee',
+      type: 'Logo Design',
+      description: 'Handcrafted, vintage-style branding for cafes and roasteries.',
+      price: 150,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'basic'
+    }
+  ],
+  'branding-package': [
+    {
+      id: 'logo-1',
+      name: 'Minimalist Tech',
+      type: 'Logo Design',
+      description: 'Clean, modern minimalist logo design for technology startups.',
+      price: 150,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'basic'
+    },
+    {
+      id: 'logo-2',
+      name: 'Organic Wellness',
+      type: 'Logo Design',
+      description: 'Earth-toned, organic logo design for health and wellness brands.',
+      price: 150,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'basic'
+    },
+    {
+      id: 'logo-3',
+      name: 'Luxury Real Estate',
+      type: 'Logo Design',
+      description: 'Elegant and sophisticated branding for high-end property management.',
+      price: 250,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'premium'
+    },
+    {
+      id: 'logo-4',
+      name: 'Cyberpunk Gaming',
+      type: 'Logo Design',
+      description: 'Futuristic, neon-themed branding for gaming and streaming channels.',
+      price: 200,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'basic'
+    },
+    {
+      id: 'logo-5',
+      name: 'Corporate Finance',
+      type: 'Logo Design',
+      description: 'Strong, professional identity for financial services and consulting.',
+      price: 300,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'premium'
+    },
+    {
+      id: 'logo-6',
+      name: 'Artisan Coffee',
+      type: 'Logo Design',
+      description: 'Handcrafted, vintage-style branding for cafes and roasteries.',
+      price: 150,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      moduleIds: ['design'],
+      minTier: 'basic'
+    }
   ]
 }
+

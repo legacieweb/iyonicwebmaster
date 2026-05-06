@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion'
-import { Sparkles, HeartHandshake, Zap, ShieldCheck, ArrowRight, Check } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Sparkles, HeartHandshake, Zap, ShieldCheck, ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import Navbar from './Navbar'
@@ -7,6 +8,14 @@ import Navbar from './Navbar'
 const PartnershipDetail = () => {
   const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
+  const [activeSection, setActiveSection] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSection((prev) => (prev + 1) % sections.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
 
   const handlePartnerNow = () => {
     if (isAuthenticated) {
@@ -106,30 +115,55 @@ const PartnershipDetail = () => {
           </div>
         </section>
 
-        {/* Clean Partnership Benefits Section */}
-        <section className="max-w-7xl mx-auto px-8 mb-32">
-          <div className="grid md:grid-cols-3 gap-8">
-            {sections.map((section, i) => (
-              <motion.div
+        {/* Clean Partnership Benefits Section - Auto Slider */}
+        <section className="max-w-7xl mx-auto px-8 mb-32 overflow-hidden relative">
+          <div className="flex md:grid md:grid-cols-3 gap-8 transition-transform duration-700 ease-in-out" style={{ transform: `translateX(-${activeSection * 0}%)` }}>
+            <AnimatePresence mode="wait">
+              {sections.map((section, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ 
+                    opacity: 1, 
+                    x: 0,
+                    scale: activeSection === i ? 1 : 0.95,
+                    display: 'flex'
+                  }}
+                  className={`flex-shrink-0 w-full md:w-auto group bg-white rounded-[3rem] p-10 border transition-all duration-500 ${
+                    activeSection === i ? 'border-blue-600 shadow-xl' : 'border-neutral-100 opacity-40 md:opacity-100'
+                  }`}
+                  style={{ 
+                    display: typeof window !== 'undefined' && window.innerWidth < 768 ? (activeSection === i ? 'flex' : 'none') : 'flex'
+                  }}
+                >
+                  <div className="flex flex-col h-full">
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 ${
+                      section.color === 'blue' ? 'bg-blue-50 text-blue-600' :
+                      section.color === 'indigo' ? 'bg-indigo-50 text-indigo-600' :
+                      'bg-purple-50 text-purple-600'
+                    }`}>
+                      <section.icon size={28} />
+                    </div>
+                    <h3 className="text-2xl font-black text-neutral-900 mb-4 tracking-tighter uppercase italic">{section.title}</h3>
+                    <p className="text-base text-neutral-500 font-medium leading-relaxed">
+                      {section.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+          
+          {/* Slider Indicators */}
+          <div className="flex justify-center gap-3 mt-12 md:hidden">
+            {sections.map((_, i) => (
+              <button
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group bg-white rounded-[3rem] p-10 border border-neutral-100 shadow-sm hover:shadow-lg transition-all"
-              >
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 ${
-                  section.color === 'blue' ? 'bg-blue-50 text-blue-600' :
-                  section.color === 'indigo' ? 'bg-indigo-50 text-indigo-600' :
-                  'bg-purple-50 text-purple-600'
-                }`}>
-                  <section.icon size={28} />
-                </div>
-                <h3 className="text-2xl font-black text-neutral-900 mb-4 tracking-tighter uppercase italic">{section.title}</h3>
-                <p className="text-base text-neutral-500 font-medium leading-relaxed">
-                  {section.description}
-                </p>
-              </motion.div>
+                onClick={() => setActiveSection(i)}
+                className={`w-3 h-3 rounded-full transition-all duration-500 ${
+                  activeSection === i ? 'w-8 bg-blue-600' : 'bg-neutral-200'
+                }`}
+              />
             ))}
           </div>
         </section>

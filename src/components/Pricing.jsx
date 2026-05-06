@@ -159,22 +159,22 @@ const Pricing = ({ onPlanClick }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 justify-center">
           {offers.map((plan, i) => (
             <div 
               key={i} 
-              className={`relative flex flex-col bg-white rounded-[40px] p-8 border transition-all duration-500 hover:shadow-2xl group overflow-hidden ${
+              className={`relative flex flex-col bg-white rounded-[40px] p-10 border transition-all duration-500 hover:shadow-2xl group ${
                 plan.popular ? 'border-transparent ring-4 ring-blue-50 scale-105 z-20' : 'border-neutral-100'
               }`}
             >
-              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${plan.design?.pattern || ''}`} />
+              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-[40px] ${plan.design?.pattern || ''}`} />
               
-              <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${plan.design?.gradient || 'from-blue-600 to-indigo-600'}`} />
+              <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${plan.design?.gradient || 'from-blue-600 to-indigo-600'} rounded-t-[40px]`} />
 
-              <div className={`absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-[10px] font-black tracking-widest uppercase flex items-center gap-1 z-20 transition-colors ${
-                plan.popular ? 'bg-blue-600 text-white' : 'bg-neutral-900 text-white group-hover:bg-blue-600'
+              <div className={`absolute -top-5 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full text-[11px] font-black tracking-widest uppercase flex items-center gap-2 z-30 transition-all shadow-xl ${
+                plan.popular ? 'bg-blue-600 text-white scale-110' : 'bg-neutral-900 text-white group-hover:bg-blue-600'
               }`}>
-                <Star size={12} fill="currentColor" />
+                <Star size={14} fill="currentColor" />
                 {plan.tag}
               </div>
               

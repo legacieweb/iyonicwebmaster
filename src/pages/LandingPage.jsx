@@ -24,7 +24,7 @@ const LandingPage = ({ onLoginClick }) => {
       const el = document.getElementById(targetId)
       if (el) {
         setTimeout(() => {
-          el.scrollIntoView({ behavior: 'auto' })
+          el.scrollIntoView({ behavior: 'smooth' })
           const cleanPath = location.pathname === '/' ? '/' : location.pathname
           navigate(cleanPath, { replace: true, state: {} })
         }, 100)

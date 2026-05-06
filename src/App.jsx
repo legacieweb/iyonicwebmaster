@@ -3,6 +3,7 @@ import { HashRouter as Router, Routes, Route, Navigate, Outlet, useLocation, use
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import AuthModal from './components/AuthModal'
+import ScrollToTop from './components/ScrollToTop'
 import { checkAPIStatus, saveProject, saveOrder } from './utils/api'
 import { useAuth } from './contexts/AuthContext'
 
@@ -106,6 +107,7 @@ function AppContent({ isAuthModalOpen, authModalMode, toggleAuthModal, closeAuth
 
   return (
     <div className="bg-white text-gray-900 overflow-hidden">
+      <ScrollToTop />
       <AuthModal 
         isOpen={isAuthModalOpen} 
         onClose={closeAuthModal} 

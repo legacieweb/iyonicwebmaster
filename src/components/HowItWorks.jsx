@@ -2,54 +2,60 @@ import { HOW_IT_WORKS_STEPS } from '../utils/constants'
 
 const HowItWorks = () => {
   return (
-    <section id="how-it-works" className="py-24 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-20">
-          <span className="inline-block text-sm font-bold text-blue-600 tracking-wider uppercase mb-4">
-            Web Development Process
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
-            How we build <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">websites</span>
-          </h2>
+    <section id="how-it-works" className="py-24 bg-white overflow-hidden relative">
+      <div className="absolute inset-0 opacity-40">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.05)_0%,transparent_50%)]" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+          <div className="max-w-2xl">
+            <span className="inline-block text-sm font-bold text-blue-600 tracking-[0.3em] uppercase mb-4">
+              The Blueprint
+            </span>
+            <h2 className="text-4xl md:text-6xl font-black text-neutral-950 leading-none uppercase italic tracking-tighter">
+              Web Development <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                Process
+              </span>
+            </h2>
+          </div>
+          <p className="text-neutral-500 max-w-sm font-medium border-l-2 border-blue-600 pl-6 py-2">
+            A precision-engineered methodology designed to scale your vision from concept to production.
+          </p>
         </div>
 
-        <div className="relative">
-          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-neutral-100 -translate-y-1/2 hidden lg:block" />
-
-          <div className="grid lg:grid-cols-4 gap-12 relative z-10">
-            {HOW_IT_WORKS_STEPS.map((step, index) => {
-              const Icon = step.icon
-              return (
-                <div
-                  key={index}
-                  className="flex flex-col items-center text-center"
-                >
-                  <div className={`w-20 h-20 rounded-full bg-white border-4 border-neutral-50 shadow-xl flex items-center justify-center mb-8 relative`}>
-                    <div className={`absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-lg ${
-                      step.color === 'blue' ? 'bg-blue-600' :
-                      step.color === 'purple' ? 'bg-purple-600' :
-                      step.color === 'indigo' ? 'bg-indigo-600' :
-                      'bg-emerald-600'
-                    }`}>
-                      0{index + 1}
-                    </div>
-                    <Icon size={32} className={`${
-                      step.color === 'blue' ? 'text-blue-600' :
-                      step.color === 'purple' ? 'text-purple-600' :
-                      step.color === 'indigo' ? 'text-indigo-600' :
-                      'text-emerald-600'
-                    }`} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {HOW_IT_WORKS_STEPS.map((step, index) => {
+            const Icon = step.icon
+            return (
+              <div
+                key={index}
+                className="group relative p-8 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 hover:border-blue-500/30 hover:bg-white hover:shadow-2xl transition-all duration-500"
+              >
+                <div className="flex items-center justify-between mb-8">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-lg ${
+                    step.color === 'blue' ? 'bg-blue-600 text-white' :
+                    step.color === 'purple' ? 'bg-purple-600 text-white' :
+                    step.color === 'indigo' ? 'bg-indigo-600 text-white' :
+                    'bg-emerald-600 text-white'
+                  }`}>
+                    <Icon size={28} />
                   </div>
-                  
-                  <h3 className="text-xl font-bold mb-4 text-neutral-900">{step.title}</h3>
-                  <p className="text-neutral-500 text-sm leading-relaxed max-w-[200px] mx-auto">
-                    {step.description}
-                  </p>
+                  <span className="text-4xl font-black text-neutral-200 group-hover:text-blue-500/10 transition-colors duration-500 italic">
+                    0{index + 1}
+                  </span>
                 </div>
-              )
-            })}
-          </div>
+                
+                <h3 className="text-xl font-black mb-4 text-neutral-900 uppercase tracking-tight">{step.title}</h3>
+                <p className="text-neutral-500 text-sm leading-relaxed font-medium">
+                  {step.description}
+                </p>
+
+                <div className="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all duration-500 group-hover:w-full rounded-b-[2.5rem]" />
+              </div>
+            )
+          })}
         </div>
       </div>
     </section>

@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { 
   ArrowLeft, Check, Star, Zap, Shield, Sparkles, Code, Smartphone, Cpu, 
-  CreditCard, Megaphone, Globe, ShoppingBag, Calendar, 
+  CreditCard, Megaphone, Globe, ShoppingBag, Calendar, Search, 
   User, ExternalLink, Eye, Info, Layout, Layers, MousePointer2,
   ChevronRight, X, Monitor, Tablet, ArrowRight, Lock, Phone, Mail
 } from 'lucide-react'
@@ -316,6 +316,14 @@ const WebDevelopmentLanding = ({ service, onBack, pricingPlans, currency, setCur
   const [inquiryData, setInquiryData] = useState({ name: '', email: '', phone: '', message: '' })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [popup, setPopup] = useState({ isOpen: false, title: '', message: '', type: 'info' })
+  const [activeMetric, setActiveMetric] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveMetric((prev) => (prev + 1) % 3)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [])
 
   const handleCustomInquiry = async (e) => {
     e.preventDefault()
@@ -536,7 +544,7 @@ const WebDevelopmentLanding = ({ service, onBack, pricingPlans, currency, setCur
               </div>
             </motion.div>
 
-            <div className="grid gap-6">
+            <div className="grid gap-6 relative h-[300px] md:h-auto overflow-hidden md:overflow-visible">
               {[
                 { 
                   title: 'Instant Purchase', 
@@ -566,9 +574,19 @@ const WebDevelopmentLanding = ({ service, onBack, pricingPlans, currency, setCur
                 <motion.div
                   key={model.title}
                   initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + (idx * 0.1) }}
-                  className="p-8 bg-white border border-neutral-100 rounded-[40px] hover:border-blue-500/30 transition-all group shadow-sm hover:shadow-[0_30px_60px_rgba(0,0,0,0.05)] cursor-default"
+                  animate={{ 
+                    opacity: typeof window !== 'undefined' && window.innerWidth < 768 ? (activeMetric === idx ? 1 : 0) : 1, 
+                    x: typeof window !== 'undefined' && window.innerWidth < 768 ? (activeMetric === idx ? 0 : 50) : 0,
+                    scale: typeof window !== 'undefined' && window.innerWidth < 768 ? (activeMetric === idx ? 1 : 0.9) : 1,
+                    zIndex: activeMetric === idx ? 10 : 0
+                  }}
+                  transition={{ 
+                    duration: 0.5,
+                    ease: "easeInOut"
+                  }}
+                  className={`p-8 bg-white border border-neutral-100 rounded-[40px] transition-all group shadow-sm hover:shadow-[0_30px_60px_rgba(0,0,0,0.05)] cursor-default md:relative absolute inset-0 md:opacity-100 md:translate-x-0 md:scale-100 hover:border-blue-500/30 ${
+                    activeMetric === idx ? 'block' : 'hidden md:block'
+                  }`}
                 >
                   <div className="flex justify-between items-start">
                     <div className="flex gap-6">
@@ -590,6 +608,19 @@ const WebDevelopmentLanding = ({ service, onBack, pricingPlans, currency, setCur
                   </div>
                 </motion.div>
               ))}
+              
+              {/* Slider Indicators for Mobile */}
+              <div className="flex justify-center gap-2 mt-4 md:hidden absolute bottom-4 left-0 right-0 z-20">
+                {[0, 1, 2].map((i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveMetric(i)}
+                    className={`h-1.5 rounded-full transition-all duration-500 ${
+                      activeMetric === i ? 'w-6 bg-blue-600' : 'w-2 bg-neutral-200'
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 

@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, Eye, ShoppingCart, Star } from 'lucide-react'
+import { ArrowLeft, Eye, ShoppingCart, Star, Shield, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { CATALOG_ITEMS, SERVICES, PRICING_DATA } from '../utils/constants'
 import { MODULES, MEMBERSHIP_TIERS, checkAccess } from '../utils/membership'
 import { useAuth } from '../contexts/AuthContext'
-import { Shield } from 'lucide-react'
 import { saveProject, saveOrder } from '../utils/api'
-import { Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
 
 const CoolPopup = ({ isOpen, onClose, title, message, type = 'info' }) => {
   return (
@@ -310,6 +308,8 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
           {items.map((item, index) => {
             const isWishlisted = wishlist.some(w => w.id === item.id)
             
+            const isBranding = serviceId === 'branding-package' || serviceId === 'Pro Branding'
+
             return (
               <motion.div
                 key={item.id}
@@ -317,12 +317,16 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 onClick={() => handlePreview(item)}
-                className="group bg-white rounded-[40px] overflow-hidden border border-neutral-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer"
+                className={`group bg-white rounded-[40px] overflow-hidden border border-neutral-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer ${
+                  isBranding ? 'flex flex-col' : ''
+                }`}
               >
                 {/* Image Container */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100 flex items-center justify-center">
+                <div className={`relative overflow-hidden bg-neutral-100 flex items-center justify-center ${
+                  isBranding ? 'aspect-square p-12' : 'aspect-[4/3]'
+                }`}>
                   {/* Background Logo Placeholder */}
-                  {!item.url && (
+                  {(!item.url && !isBranding) && (
                     <div className="absolute inset-0 flex items-center justify-center p-12 opacity-10">
                       <img src="https://i.imgur.com/6nGQFtj.png" alt="Iyonicorp" className="w-full h-full object-contain" />
                     </div>
@@ -331,7 +335,9 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                   <img 
                     src={item.url ? `https://s.wordpress.com/mshots/v1/${encodeURIComponent(item.url)}?w=1280` : item.image} 
                     alt={item.name} 
-                    className={`w-full h-full ${item.url ? 'object-cover' : 'object-contain'} transition-transform duration-700 group-hover:scale-110`}
+                    className={`transition-transform duration-700 group-hover:scale-110 ${
+                      item.url ? 'w-full h-full object-cover' : 'w-4/5 h-4/5 object-contain'
+                    }`}
                     loading="lazy"
                   />
                   
@@ -340,6 +346,15 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                       <div className="px-3 py-1 bg-blue-600 text-white text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
                         Live System
+                      </div>
+                    </div>
+                  )}
+
+                  {isBranding && (
+                    <div className="absolute top-4 right-4">
+                      <div className="px-3 py-1 bg-indigo-600 text-white text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg flex items-center gap-1.5">
+                        <Star size={10} fill="currentColor" />
+                        Logo Blueprint
                       </div>
                     </div>
                   )}
