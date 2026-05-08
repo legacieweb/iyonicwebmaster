@@ -236,7 +236,8 @@ export const WEBSITE_TYPES = [
   { name: 'Streaming', price: 2500, id: 'streaming' },
   { name: 'Social Platforms', price: 3500, id: 'social-platforms' },
   { name: 'Business Profiles', price: 400, id: 'business-profiles' },
-  { name: 'Professional Services', price: 500, id: 'professional-services' }
+  { name: 'Professional Services', price: 500, id: 'professional-services' },
+  { name: 'AI & Automation', price: 2500, id: 'ai-automation' }
 ]
 
 export const CATALOG_ITEMS = {
@@ -297,6 +298,18 @@ export const CATALOG_ITEMS = {
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://groundflexadventures.iyonicorp.com/',
       moduleIds: ['forms', 'bookings', 'customer management', 'ticketing', 'ticketvalidation'],
+      minTier: 'basic'
+    },
+
+            {
+      id: 'lp-6',
+      name: 'Dream homes',
+      type: 'Real Estate & Property Management',
+      description: 'real estate listing and management platform with property search, agent profiles, and contact forms.',
+      price: 300,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://dreamhomes.iyonicorp.com/',
+      moduleIds: ['property listings', 'agent profiles', 'contact forms'],
       minTier: 'basic'
     },
   ],
@@ -672,6 +685,7 @@ export const CATALOG_ITEMS = {
     {
       id: 'az-1',
       name: 'Custom AI Assistant',
+      type: 'AI & Automation',
       description: 'Custom AI support agent trained on your docs.',
       price: 2499,
       image: 'https://i.imgur.com/6nGQFtj.png',

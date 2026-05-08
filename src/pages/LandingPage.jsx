@@ -122,6 +122,12 @@ const DesignDetails = ({ item, onClose, formatPrice, getMonthlyPrice, onPreview,
           src={item.url ? `https://s.wordpress.com/mshots/v1/${encodeURIComponent(item.url)}?w=1920` : item.image} 
           alt={item.name}
           className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+          onError={(e) => {
+            if (item.url && e.target.src !== item.image) {
+              e.target.src = item.image;
+              e.target.className = "w-4/5 h-4/5 object-contain transition-transform duration-1000 group-hover:scale-105 m-auto";
+            }
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/40 via-transparent to-transparent" />
       </div>
@@ -655,6 +661,12 @@ const LandingPage = ({ onLoginClick }) => {
                       src={item.url ? `https://s.wordpress.com/mshots/v1/${encodeURIComponent(item.url)}?w=1280` : item.image} 
                       alt={item.name} 
                       className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                      onError={(e) => {
+                        if (item.url && e.target.src !== item.image) {
+                          e.target.src = item.image;
+                          e.target.className = "w-4/5 h-4/5 object-contain transition-transform duration-1000 group-hover:scale-110 m-auto";
+                        }
+                      }}
                     />
                   </div>
 

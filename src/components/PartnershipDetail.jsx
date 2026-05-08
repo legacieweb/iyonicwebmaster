@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import Navbar from './Navbar'
 
 const PartnershipDetail = () => {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, toggleAuthModal } = useAuth()
   const navigate = useNavigate()
   const [activeSection, setActiveSection] = useState(0)
 
@@ -22,8 +22,9 @@ const PartnershipDetail = () => {
       // Redirect to dashboard membership section
       navigate('/dashboard', { state: { tab: 'membership' } })
     } else {
-      // Redirect to login with redirect to dashboard after login
-      navigate('/login', { state: { from: '/dashboard', tab: 'membership' } })
+      // Set redirect flag for after login
+      localStorage.setItem('auth_redirect', JSON.stringify({ path: '/dashboard', state: { tab: 'membership' } }))
+      toggleAuthModal('login')
     }
   }
 

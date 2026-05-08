@@ -32,6 +32,20 @@ const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = '
   useEffect(() => {
     if (location.state?.tab) {
       setActiveTab(location.state.tab)
+      
+      // If navigating to membership, scroll to partnership section after a short delay
+      if (location.state.tab === 'membership') {
+        setTimeout(() => {
+          const partnerTier = document.getElementById('tier-partner')
+          if (partnerTier) {
+            partnerTier.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            partnerTier.classList.add('ring-4', 'ring-blue-600', 'ring-offset-8')
+            setTimeout(() => {
+              partnerTier.classList.remove('ring-4', 'ring-blue-600', 'ring-offset-8')
+            }, 3000)
+          }
+        }, 500)
+      }
     }
   }, [location.state?.tab])
   const [error, setError] = useState(null)
@@ -1355,6 +1369,7 @@ const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = '
                       return (
                         <div 
                           key={tier.id}
+                          id={tier.id === 'partner' ? 'tier-partner' : undefined}
                           className={`p-10 rounded-[3.5rem] border transition-all duration-500 relative overflow-hidden flex flex-col ${
                             isCurrent 
                               ? 'bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700 text-white shadow-2xl scale-105 z-10' 

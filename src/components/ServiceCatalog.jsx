@@ -333,6 +333,12 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                       item.url ? 'w-full h-full object-cover' : 'w-4/5 h-4/5 object-contain'
                     }`}
                     loading="lazy"
+                    onError={(e) => {
+                      if (item.url && e.target.src !== item.image) {
+                        e.target.src = item.image;
+                        e.target.className = 'w-4/5 h-4/5 object-contain transition-transform duration-700 group-hover:scale-110';
+                      }
+                    }}
                   />
                   
                   {item.url && (

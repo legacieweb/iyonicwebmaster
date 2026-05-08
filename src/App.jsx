@@ -90,16 +90,26 @@ function AppContent({ isAuthModalOpen, authModalMode, toggleAuthModal, closeAuth
   const { isAuthenticated, currentUser } = useAuth()
   const navigate = useNavigate()
 
-  // Handle pending selection after login
+  // Handle pending selection or redirects after login
   useEffect(() => {
     if (isAuthenticated && currentUser) {
-      // Clear pending selection - user should select it manually in the dashboard or marketplace
-      // to avoid automatic project assignment during signup/login
+      // 1. Check for explicit auth redirect (e.g. from Partner Now)
+      const authRedirect = localStorage.getItem('auth_redirect')
+      if (authRedirect) {
+        try {
+          const { path, state } = JSON.parse(authRedirect)
+          localStorage.removeItem('auth_redirect')
+          navigate(path, { state })
+          return
+        } catch (e) {
+          localStorage.removeItem('auth_redirect')
+        }
+      }
+
+      // 2. Handle pending selection
       const pendingSelection = localStorage.getItem('pending_selection')
       if (pendingSelection) {
         localStorage.removeItem('pending_selection')
-        // We don't auto-create the project anymore to fulfill the requirement
-        // "when the user is signing up, they are asigned a project and it should not be there"
         navigate('/dashboard')
       }
     }
