@@ -501,22 +501,6 @@ const LandingPage = ({ onLoginClick }) => {
                 Displaying {filteredItems.length} curated architectures
               </p>
             </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="p-1.5 bg-white border border-neutral-200 rounded-[24px] flex shadow-inner">
-                {['USD', 'KES'].map(c => (
-                  <button
-                    key={c}
-                    onClick={() => setCurrency(c)}
-                    className={`px-8 py-4 rounded-[20px] text-[10px] font-black transition-all uppercase tracking-widest ${
-                      currency === c ? 'bg-neutral-900 text-white shadow-xl scale-105' : 'text-neutral-400 hover:text-neutral-900'
-                    }`}
-                  >
-                    {c}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
 
           <div className="sticky top-24 z-40 mb-16 space-y-4">
