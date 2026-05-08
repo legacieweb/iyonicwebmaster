@@ -8,7 +8,7 @@ import {
 export const SERVICES_CONTENT = {
   subtitle: 'Our Specialization',
   title: 'Premium Web Development Services',
-  description: 'We specialize exclusively in high-end web development, delivering precision-engineered digital solutions. Every project comes with a comprehensive branding package to ensure your business stands out from day one.'
+  description: 'We specialize exclusively in high-end web development, delivering precision-engineered digital solutions. Every project comes with a custom logo, banner, flyers, and posters—completely free of charge.'
 }
 
 export const HOW_IT_WORKS_STEPS = [
@@ -159,17 +159,6 @@ export const SERVICES = [
     types: ['SaaS', 'E-commerce', 'Portfolios', 'Corporate'],
     architecture: 'Next.js / React',
     minPrice: 100
-  },
-  {
-    id: 'branding-package',
-    icon: Award,
-    title: 'Branding Bundle',
-    description: 'Elevate your visual identity. Our professional branding suite includes everything you need to stand out: custom logo design, high-impact posters, and professional flyers.',
-    moduleIds: ['design', 'marketing'],
-    color: 'bg-indigo-600',
-    types: ['Logo Design', 'Posters', 'Flyers', 'Social Media'],
-    architecture: 'Custom Design',
-    minPrice: 150
   }
 ]
 
@@ -221,24 +210,6 @@ export const PRICING_DATA = {
         shadow: 'hover:shadow-indigo-500/20'
       }
     }
-  ],
-  'branding-package': [
-    {
-      name: 'Pro Branding',
-      category: 'Professional',
-      price: 150,
-      maxPrice: 500,
-      description: 'Complete visual identity package for your business.',
-      moduleIds: ['design', 'marketing'],
-      tag: 'Best Value',
-      popular: true,
-      color: 'indigo',
-      design: {
-        gradient: 'from-indigo-600 to-purple-500',
-        pattern: 'bg-grid-white/[0.02]',
-        shadow: 'hover:shadow-indigo-500/20'
-      }
-    }
   ]
 }
 
@@ -250,6 +221,7 @@ export const WEBSITE_TYPES = [
   { name: 'Ebooks', price: 700, id: 'ebooks' },
   { name: 'Salons', price: 450, id: 'salons' },
   { name: 'Beauty shops', price: 550, id: 'beauty-shops' },
+  { name: 'Bakeries', price: 500, id: 'bakeries' },
   { name: 'Hotels & Restaurants', price: 750, id: 'hotels-restaurants' },
   { name: 'Appointment Scheduling', price: 500, id: 'appointment-scheduling' },
   { name: 'Health & Fitness', price: 550, id: 'health-fitness' },
@@ -450,6 +422,17 @@ export const CATALOG_ITEMS = {
       moduleIds: ['bookings', 'fitness programs', 'customer management', 'analytics'],
       minTier: 'premium_plus'
     },
+                {
+      id: 'cp-12',
+      name: 'Baller\'s mounts',
+      type: 'Professional Services',
+      description: 'Digital portraits from your favorite photographs. Custom digital art in multiple sizes - A4, A3, A2, A1, A0. Transform your memories into timeless art.',
+      price: 299,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://ballersmounts.iyonicorp.com/',
+      moduleIds: ['project portifolio', 'social media intergration'],
+      minTier: 'basic'
+    },
   ],
   'Retail Engine': [
     {
@@ -620,6 +603,28 @@ export const CATALOG_ITEMS = {
       moduleIds: ['pos', 'inventory', 'customer management', 'analytics'],
       minTier: 'premium'
     },
+                    {
+      id: 're-16',
+      name: 'Booktels',
+      type: 'Event Planner',
+      description: 'Comprehensive event planning platform with vendor management, guest lists, and scheduling tools.',
+      price: 850,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://eventplanner.iyonicorp.com',
+      moduleIds: ['event management', 'vendor management', 'guest management', 'scheduling'],
+      minTier: 'premium'
+    },
+                        {
+      id: 're-17',
+      name: 'Sunny Delights',
+      type: 'Bakeries',
+      description: 'Elegant online bakery store with detailed product pages, inventory management, and customer reviews.',
+      price: 850,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://sunnydelights.iyonicorp.com',
+      moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics'],
+      minTier: 'premium'
+    },
   ],
 
   // Payment Solution Plans
@@ -673,194 +678,6 @@ export const CATALOG_ITEMS = {
       url: 'https://iyonicbots.iyonicorp.com',
       moduleIds: ['analytics', 'ai_assistant', 'model_training'],
       minTier: 'premium'
-    }
-  ],
-  'Neural Enterprise': [
-    {
-      id: 'ne-1',
-      name: 'Core Logic AI',
-      description: 'Enterprise-wide LLM integration for operations.',
-      price: 4999,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      url: 'https://openai.com',
-      moduleIds: ['analytics', 'ai_assistant', 'automation', 'vision_ai'],
-      minTier: 'premium_plus'
-    }
-  ],
-
-  // Mobile App Plans
-  'Native MVP': [
-    {
-      id: 'mvp-1',
-      name: 'Flash Mobile',
-      description: 'Quick-to-market mobile app with core functionality.',
-      price: 4999,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      url: 'https://expo.dev',
-      moduleIds: ['crm', 'collaboration', 'push_notifs'],
-      minTier: 'premium'
-    }
-  ],
-  'Mobile Empire': [
-    {
-      id: 'me-1',
-      name: 'Ecosystem Mobile',
-      description: 'Massive mobile app with social and commerce features.',
-      price: 8999,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      url: 'https://instagram.com',
-      moduleIds: ['crm', 'collaboration', 'analytics', 'offline_sync', 'biometric_auth'],
-      minTier: 'premium_plus'
-    }
-  ],
-
-  // Integration Plans
-  'Sync Logic': [
-    {
-      id: 'sl-1',
-      name: 'Bridge Master',
-      description: 'Connect two major systems with bidirectional sync.',
-      price: 799,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      url: 'https://zapier.com',
-      moduleIds: ['automation', 'security'],
-      minTier: 'premium'
-    }
-  ],
-  'System Weave': [
-    {
-      id: 'sw-1',
-      name: 'Nexus Weaver',
-      description: 'Centralized automation hub for your entire stack.',
-      price: 1999,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      url: 'https://make.com',
-      moduleIds: ['automation', 'security', 'compliance'],
-      minTier: 'premium_plus'
-    }
-  ],
-  'Pro Branding': [
-    {
-      id: 'logo-1',
-      name: 'Minimalist Tech',
-      type: 'Logo Design',
-      description: 'Clean, modern minimalist logo design for technology startups.',
-      price: 150,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'basic'
-    },
-    {
-      id: 'logo-2',
-      name: 'Organic Wellness',
-      type: 'Logo Design',
-      description: 'Earth-toned, organic logo design for health and wellness brands.',
-      price: 150,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'basic'
-    },
-    {
-      id: 'logo-3',
-      name: 'Luxury Real Estate',
-      type: 'Logo Design',
-      description: 'Elegant and sophisticated branding for high-end property management.',
-      price: 250,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'premium'
-    },
-    {
-      id: 'logo-4',
-      name: 'Cyberpunk Gaming',
-      type: 'Logo Design',
-      description: 'Futuristic, neon-themed branding for gaming and streaming channels.',
-      price: 200,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'basic'
-    },
-    {
-      id: 'logo-5',
-      name: 'Corporate Finance',
-      type: 'Logo Design',
-      description: 'Strong, professional identity for financial services and consulting.',
-      price: 300,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'premium'
-    },
-    {
-      id: 'logo-6',
-      name: 'Artisan Coffee',
-      type: 'Logo Design',
-      description: 'Handcrafted, vintage-style branding for cafes and roasteries.',
-      price: 150,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'basic'
-    }
-  ],
-  'branding-package': [
-    {
-      id: 'logo-1',
-      name: 'Minimalist Tech',
-      type: 'Logo Design',
-      description: 'Clean, modern minimalist logo design for technology startups.',
-      price: 150,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'basic'
-    },
-    {
-      id: 'logo-2',
-      name: 'Organic Wellness',
-      type: 'Logo Design',
-      description: 'Earth-toned, organic logo design for health and wellness brands.',
-      price: 150,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'basic'
-    },
-    {
-      id: 'logo-3',
-      name: 'Luxury Real Estate',
-      type: 'Logo Design',
-      description: 'Elegant and sophisticated branding for high-end property management.',
-      price: 250,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'premium'
-    },
-    {
-      id: 'logo-4',
-      name: 'Cyberpunk Gaming',
-      type: 'Logo Design',
-      description: 'Futuristic, neon-themed branding for gaming and streaming channels.',
-      price: 200,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'basic'
-    },
-    {
-      id: 'logo-5',
-      name: 'Corporate Finance',
-      type: 'Logo Design',
-      description: 'Strong, professional identity for financial services and consulting.',
-      price: 300,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'premium'
-    },
-    {
-      id: 'logo-6',
-      name: 'Artisan Coffee',
-      type: 'Logo Design',
-      description: 'Handcrafted, vintage-style branding for cafes and roasteries.',
-      price: 150,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      moduleIds: ['design'],
-      minTier: 'basic'
     }
   ]
 }

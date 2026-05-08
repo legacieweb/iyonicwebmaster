@@ -1653,8 +1653,8 @@ const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = '
                               >
                                 {!canActivate && (
                                   <div className="absolute top-6 right-6 z-20">
-                                    <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400">
-                                      <Lock size={16} />
+                                    <div className="px-3 py-1 bg-slate-100 rounded-lg flex items-center justify-center text-[8px] font-black uppercase tracking-widest text-slate-400 border border-slate-200">
+                                      {MEMBERSHIP_TIERS[tool.minTier.toUpperCase()]?.name || tool.minTier} Required
                                     </div>
                                   </div>
                                 )}

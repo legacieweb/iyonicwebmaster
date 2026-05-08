@@ -308,8 +308,6 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
           {items.map((item, index) => {
             const isWishlisted = wishlist.some(w => w.id === item.id)
             
-            const isBranding = serviceId === 'branding-package' || serviceId === 'Pro Branding'
-
             return (
               <motion.div
                 key={item.id}
@@ -317,16 +315,12 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 onClick={() => handlePreview(item)}
-                className={`group bg-white rounded-[40px] overflow-hidden border border-neutral-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer ${
-                  isBranding ? 'flex flex-col' : ''
-                }`}
+                className="group bg-white rounded-[40px] overflow-hidden border border-neutral-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer"
               >
                 {/* Image Container */}
-                <div className={`relative overflow-hidden bg-neutral-100 flex items-center justify-center ${
-                  isBranding ? 'aspect-square p-12' : 'aspect-[4/3]'
-                }`}>
+                <div className="relative overflow-hidden bg-neutral-100 flex items-center justify-center aspect-[4/3]">
                   {/* Background Logo Placeholder */}
-                  {(!item.url && !isBranding) && (
+                  {!item.url && (
                     <div className="absolute inset-0 flex items-center justify-center p-12 opacity-10">
                       <img src="https://i.imgur.com/6nGQFtj.png" alt="Iyonicorp" className="w-full h-full object-contain" />
                     </div>
@@ -349,15 +343,6 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                       </div>
                     </div>
                   )}
-
-                  {isBranding && (
-                    <div className="absolute top-4 right-4">
-                      <div className="px-3 py-1 bg-indigo-600 text-white text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg flex items-center gap-1.5">
-                        <Star size={10} fill="currentColor" />
-                        Logo Blueprint
-                      </div>
-                    </div>
-                  )}
                   
                   <div className="absolute inset-0 bg-neutral-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-4">
                     <button 
@@ -371,35 +356,33 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                     </button>
                   </div>
                   
-                  {/* Price Tag */}
-                  <div className="absolute top-6 left-6 flex flex-col gap-2">
-                    <div className="px-4 py-2 bg-white/90 backdrop-blur-md rounded-full text-sm font-black text-neutral-900 shadow-xl flex flex-col items-center">
-                      <span>{formatPrice(item.price)}</span>
-                      <span className="text-[8px] text-blue-600 uppercase tracking-tighter">Or {getMonthlyPrice(item.price)}/mo</span>
-                    </div>
-                    {item.minTier && item.minTier !== 'free' && (
-                      <div className={`px-3 py-1 backdrop-blur-md rounded-full text-[8px] font-black shadow-lg flex items-center gap-1.5 uppercase tracking-widest border ${
-                        checkAccess(currentUser?.membership_tier || 'free', item.minTier)
-                          ? 'bg-emerald-500/90 text-white border-emerald-400'
-                          : 'bg-amber-500/90 text-white border-amber-400'
-                      }`}>
-                        <Shield size={10} />
-                        {MEMBERSHIP_TIERS[item.minTier.toUpperCase()]?.name || item.minTier} Tier
-                        <span className="ml-1 opacity-70">
-                          ({checkAccess(currentUser?.membership_tier || 'free', item.minTier) ? 'Unlocked' : 'Locked'})
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  {/* Price Tag removed as it is now in the content area */}
                 </div>
 
                 {/* Content */}
                 <div className="p-8">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-xl font-bold text-neutral-900">{item.name}</h3>
-                    <div className="flex items-center gap-1 text-amber-500">
-                      <Star size={14} fill="currentColor" />
-                      <span className="text-xs font-black">4.9</span>
+                  </div>
+
+                  <div className="flex flex-col gap-1 mb-6">
+                    <div className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Starting At</div>
+                    <div className="text-3xl font-black text-neutral-900 italic tracking-tighter">
+                      {formatPrice(item.price)}
+                    </div>
+                    <div className="flex items-center justify-between mt-1">
+                      <div className="text-[9px] font-bold text-blue-600 uppercase tracking-widest">
+                        Or {getMonthlyPrice(item.price)} (Rent to Own)
+                      </div>
+                      {item.minTier && item.minTier !== 'free' && (
+                        <span className={`px-2 py-1 rounded-lg text-[7px] font-black uppercase tracking-widest border ${
+                          !currentUser?.membership_tier || !checkAccess(currentUser?.membership_tier, item.minTier)
+                            ? 'bg-slate-50 text-slate-400 border-slate-100'
+                            : 'bg-emerald-50 text-emerald-600 border-emerald-100'
+                        }`}>
+                          {MEMBERSHIP_TIERS[item.minTier.toUpperCase()]?.name || item.minTier}
+                        </span>
+                      )}
                     </div>
                   </div>
                   <p className="text-neutral-500 text-sm leading-relaxed mb-8 line-clamp-2 font-medium">

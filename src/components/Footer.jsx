@@ -58,23 +58,17 @@ const Footer = () => {
     {
       title: 'Studio',
       links: [
-        { name: 'About Us', id: 'about' },
+        { name: 'Blueprints', id: 'catalog' },
         { name: 'Process', id: 'how-it-works' },
+        { name: 'Pricing', id: 'pricing' },
         { name: 'Partnership', id: 'partnership' },
-        { name: 'Careers', id: 'careers' },
       ]
     },
     {
-      title: 'Services',
+      title: 'Experience',
       links: [
-        { name: 'Web Development', id: 'services' },
-      ]
-    },
-    {
-      title: 'Resources',
-      links: [
-        { name: 'Blog', id: 'blog' },
         { name: 'Case Studies', id: 'case-studies' },
+        { name: 'Blog', id: 'blog' },
         { name: 'Documentation', id: 'documentation' },
       ]
     },
@@ -91,7 +85,7 @@ const Footer = () => {
   const handleLinkClick = (e, id) => {
     e.preventDefault()
     
-    if (['how-it-works', 'services', 'pricing', 'partnership'].includes(id)) {
+    if (['catalog', 'pricing', 'partnership', 'how-it-works'].includes(id)) {
       if (location.pathname === '/') {
         const element = document.getElementById(id)
         if (element) {

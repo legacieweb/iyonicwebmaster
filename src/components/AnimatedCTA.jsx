@@ -4,7 +4,7 @@ const AnimatedCTA = ({ onClick, className = "" }) => {
   return (
     <button
       onClick={onClick}
-      className={`group relative overflow-hidden bg-neutral-950 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all hover:shadow-[0_20px_40px_rgba(0,0,0,0.15)] hover:-translate-y-1 active:translate-y-0 ${className}`}
+      className={`group relative overflow-hidden bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all hover:shadow-[0_20px_40px_rgba(37,99,235,0.15)] hover:-translate-y-1 active:translate-y-0 ${className}`}
       style={{ minWidth: '200px', height: '56px' }}
     >
       <div className="relative z-10 flex items-center justify-center gap-3 px-8 h-full">

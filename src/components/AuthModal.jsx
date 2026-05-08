@@ -79,7 +79,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-slate-950/40 backdrop-blur-xl"
+            className="absolute inset-0 bg-neutral-900/20 backdrop-blur-md"
           />
           
           <motion.div
@@ -87,20 +87,20 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 40 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative w-full h-full sm:h-auto sm:max-w-5xl bg-white sm:rounded-[40px] overflow-hidden shadow-[0_32px_128px_-16px_rgba(0,0,0,0.1)] flex flex-col md:flex-row"
+            className="relative w-full h-full sm:h-auto sm:max-w-5xl bg-white sm:rounded-[40px] overflow-hidden shadow-[0_32px_128px_-16px_rgba(0,0,0,0.1)] flex flex-col md:flex-row border border-neutral-100"
           >
             {/* Left Side: Branding/Info (Hidden on small mobile) */}
-            <div className="hidden md:flex md:w-[40%] bg-slate-900 relative p-12 flex-col justify-between overflow-hidden">
+            <div className="hidden md:flex md:w-[40%] bg-neutral-50 relative p-12 flex-col justify-between overflow-hidden border-r border-neutral-100">
               {/* Background Orbs */}
-              <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[80%] bg-cyan-500/10 rounded-full blur-[100px]" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-indigo-500/10 rounded-full blur-[80px]" />
+              <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[80%] bg-blue-500/5 rounded-full blur-[100px]" />
+              <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-indigo-500/5 rounded-full blur-[80px]" />
               
               <div className="relative z-10">
-                <div className="w-12 h-12 bg-gradient-to-br from-cyan-600 to-indigo-600 rounded-xl flex items-center justify-center text-white font-black italic shadow-lg shadow-cyan-500/20 mb-10">I</div>
-                <h3 className="text-3xl font-black text-white tracking-tighter leading-tight mb-4 italic uppercase">
-                  Accelerating digital <span className="text-cyan-500">evolution.</span>
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white font-black italic shadow-lg shadow-blue-500/20 mb-10">I</div>
+                <h3 className="text-3xl font-black text-neutral-900 tracking-tighter leading-tight mb-4 italic uppercase">
+                  Accelerating digital <span className="text-blue-600">evolution.</span>
                 </h3>
-                <p className="text-slate-400 font-medium text-sm leading-relaxed">
+                <p className="text-neutral-500 font-medium text-sm leading-relaxed">
                   Join a network of elite digital creators and enterprises scaling the future of technology.
                 </p>
               </div>
@@ -111,9 +111,9 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
                   { icon: Zap, text: 'Sub-millisecond latency' },
                   { icon: Globe, text: 'Global edge distribution' }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 text-slate-400">
-                    <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
-                      <item.icon size={16} className="text-cyan-500" />
+                  <div key={i} className="flex items-center gap-3 text-neutral-500">
+                    <div className="w-8 h-8 rounded-lg bg-white border border-neutral-100 flex items-center justify-center shadow-sm">
+                      <item.icon size={16} className="text-blue-600" />
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-widest">{item.text}</span>
                   </div>
@@ -136,7 +136,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
                     <div className="mb-10 text-center sm:text-left">
                       <h2 className="text-3xl sm:text-4xl font-black text-black tracking-tighter uppercase italic mb-2">
                         {isSignup ? 'Initialize Account' : 'Secure Login'}
-                        <span className="text-cyan-600">.</span>
+                        <span className="text-blue-600">.</span>
                       </h2>
                       <p className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">
                         {isSignup ? 'Enter your credentials to begin evolution' : 'Provide your security key for authentication'}

@@ -17,6 +17,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
       image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2426',
       url: 'https://vercel.com',
       features: ['Responsive', 'SEO Optimized', 'Contact Form'],
+      minTier: 'basic'
     },
     {
       id: 2,
@@ -28,6 +29,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
       image: 'https://images.unsplash.com/photo-1522542550221-31fd19255a7a?auto=format&fit=crop&q=80&w=2426',
       url: 'https://supabase.com',
       features: ['Gallery Layout', 'Smooth Animations', 'Project Filter'],
+      minTier: 'basic'
     },
     {
       id: 3,
@@ -39,6 +41,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
       image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=2426',
       url: 'https://shopify.com',
       features: ['Product Showcase', 'Cart System', 'Payment Ready'],
+      minTier: 'premium'
     },
     {
       id: 4,
@@ -50,6 +53,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
       image: 'https://images.unsplash.com/photo-1551288049-bbda022b868e?auto=format&fit=crop&q=80&w=2426',
       url: 'https://framer.com',
       features: ['CTA Optimized', 'Fast Loading', 'Mobile First'],
+      minTier: 'basic'
     },
     {
       id: 5,
@@ -61,6 +65,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
       image: 'https://images.unsplash.com/photo-1557838923-2985c318be48?auto=format&fit=crop&q=80&w=2426',
       url: 'https://webflow.com',
       features: ['Case Studies', 'Testimonials', 'Team Profiles'],
+      minTier: 'premium'
     },
     {
       id: 6,
@@ -72,6 +77,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
       image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80&w=2426',
       url: 'https://medium.com',
       features: ['Blog Posts', 'Categories', 'Social Share'],
+      minTier: 'basic'
     },
     {
       id: 7,
@@ -83,6 +89,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
       image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=2426',
       url: 'https://linear.app',
       features: ['Pricing Table', 'Feature Grid', 'Demo CTA'],
+      minTier: 'premium_plus'
     },
     {
       id: 8,
@@ -94,6 +101,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
       image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=2426',
       url: 'https://coursera.org',
       features: ['Course Display', 'Student Portal', 'Progress Tracking'],
+      minTier: 'premium_plus'
     },
     {
       id: 9,
@@ -105,6 +113,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
       image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=2426',
       url: 'https://opentable.com',
       features: ['Menu Display', 'Reservations', 'Photo Gallery'],
+      minTier: 'premium'
     },
   ]
 
@@ -229,7 +238,19 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
 
               {/* Template Info */}
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">{template.name}</h3>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xl font-bold">{template.name}</h3>
+                  {template.minTier && (
+                    <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded ${
+                      template.minTier === 'basic' ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' :
+                      template.minTier === 'premium' ? 'bg-purple-600/20 text-purple-400 border border-purple-500/30' :
+                      template.minTier === 'premium_plus' ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30' :
+                      'bg-rose-600/20 text-rose-400 border border-rose-500/30'
+                    }`}>
+                      {template.minTier.replace('_', ' ')}
+                    </span>
+                  )}
+                </div>
                 <p className="text-sm text-gray-400 mb-4 line-clamp-2">{template.description}</p>
 
                 {/* Features */}

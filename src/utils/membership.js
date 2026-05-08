@@ -250,7 +250,6 @@ export const MEMBERSHIP_TIERS = {
     maxModules: 4,
     features: [
       '2 Infrastructure Nodes (2 Websites)',
-      'Free Professional Branding Bundle',
       '4 Modules for the 2 websites upgrade',
       'Free Maintenance for the 2 websites',
       'Custom Domain Integration',
@@ -269,7 +268,6 @@ export const MEMBERSHIP_TIERS = {
     maxModules: 8,
     features: [
       'Everything in Basic',
-      'Free Professional Branding Bundle',
       '1 Additional Infrastructure Node (3 Total)',
       'Advanced Business Analytics',
       '1 Dedicated Account Manager',
@@ -288,7 +286,6 @@ export const MEMBERSHIP_TIERS = {
     maxModules: 100, // Unlimited modules in prompt
     features: [
       'Everything in Premium',
-      'Free Professional Branding Bundle',
       '1 Additional Infrastructure Node (4 Total)',
       'Unlimited Modules for all websites',
       'AI-Powered Business Intelligence for all websites',
@@ -306,7 +303,6 @@ export const MEMBERSHIP_TIERS = {
     maxModules: 1000, // Unlimited scalability
     features: [
       'Everything in Premium Plus',
-      'Free Professional Branding Bundle',
       '3 Additional Infrastructure Nodes (7 Total)',
       'Dedicated Infrastructure',
       'Custom SLA & Legal Support',

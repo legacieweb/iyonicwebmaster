@@ -16,10 +16,10 @@ const Navbar = ({ onLoginClick }) => {
   const location = useLocation()
 
   const navItems = [
-    { label: 'Services', href: '/#services' },
-    { label: 'Partnership', href: '/#partnership' },
-    { label: 'Pricing', href: '/#pricing' },
+    { label: 'Blueprints', href: '/#catalog' },
     { label: 'Process', href: '/#how-it-works' },
+    { label: 'Pricing', href: '/#pricing' },
+    { label: 'Partnership', href: '/#partnership' },
   ]
 
   useEffect(() => {
@@ -89,20 +89,7 @@ const Navbar = ({ onLoginClick }) => {
             className="flex items-center gap-4 group"
             onClick={(e) => handleNavigate('/', e)}
           >
-            <div className="relative">
-              <div className="w-12 h-12 flex items-center justify-center transform group-hover:rotate-[15deg] transition-all duration-500">
-                <img src="https://i.imgur.com/6nGQFtj.png" alt="Iyonicorp Logo" className="w-full h-full object-contain" />
-              </div>
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-600 rounded-full border-2 border-white animate-pulse shadow-[0_0_10px_rgba(37,99,235,0.5)]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-black text-2xl text-neutral-950 tracking-tighter leading-none group-hover:text-blue-600 transition-colors">
-                Iyonicorp
-              </span>
-              <span className="text-[10px] font-bold text-neutral-400 tracking-[0.2em] uppercase mt-1">
-                Digital Excellence
-              </span>
-            </div>
+            <img src="https://i.imgur.com/6nGQFtj.png" alt="Iyonicorp Logo" className="w-10 h-10 object-contain" />
           </motion.a>
 
           {/* Styled Navigation Items */}

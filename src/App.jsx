@@ -157,6 +157,10 @@ function AppContent({ isAuthModalOpen, authModalMode, toggleAuthModal, closeAuth
 const ServiceDetailWrapper = () => {
   const { serviceId } = useParams()
   const navigate = useNavigate()
+  
+  // Web Development is now the homepage
+  if (serviceId === 'web-development') return <Navigate to="/" replace />
+  
   const service = SERVICES.find(s => s.id === serviceId)
   if (!service) return <Navigate to="/" replace />
   return (
