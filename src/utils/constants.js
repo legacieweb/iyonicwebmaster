@@ -446,6 +446,17 @@ export const CATALOG_ITEMS = {
       moduleIds: ['project portifolio', 'social media intergration'],
       minTier: 'basic'
     },
+                    {
+      id: 'cp-13',
+      name: 'Rent drive',
+      type: 'Automobiles',
+      description: 'Car rental platform with vehicle listings, booking management, and customer profiles.',
+      price: 499,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://rentdrive.iyonicorp.com/',
+      moduleIds: ['vehicle listings', 'booking management', 'customer profiles', 'analytics'],
+      minTier: 'basic'
+    },
   ],
   'Retail Engine': [
     {
