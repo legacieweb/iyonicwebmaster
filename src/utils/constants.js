@@ -243,17 +243,7 @@ export const WEBSITE_TYPES = [
 export const CATALOG_ITEMS = {
   // Web Development Plans
   'Launch Pad': [
-    {
-      id: 'lp-1',
-      name: 'Modern Portfolio',
-      type: 'Portfolio',
-      description: 'Sleek, modern portfolio website to showcase your work and attract clients.',
-      price: 100,
-      image: 'https://i.imgur.com/6nGQFtj.png',
-      url: 'https://bonfacemurimi.iyonicorp.com',
-      moduleIds: ['crm', 'collaboration', 'auth'],
-      minTier: 'basic'
-    },
+
 
         {
       id: 'lp-2',
@@ -311,6 +301,28 @@ export const CATALOG_ITEMS = {
       url: 'https://dreamhomes.iyonicorp.com/',
       moduleIds: ['property listings', 'agent profiles', 'contact forms'],
       minTier: 'basic'
+    },
+        {
+      id: 'lp-1',
+      name: 'Modern Portfolio',
+      type: 'Portfolio',
+      description: 'Sleek, modern portfolio website to showcase your work and attract clients.',
+      price: 100,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://bonfacemurimi.iyonicorp.com',
+      moduleIds: ['crm', 'collaboration', 'auth'],
+      minTier: 'basic'
+    },
+            {
+      id: 'lp-7',
+      name: 'Auto kenya',
+      type: 'Automobiles',
+      description: 'Car dealership and with vehicle listings, booking management, and customer profiles.',
+      price: 6000,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://autokenya.onrender.com',
+      moduleIds: ['vehicle listings', 'booking management', 'customer profiles', 'analytics'],
+      minTier: 'premium_plus'
     },
   ],
   'Service Suite': [
@@ -446,7 +458,7 @@ export const CATALOG_ITEMS = {
       moduleIds: ['project portifolio', 'social media intergration'],
       minTier: 'basic'
     },
-                    {
+      {
       id: 'cp-13',
       name: 'Rent drive',
       type: 'Automobiles',
@@ -457,7 +469,19 @@ export const CATALOG_ITEMS = {
       moduleIds: ['vehicle listings', 'booking management', 'customer profiles', 'analytics'],
       minTier: 'basic'
     },
+{
+      id: 'cp-14',
+      name: 'Beauty plug',
+      type: 'salons',
+      description: 'Salon booking platform with service listings, product listings, appointment scheduling, and customer profiles.',
+      price: 1499,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://beautyplug-1.onrender.com/',
+      moduleIds: ['service listings', 'product listings', 'appointment scheduling', 'customer profiles', 'analytics'],
+      minTier: 'premium_plus'
+    }
   ],
+  
   'Retail Engine': [
     {
       id: 're-1',
@@ -486,7 +510,7 @@ export const CATALOG_ITEMS = {
       name: 'Lumina Beauty',
       type: 'Beauty shops',
       description: 'Elegant beauty shop with inventory management and customer profiles.',
-      price: 3999,
+      price: 3990,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://luminabeauty-1.onrender.com/',
       moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
@@ -497,7 +521,7 @@ export const CATALOG_ITEMS = {
       name: 'Fashion Vela',
       type: 'Ecommerce',
       description: 'High-end fashion e-commerce experience for premium brands.',
-      price: 3999,
+      price: 3990,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://fashionvela-1.onrender.com/',
       moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
@@ -509,7 +533,7 @@ export const CATALOG_ITEMS = {
       name: 'African artifacts',
       type: 'Ecommerce',
       description: 'Best for selling handmade products',
-      price: 2599,
+      price: 2799,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://africanartifacts.iyonicorp.com/',
       moduleIds: ['product catalog', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
@@ -520,7 +544,7 @@ export const CATALOG_ITEMS = {
       name: 'Wimson',
       type: 'Ebooks',
       description: 'Best for selling ebooks and digital products',
-      price: 799,
+      price: 800,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://wimson.iyonicorp.com/',
       moduleIds: ['product catalog', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
@@ -528,13 +552,13 @@ export const CATALOG_ITEMS = {
     },
         {
       id: 're-7',
-      name: 'Couturec fashion',
+      name: 'Shabil fashion',
       type: 'Ecommerce',
-      description: 'High-end fashion e-commerce experience for premium brands.',
-      price: 1999,
+      description: 'Stylish fashion e-commerce platform for trendy clothing and accessories.',
+      price: 2500,
       image: 'https://i.imgur.com/6nGQFtj.png',
-      url: 'https://couturee.iyonicorp.com/',
-      moduleIds: ['crm', 'inventory', 'speed optimization', 'auth', 'premium_seo'],
+      url: 'https://shabil.iyonicorp.com/',
+      moduleIds: ['inventory','premium_seo', 'auth', 'cloud_infra', 'crm'],
       minTier: 'premium_plus'
     },
         {
@@ -542,7 +566,7 @@ export const CATALOG_ITEMS = {
       name: 'Plugin',
       type: 'Ecommerce',
       description: 'premium cannabis store.',
-      price: 5900,
+      price: 2900,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://plugin.iyonicorp.com/',
       moduleIds: ['crm', 'inventory', 'speed optimization', 'auth', 'premium_seo'],
@@ -553,7 +577,7 @@ export const CATALOG_ITEMS = {
       name: 'Zenpos',
       type: 'Point of Sale',
       description: 'Full-featured point of sale system with inventory and customer management.',
-      price: 1000,
+      price: 1800,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://zenpos.onrender.com',
       moduleIds: ['pos', 'inventory', 'customer management', 'analytics'],
@@ -599,7 +623,7 @@ export const CATALOG_ITEMS = {
       name: 'Elegant men\'s footwear',
       type: 'Ecommerce',
       description: 'High-end men\'s footwear e-commerce experience for premium brands.',
-      price: 4999,
+      price: 2999,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://elegantmen.iyonicorp.com/',
       moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
@@ -610,11 +634,11 @@ export const CATALOG_ITEMS = {
       name: 'Modern Bistro',
       type: 'Point of Sale',
       description: 'pos for fastfood restaurant with inventory and customer management.',
-      price: 600,
+      price: 900,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://pos-1-qwh3.onrender.com/',
       moduleIds: ['pos', 'inventory', 'customer management', 'analytics'],
-      minTier: 'basic'
+      minTier: 'premium'
     },
                 {
       id: 're-15',
@@ -643,11 +667,22 @@ export const CATALOG_ITEMS = {
       name: 'Sunny Delights',
       type: 'Bakeries',
       description: 'Elegant online bakery store with detailed product pages, inventory management, and customer reviews.',
-      price: 850,
+      price: 800,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://sunnydelights.iyonicorp.com',
       moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics'],
       minTier: 'premium'
+    },
+                            {
+      id: 're-18',
+      name: 'Luxwatch',
+      type: 'Ecommerce',
+      description: 'High-end watch store with detailed product pages, inventory management, and customer reviews.',
+      price: 2000,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://luxwatch-1.onrender.com',
+      moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics'],
+      minTier: 'premium_plus'
     },
   ],
 
@@ -657,10 +692,10 @@ export const CATALOG_ITEMS = {
       id: 'gl-1',
       name: 'Paylang',
       description: 'One-click payment landing page for single products.',
-      price: 150,
+      price: 350,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://paylang.iyonicorp.com/',
-      moduleIds: ['invoicing', 'security', 'subscription_mgmt'],
+      moduleIds: ['invoicing', 'security', 'refund management', 'basic analytics'],
       minTier: 'free'
     }
   ],
@@ -669,11 +704,11 @@ export const CATALOG_ITEMS = {
       id: 'fc-1',
       name: 'iyonicpay',
       description: 'Secure financial dashboard with transaction history.',
-      price: 999,
+      price: 15000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://pay.iyonicorp.com',
-      moduleIds: ['invoicing', 'security', 'global_payroll', 'high_risk_monitoring', 'faud_prevention'],
-      minTier: 'premium'
+      moduleIds: ['invoicing', 'security', 'global_payroll', 'high_risk_monitoring', 'faud_prevention', 'premium analytics', 'customer support', 'compliance_management'],
+      minTier: 'enterprise'
     }
   ],
 

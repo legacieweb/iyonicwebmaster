@@ -31,16 +31,16 @@ const CookiePolicy = ({ onBack }) => {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-32 flex items-center gap-12 border-b border-neutral-100 pb-20"
+          className="mb-20 md:mb-32 flex flex-col md:flex-row items-center gap-8 md:gap-12 border-b border-neutral-100 pb-12 md:pb-20 text-center md:text-left"
         >
-          <div className="w-32 h-32 bg-neutral-950 rounded-[48px] flex items-center justify-center flex-shrink-0 shadow-2xl">
-            <Cookie className="text-white" size={64} />
+          <div className="w-24 h-24 md:w-32 md:h-32 bg-neutral-950 rounded-[32px] md:rounded-[48px] flex items-center justify-center flex-shrink-0 shadow-2xl">
+            <Cookie className="text-white" size={48} />
           </div>
           <div>
-            <h1 className="text-7xl font-black text-neutral-950 tracking-tighter mb-8 uppercase italic">
+            <h1 className="text-5xl md:text-7xl font-black text-neutral-950 tracking-tighter mb-4 md:mb-8 uppercase italic leading-[0.9]">
               Cookies<span className="text-blue-600">.</span>
             </h1>
-            <p className="text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl">
+            <p className="text-lg md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl">
               Understanding how we use small data packets to enhance your digital experience.
             </p>
           </div>

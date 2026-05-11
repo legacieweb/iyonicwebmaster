@@ -862,6 +862,14 @@ app.delete('/api/users/:id', authenticate, async (req, res) => {
 // Projects Routes
 app.get('/api/projects', async (req, res) => {
   const { userId } = req.query;
+
+  // Migration: Ensure price column exists
+  try {
+    await queryWithRetry('ALTER TABLE projects ADD COLUMN IF NOT EXISTS price DECIMAL(10,2) DEFAULT 0');
+  } catch (err) {
+    // Ignore error if column already exists or other issues
+  }
+
   let query = 'SELECT * FROM projects';
   let params = [];
   
@@ -880,7 +888,7 @@ app.get('/api/projects', async (req, res) => {
 });
 
 app.post('/api/projects', authenticate, async (req, res) => {
-  const { title, description, category, thumbnail, status, template, userId, data } = req.body;
+  const { title, description, category, thumbnail, status, template, userId, data, price } = req.body;
   try {
     const projectData = data && typeof data === 'object' ? JSON.stringify(data) : (data || '{}');
     const userIdToUse = userId || req.userId;
@@ -890,8 +898,8 @@ app.post('/api/projects', authenticate, async (req, res) => {
     const user = userResult.rows[0];
     
     const result = await queryWithRetry(
-      'INSERT INTO projects (title, description, category, thumbnail, status, template, userid, data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-      [title, description, category, thumbnail, status || 'draft', template, userIdToUse, projectData]
+      'INSERT INTO projects (title, description, category, thumbnail, status, template, userid, data, price) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+      [title, description, category, thumbnail, status || 'draft', template, userIdToUse, projectData, price || 0]
     );
     const project = result.rows[0];
     
@@ -1259,6 +1267,12 @@ app.post('/api/support-tickets', authenticate, async (req, res) => {
 
 // Templates Routes
 app.get('/api/templates', async (req, res) => {
+  // Migration: Ensure price column exists
+  try {
+    await queryWithRetry('ALTER TABLE templates ADD COLUMN IF NOT EXISTS price DECIMAL(10,2) DEFAULT 0');
+  } catch (err) {
+    // Ignore error
+  }
   try {
     const result = await queryWithRetry('SELECT * FROM templates');
     res.json(result.rows);
@@ -1269,11 +1283,11 @@ app.get('/api/templates', async (req, res) => {
 });
 
 app.post('/api/templates', authenticate, async (req, res) => {
-  const { name, description, category, thumbnail, html_content, css_content, js_content, deployed, status } = req.body;
+  const { name, description, category, thumbnail, html_content, css_content, js_content, deployed, status, price } = req.body;
   try {
     const result = await queryWithRetry(
-      'INSERT INTO templates (name, description, category, thumbnail, html_content, css_content, js_content, deployed, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
-      [name, description, category, thumbnail, html_content, css_content, js_content, deployed || false, status || 'draft']
+      'INSERT INTO templates (name, description, category, thumbnail, html_content, css_content, js_content, deployed, status, price) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
+      [name, description, category, thumbnail, html_content, css_content, js_content, deployed || false, status || 'draft', price || 0]
     );
     res.json(result.rows[0]);
   } catch (err) {

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Check, Eye, ExternalLink, X, Layout, Zap, ArrowRight, Lock, Shield, 
@@ -291,7 +291,7 @@ const LandingPage = ({ onLoginClick }) => {
   const [selectedType, setSelectedType] = useState('All')
   const [selectedModules, setSelectedModules] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [priceRange, setPriceRange] = useState([0, 10000])
+  const [priceRange, setPriceRange] = useState([0, 60000])
   const [selectedDesign, setSelectedDesign] = useState(null)
   const [startAtPricing, setStartAtPricing] = useState(false)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
@@ -301,7 +301,32 @@ const LandingPage = ({ onLoginClick }) => {
   const [showCustomInquiry, setShowCustomInquiry] = useState(false)
   const [showModules, setShowModules] = useState(false)
   
+  const scrollRef = useRef(null)
+  const [isInteracting, setIsInteracting] = useState(false)
+  const autoScrollPos = useRef(0)
+  
   const KES_RATE = 125
+
+  useEffect(() => {
+    if (!scrollRef.current) return
+    
+    let animationFrameId
+    const scroll = () => {
+      if (!isInteracting && scrollRef.current) {
+        autoScrollPos.current += 0.4
+        scrollRef.current.scrollLeft = autoScrollPos.current
+        
+        if (scrollRef.current.scrollLeft >= scrollRef.current.scrollWidth - scrollRef.current.clientWidth) {
+          autoScrollPos.current = 0
+          scrollRef.current.scrollLeft = 0
+        }
+      }
+      animationFrameId = requestAnimationFrame(scroll)
+    }
+    
+    animationFrameId = requestAnimationFrame(scroll)
+    return () => cancelAnimationFrame(animationFrameId)
+  }, [isInteracting])
 
   useEffect(() => {
     const targetId = location.state?.scrollTo || (location.hash ? location.hash.substring(1) : null)
@@ -503,9 +528,6 @@ const LandingPage = ({ onLoginClick }) => {
               <h2 className="text-6xl font-black text-neutral-900 italic tracking-tighter mb-4">
                 Available <span className="text-blue-600">Blueprints</span>
               </h2>
-              <p className="text-neutral-500 font-medium uppercase text-[10px] tracking-[0.3em]">
-                Displaying {filteredItems.length} curated architectures
-              </p>
             </div>
           </div>
 
@@ -542,7 +564,29 @@ const LandingPage = ({ onLoginClick }) => {
 
                 {/* Horizontal Category Slider */}
                 <div className="relative">
-                  <div className="flex items-center gap-4 overflow-x-auto no-scrollbar pb-2 px-1">
+                  <div 
+                    ref={scrollRef}
+                    onMouseEnter={() => setIsInteracting(true)}
+                    onMouseLeave={() => {
+                      setIsInteracting(false)
+                      if (scrollRef.current) {
+                        autoScrollPos.current = scrollRef.current.scrollLeft
+                      }
+                    }}
+                    onTouchStart={() => setIsInteracting(true)}
+                    onTouchEnd={() => {
+                      setIsInteracting(false)
+                      if (scrollRef.current) {
+                        autoScrollPos.current = scrollRef.current.scrollLeft
+                      }
+                    }}
+                    onScroll={() => {
+                      if (isInteracting && scrollRef.current) {
+                        autoScrollPos.current = scrollRef.current.scrollLeft
+                      }
+                    }}
+                    className="flex items-center gap-4 overflow-x-auto no-scrollbar pb-2 px-1"
+                  >
                     {websiteTypes.map(type => (
                       <button
                         key={type}
@@ -569,7 +613,7 @@ const LandingPage = ({ onLoginClick }) => {
                     <input 
                       type="range"
                       min="0"
-                      max="10000"
+                      max="60000"
                       step="500"
                       value={priceRange[1]}
                       onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
@@ -641,6 +685,12 @@ const LandingPage = ({ onLoginClick }) => {
                 </AnimatePresence>
               </div>
             </div>
+          </div>
+
+          <div className="flex justify-between items-center mb-12">
+            <p className="text-neutral-500 font-medium uppercase text-[10px] tracking-[0.3em]">
+              Displaying {filteredItems.length} curated architectures
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">

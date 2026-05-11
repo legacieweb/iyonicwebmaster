@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS projects (
     status VARCHAR(50) DEFAULT 'draft',
     template VARCHAR(100),
     userid INTEGER REFERENCES users(id),
+    price DECIMAL(10,2) DEFAULT 0,
     data JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -78,6 +79,7 @@ CREATE TABLE IF NOT EXISTS templates (
     html_content TEXT,
     css_content TEXT,
     js_content TEXT,
+    price DECIMAL(10,2) DEFAULT 0,
     deployed BOOLEAN DEFAULT false,
     status VARCHAR(50) DEFAULT 'draft',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

@@ -9,9 +9,11 @@ import {
 import { useAuth } from '../contexts/AuthContext'
 import { 
   fetchLeads, fetchAllProjects, deleteLead, deleteProject, updateLead, updateProject,
-  fetchAllUsers, deleteUser, updateUserProfile, fetchUserOrders, fetchPartnershipRequests, updatePartnershipRequest
+  fetchAllUsers, deleteUser, updateUserProfile, fetchUserOrders, fetchPartnershipRequests, updatePartnershipRequest,
+  fetchTemplates, updateTemplate, deleteTemplate, saveTemplate
 } from '../utils/api'
 import { MEMBERSHIP_TIERS } from '../utils/membership'
+import { CATALOG_ITEMS } from '../utils/constants'
 
 const AdminPanel = ({ onBack }) => {
   const { currentUser, isAdmin } = useAuth()
@@ -20,6 +22,7 @@ const AdminPanel = ({ onBack }) => {
   const [users, setUsers] = useState([])
   const [orders, setOrders] = useState([])
   const [partnershipRequests, setPartnershipRequests] = useState([])
+  const [templates, setTemplates] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [editingId, setEditingId] = useState(null)
@@ -46,12 +49,14 @@ const AdminPanel = ({ onBack }) => {
         const usersData = await fetchAllUsers().catch(err => { if (err.response?.status === 404 || err.response?.status === 401) return []; throw err; })
         const ordersData = await fetchUserOrders().catch(err => { if (err.response?.status === 401) return []; return []; })
         const partnershipData = await fetchPartnershipRequests().catch(err => { if (err.response?.status === 401) return []; return []; })
+        const templatesData = await fetchTemplates().catch(err => [])
         
         setLeads(leadsData || [])
         setProjects(projectsData || [])
         setUsers(usersData || [])
         setOrders(ordersData || [])
         setPartnershipRequests(partnershipData || [])
+        setTemplates(templatesData || [])
         setError(null)
       } catch (err) {
         setError('Failed to load system data. Some services might be restricted.')
@@ -151,6 +156,70 @@ const AdminPanel = ({ onBack }) => {
       setError(null)
     } catch (err) {
       setError('Failed to update user status')
+    } finally {
+      setProcessing(prev => ({ ...prev, [id]: false }))
+    }
+  }
+
+  const handleEditTemplate = async (id) => {
+    if (processing[id]) return
+    try {
+      setProcessing(prev => ({ ...prev, [id]: true }))
+      const updatedTemplate = await updateTemplate(id, editData[id] || {})
+      setTemplates(templates.map((t) => (t.id === id ? { ...t, ...updatedTemplate } : t)))
+      setEditingId(null)
+      setEditData({})
+    } catch (err) {
+      setError('Failed to update template')
+    } finally {
+      setProcessing(prev => ({ ...prev, [id]: false }))
+    }
+  }
+
+  const handleSeedCatalog = async () => {
+    if (!window.confirm('This will import all websites from constants.js into the database. Continue?')) return;
+    try {
+      setLoading(true);
+      const allItems = Object.values(CATALOG_ITEMS).flat();
+      let importedCount = 0;
+      
+      for (const item of allItems) {
+        // Check if already exists by name to avoid duplicates
+        const exists = templates.find(t => t.name === item.name);
+        if (!exists) {
+          await saveTemplate({
+            name: item.name,
+            description: item.description,
+            category: item.type,
+            thumbnail: item.image,
+            price: item.price,
+            status: 'published',
+            deployed: true
+          });
+          importedCount++;
+        }
+      }
+      
+      const updatedTemplates = await fetchTemplates();
+      setTemplates(updatedTemplates);
+      alert(`Successfully seeded ${importedCount} assets from catalog.`);
+    } catch (err) {
+      console.error('Seeding error:', err);
+      setError('Failed to seed catalog data.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteTemplate = async (id) => {
+    if (processing[id]) return
+    try {
+      setProcessing(prev => ({ ...prev, [id]: true }))
+      await deleteTemplate(id)
+      setTemplates(prev => prev.filter((t) => t.id !== id))
+      setDeleteConfirm(null)
+    } catch (err) {
+      setError('Failed to delete template')
     } finally {
       setProcessing(prev => ({ ...prev, [id]: false }))
     }
@@ -318,6 +387,7 @@ const AdminPanel = ({ onBack }) => {
                     { id: 'users', label: 'User Hub', icon: Users },
                     { id: 'marketing', label: 'Marketing Hub', icon: Activity },
                     { id: 'leads', label: 'Lead Engine', icon: Sparkles },
+                    { id: 'templates', label: 'Asset Matrix', icon: Database },
                     { id: 'projects', label: 'Project Matrix', icon: Box },
                   ].map((item) => {
                     const Icon = item.icon
@@ -371,6 +441,7 @@ const AdminPanel = ({ onBack }) => {
               { id: 'users', label: 'User Hub', icon: Users },
               { id: 'marketing', label: 'Marketing Hub', icon: Activity },
               { id: 'leads', label: 'Lead Engine', icon: Sparkles },
+              { id: 'templates', label: 'Asset Matrix', icon: Database },
               { id: 'projects', label: 'Project Matrix', icon: Box },
             ].map((item) => {
               const Icon = item.icon
@@ -487,7 +558,16 @@ const AdminPanel = ({ onBack }) => {
                           { label: 'Alliance Req', value: partnershipRequests.filter(r => r.status === 'pending').length, icon: HeartHandshake, color: 'text-emerald-600', bg: 'bg-emerald-600/10' },
                           { label: 'Total Leads', value: leads.length, icon: Sparkles, color: 'text-indigo-600', bg: 'bg-indigo-600/10' },
                           { label: 'Infrastructure', value: projects.length, icon: Box, color: 'text-amber-500', bg: 'bg-amber-500/10' },
-                          { label: 'Active Status', value: '99.9%', icon: Shield, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+                          { 
+                            label: 'Assets Worth', 
+                            value: `$${(
+                              projects.reduce((sum, p) => sum + (Number(p.price) || 0), 0) + 
+                              Object.values(CATALOG_ITEMS).flat().reduce((sum, item) => sum + (Number(item.price) || 0), 0)
+                            ).toLocaleString()}`, 
+                            icon: CreditCard, 
+                            color: 'text-blue-500', 
+                            bg: 'bg-blue-500/10' 
+                          },
                         ].map((stat, i) => (
                           <motion.div
                             key={i}
@@ -1405,6 +1485,98 @@ const AdminPanel = ({ onBack }) => {
                     </div>
                   )}
 
+                  {/* Asset Matrix Tab */}
+                  {activeTab === 'templates' && (
+                    <div className="space-y-10 pb-20">
+                      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div>
+                          <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] mb-3">Enterprise Asset Registry</p>
+                          <h2 className="text-4xl sm:text-5xl font-black text-neutral-950 uppercase italic tracking-tighter leading-none">
+                            Asset <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Matrix</span>
+                          </h2>
+                          <p className="text-slate-500 font-medium text-sm mt-4 max-w-2xl">
+                            Real-time valuation and registry of all catalog assets. These core nodes represent the platform's intellectual infrastructure.
+                          </p>
+                        </div>
+                        <div className="bg-white px-6 py-4 rounded-2xl border border-slate-100 shadow-sm">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Catalog Value</p>
+                          <p className="text-2xl font-black text-blue-600 italic">
+                            ${Object.values(CATALOG_ITEMS).flat().reduce((sum, item) => sum + (Number(item.price) || 0), 0).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                        {Object.entries(CATALOG_ITEMS).map(([category, items]) => 
+                          items.map((item) => (
+                            <motion.div
+                              key={item.id}
+                              whileHover={{ y: -8 }}
+                              className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-blue-500/5 transition-all overflow-hidden group flex flex-col"
+                            >
+                              {/* Thumbnail Container */}
+                              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                                <img 
+                                  src={item.image} 
+                                  alt={item.name}
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                <div className="absolute top-6 right-6">
+                                  <div className="px-4 py-2 bg-white/90 backdrop-blur-md rounded-xl shadow-lg border border-white/20">
+                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">${item.price.toLocaleString()}</p>
+                                  </div>
+                                </div>
+                                <div className="absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                  <a 
+                                    href={item.url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="w-full py-3 bg-blue-600 text-white rounded-xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20"
+                                  >
+                                    <Globe size={14} />
+                                    Launch Live Node
+                                  </a>
+                                </div>
+                              </div>
+
+                              {/* Content */}
+                              <div className="p-8 flex-1 flex flex-col">
+                                <div className="flex items-center gap-2 mb-3">
+                                  <span className="px-3 py-1 bg-slate-100 text-slate-500 rounded-full text-[8px] font-black uppercase tracking-widest border border-slate-200">
+                                    {item.type}
+                                  </span>
+                                  <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[8px] font-black uppercase tracking-widest border border-blue-100">
+                                    {category}
+                                  </span>
+                                </div>
+                                <h3 className="text-xl font-black text-neutral-950 uppercase italic tracking-tight mb-3 group-hover:text-blue-600 transition-colors">
+                                  {item.name}
+                                </h3>
+                                <p className="text-slate-500 text-xs font-medium leading-relaxed mb-6 line-clamp-2">
+                                  {item.description}
+                                </p>
+                                
+                                <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Asset Active</span>
+                                  </div>
+                                  <button 
+                                    onClick={() => window.open(item.url, '_blank')}
+                                    className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-blue-600 transition-colors"
+                                  >
+                                    Audit Site
+                                  </button>
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Projects Tab */}
                   {activeTab === 'projects' && (
                     <div className="space-y-8 pb-20">
@@ -1554,6 +1726,22 @@ const AdminPanel = ({ onBack }) => {
                                               </div>
 
                                               <div className="space-y-4">
+                                                <div>
+                                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Asset Valuation (Price)</p>
+                                                  <div className="relative">
+                                                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xs">$</span>
+                                                    <input 
+                                                      type="number"
+                                                      placeholder="e.g. 1500"
+                                                      value={editData[project.id]?.price ?? project.price ?? ''}
+                                                      onChange={(e) => setEditData(prev => ({
+                                                        ...prev,
+                                                        [project.id]: { ...prev[project.id], price: e.target.value }
+                                                      }))}
+                                                      className="w-full pl-10 pr-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                                    />
+                                                  </div>
+                                                </div>
                                                 <div>
                                                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Recommended Upgrades (Comma Separated)</p>
                                                   <input 
