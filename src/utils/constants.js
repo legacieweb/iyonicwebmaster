@@ -472,7 +472,7 @@ export const CATALOG_ITEMS = {
 {
       id: 'cp-14',
       name: 'Beauty plug',
-      type: 'salons',
+      type: 'Salons',
       description: 'Salon booking platform with service listings, product listings, appointment scheduling, and customer profiles.',
       price: 1499,
       image: 'https://i.imgur.com/6nGQFtj.png',
