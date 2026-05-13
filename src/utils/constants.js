@@ -313,17 +313,18 @@ export const CATALOG_ITEMS = {
       moduleIds: ['crm', 'collaboration', 'auth'],
       minTier: 'basic'
     },
-            {
+                {
       id: 'lp-7',
-      name: 'Auto kenya',
-      type: 'Automobiles',
-      description: 'Car dealership and with vehicle listings, booking management, and customer profiles.',
-      price: 6000,
+      name: 'Choma zone',
+      type: 'Hotels & Restaurants',
+      description: 'BBQ restaurant website with menu, ordering system, and reservation management.',
+      price: 300,
       image: 'https://i.imgur.com/6nGQFtj.png',
-      url: 'https://autokenya.onrender.com',
-      moduleIds: ['vehicle listings', 'booking management', 'customer profiles', 'analytics'],
-      minTier: 'premium_plus'
+      url: 'https://chomazone.iyonicorp.com/',
+      moduleIds: ['menu management', 'ordering system', 'reservation management'],
+      minTier: 'basic'
     },
+
   ],
   'Service Suite': [
     {
@@ -479,7 +480,40 @@ export const CATALOG_ITEMS = {
       url: 'https://beautyplug-1.onrender.com/',
       moduleIds: ['service listings', 'product listings', 'appointment scheduling', 'customer profiles', 'analytics'],
       minTier: 'premium_plus'
-    }
+    },
+                {
+      id: 'cp-15',
+      name: 'Auto kenya',
+      type: 'Automobiles',
+      description: 'Car dealership and with vehicle listings, booking management, and customer profiles.',
+      price: 6000,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://autokenya.onrender.com',
+      moduleIds: ['vehicle listings', 'booking management', 'customer profiles', 'analytics'],
+      minTier: 'premium_plus'
+    },
+                    {
+      id: 'cp-16',
+      name: 'Justice law firm',
+      type: 'Professional Services',
+      description: 'Legal services platform with case management, client profiles, and document storage.',
+      price: 1200,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://justicelawfirm.onrender.com',
+      moduleIds: ['case management', 'client profiles', 'document storage'],
+      minTier: 'premium'
+    },
+                      {
+      id: 'cp-17',
+      name: 'Events me',
+      type: 'Event Planner',
+      description: 'Comprehensive event planning platform with vendor management, guest lists, and scheduling tools.',
+      price: 1800,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://eventsme.onrender.com',
+      moduleIds: ['vendor management', 'guest lists', 'scheduling tools'],
+      minTier: 'premium'
+    },
   ],
   
   'Retail Engine': [
@@ -579,7 +613,7 @@ export const CATALOG_ITEMS = {
       description: 'Full-featured point of sale system with inventory and customer management.',
       price: 1800,
       image: 'https://i.imgur.com/6nGQFtj.png',
-      url: 'https://zenpos.onrender.com',
+      url: 'https://zenpos-1.onrender.com',
       moduleIds: ['pos', 'inventory', 'customer management', 'analytics'],
       minTier: 'premium'
     },
