@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const API_BASE_URL = import.meta.env.PROD 
-  ? 'http://localhost:5000'
+  ? 'https://iyonicwebmaster.onrender.com'
   : ''
 
 const apiClient = axios.create({
@@ -46,7 +46,7 @@ export const submitLead = async (data) => {
 
 export const checkAPIStatus = async () => {
   try {
-    const response = await apiClient.get(' http://localhost:5000/api/projects', {
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/projects', {
       timeout: 5000,
     })
     return true
@@ -58,7 +58,7 @@ export const checkAPIStatus = async () => {
 export const saveOrder = async (orderData) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.post(' http://localhost:5000/api/orders', orderData, { headers })
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/orders', orderData, { headers })
     return response.data
   } catch (error) {
     console.error('Error saving order:', error)
@@ -69,7 +69,7 @@ export const saveOrder = async (orderData) => {
 export const updateUserProfile = async (userId, data) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.patch(` http://localhost:5000/api/users/${userId}`, data, { headers })
+    const response = await apiClient.patch(` https://iyonicwebmaster.onrender.com/api/users/${userId}`, data, { headers })
     return response.data
   } catch (error) {
     console.error('Error updating user profile:', error)
@@ -80,7 +80,7 @@ export const updateUserProfile = async (userId, data) => {
 export const updateOrder = async (orderId, data) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.patch(` http://localhost:5000/api/orders/${orderId}`, data, { headers })
+    const response = await apiClient.patch(` https://iyonicwebmaster.onrender.com/api/orders/${orderId}`, data, { headers })
     return response.data
   } catch (error) {
     console.error('Error updating order:', error)
@@ -91,7 +91,7 @@ export const updateOrder = async (orderId, data) => {
 export const fetchUserProfile = async (userId) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(`http://localhost:5000/api/users/${userId}`, { headers })
+    const response = await apiClient.get(`https://iyonicwebmaster.onrender.com/api/users/${userId}`, { headers })
     return response.data
   } catch (error) {
     console.error('Error fetching user profile:', error)
@@ -108,7 +108,7 @@ export const fetchUserOrders = async (userId) => {
       options.params = { userId }
     }
     
-    const response = await apiClient.get(' http://localhost:5000/api/orders', options)
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/orders', options)
     return response.data || []
   } catch (error) {
     console.error('Error fetching user orders:', error.response?.data || error)
@@ -119,7 +119,7 @@ export const fetchUserOrders = async (userId) => {
 export const fetchLeads = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/leads', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/leads', { headers })
     return response.data || []
   } catch (error) {
     if (error.response?.status === 401) return []
@@ -131,7 +131,7 @@ export const fetchLeads = async () => {
 export const fetchAllProjects = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/projects', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/projects', { headers })
     return response.data || []
   } catch (error) {
     if (error.response?.status === 401) return []
@@ -143,7 +143,7 @@ export const fetchAllProjects = async () => {
 export const deleteLead = async (id) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.delete(` http://localhost:5000/api/leads/${id}`, { headers })
+    const response = await apiClient.delete(` https://iyonicwebmaster.onrender.com/api/leads/${id}`, { headers })
     return response.data
   } catch (error) {
     if (error.response?.status === 404) {
@@ -157,7 +157,7 @@ export const deleteLead = async (id) => {
 export const deleteProject = async (id) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.delete(` http://localhost:5000/api/projects/${id}`, { headers })
+    const response = await apiClient.delete(` https://iyonicwebmaster.onrender.com/api/projects/${id}`, { headers })
     return response.data
   } catch (error) {
     if (error.response?.status === 404) {
@@ -171,7 +171,7 @@ export const deleteProject = async (id) => {
 export const updateLead = async (id, data) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.patch(` http://localhost:5000/api/leads/${id}`, data, { headers })
+    const response = await apiClient.patch(` https://iyonicwebmaster.onrender.com/api/leads/${id}`, data, { headers })
     return response.data
   } catch (error) {
     console.error('Error updating lead:', error)
@@ -182,7 +182,7 @@ export const updateLead = async (id, data) => {
 export const updateProject = async (id, data) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.patch(` http://localhost:5000/api/projects/${id}`, data, { headers })
+    const response = await apiClient.patch(` https://iyonicwebmaster.onrender.com/api/projects/${id}`, data, { headers })
     return response.data
   } catch (error) {
     console.error('Error updating project:', error)
@@ -193,7 +193,7 @@ export const updateProject = async (id, data) => {
 export const createSupportTicket = async (data) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.post(' http://localhost:5000/api/support-tickets', data, { headers })
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/support-tickets', data, { headers })
     return response.data
   } catch (error) {
     console.error('Error creating support ticket:', error)
@@ -204,7 +204,7 @@ export const createSupportTicket = async (data) => {
 export const saveProject = async (data) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.post(' http://localhost:5000/api/projects', data, { headers })
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/projects', data, { headers })
     return response.data
   } catch (error) {
     console.error('Error saving project:', error)
@@ -215,7 +215,7 @@ export const saveProject = async (data) => {
 export const updateProjectData = async (id, data) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.patch(` http://localhost:5000/api/projects/${id}`, data, { headers })
+    const response = await apiClient.patch(` https://iyonicwebmaster.onrender.com/api/projects/${id}`, data, { headers })
     return response.data
   } catch (error) {
     console.error('Error updating project:', error)
@@ -232,7 +232,7 @@ export const fetchUserProjects = async (userId) => {
       options.params = { userId }
     }
     
-    const response = await apiClient.get(' http://localhost:5000/api/projects', options)
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/projects', options)
     const projects = (response.data || []).map(p => ({
       ...p,
       name: p.title || p.name
@@ -248,7 +248,7 @@ export const fetchUserProjects = async (userId) => {
 export const deleteProjectRecord = async (id) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.delete(` http://localhost:5000/api/projects/${id}`, { headers })
+    const response = await apiClient.delete(` https://iyonicwebmaster.onrender.com/api/projects/${id}`, { headers })
     return response.data
   } catch (error) {
     console.error('Error deleting project:', error)
@@ -259,7 +259,7 @@ export const deleteProjectRecord = async (id) => {
 export const saveTemplate = async (templateData) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.post(' http://localhost:5000/api/templates', templateData, { headers })
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/templates', templateData, { headers })
     return response.data
   } catch (error) {
     console.error('Error saving template:', error)
@@ -270,7 +270,7 @@ export const saveTemplate = async (templateData) => {
 export const updateTemplate = async (id, templateData) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.patch(` http://localhost:5000/api/templates/${id}`, templateData, { headers })
+    const response = await apiClient.patch(` https://iyonicwebmaster.onrender.com/api/templates/${id}`, templateData, { headers })
     return response.data
   } catch (error) {
     console.error('Error updating template:', error)
@@ -281,7 +281,7 @@ export const updateTemplate = async (id, templateData) => {
 export const deleteTemplate = async (id) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.delete(` http://localhost:5000/api/templates/${id}`, { headers })
+    const response = await apiClient.delete(` https://iyonicwebmaster.onrender.com/api/templates/${id}`, { headers })
     return response.data
   } catch (error) {
     console.error('Error deleting template:', error)
@@ -292,7 +292,7 @@ export const deleteTemplate = async (id) => {
 export const fetchTemplates = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/templates', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/templates', { headers })
     return response.data || []
   } catch (error) {
     console.error('Error fetching templates:', error)
@@ -303,7 +303,7 @@ export const fetchTemplates = async () => {
 export const deployTemplate = async (templateId) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.patch(` http://localhost:5000/api/templates/${templateId}`, 
+    const response = await apiClient.patch(` https://iyonicwebmaster.onrender.com/api/templates/${templateId}`, 
       { deployed: true, status: 'published' }, 
       { headers }
     )
@@ -317,7 +317,7 @@ export const deployTemplate = async (templateId) => {
 export const fetchAllUsers = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/users', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/users', { headers })
     return response.data || []
   } catch (error) {
     if (error.response?.status === 401 || error.response?.status === 404) return []
@@ -329,7 +329,7 @@ export const fetchAllUsers = async () => {
 export const deleteUser = async (id) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.delete(` http://localhost:5000/api/users/${id}`, { headers })
+    const response = await apiClient.delete(` https://iyonicwebmaster.onrender.com/api/users/${id}`, { headers })
     return response.data
   } catch (error) {
     if (error.response?.status === 404) {
@@ -342,7 +342,7 @@ export const deleteUser = async (id) => {
 
 export const login = async (email, password) => {
   try {
-    const response = await apiClient.post(' http://localhost:5000/api/auth/login', { email, password })
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/auth/login', { email, password })
     if (response.data.token) {
       localStorage.setItem('iyonicorp_token', response.data.token)
       localStorage.setItem('iyonicorp_user', JSON.stringify(response.data.user))
@@ -356,7 +356,7 @@ export const login = async (email, password) => {
 
 export const signup = async (userData) => {
   try {
-    const response = await apiClient.post(' http://localhost:5000/api/auth/signup', userData)
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/auth/signup', userData)
     return response.data
   } catch (error) {
     console.error('Signup error:', error)
@@ -368,7 +368,7 @@ export const signup = async (userData) => {
 export const submitPartnershipRequest = async (data) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.post(' http://localhost:5000/api/partnership-requests', data, { headers })
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/partnership-requests', data, { headers })
     return response.data
   } catch (error) {
     console.error('Error submitting partnership request:', error)
@@ -379,7 +379,7 @@ export const submitPartnershipRequest = async (data) => {
 export const fetchPartnershipRequests = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/partnership-requests', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/partnership-requests', { headers })
     return response.data || []
   } catch (error) {
     console.error('Error fetching partnership requests:', error)
@@ -390,7 +390,7 @@ export const fetchPartnershipRequests = async () => {
 export const updatePartnershipRequest = async (requestId, data) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.patch(` http://localhost:5000/api/partnership-requests/${requestId}`, data, { headers })
+    const response = await apiClient.patch(` https://iyonicwebmaster.onrender.com/api/partnership-requests/${requestId}`, data, { headers })
     return response.data
   } catch (error) {
     console.error('Error updating partnership request:', error)
@@ -405,7 +405,7 @@ export const uploadPartnershipDocument = async (file) => {
     const formData = new FormData()
     formData.append('document', file)
     
-    const response = await apiClient.post(' http://localhost:5000/api/partnership-upload', formData, {
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/partnership-upload', formData, {
       headers: {
         ...headers,
         'Content-Type': 'multipart/form-data'
@@ -422,7 +422,7 @@ export const uploadPartnershipDocument = async (file) => {
 export const fetchAffiliateStatus = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/affiliate/status', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/affiliate/status', { headers })
     return response.data
   } catch (error) {
     console.error('Error fetching affiliate status:', error)
@@ -433,7 +433,7 @@ export const fetchAffiliateStatus = async () => {
 export const signupAffiliate = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.post(' http://localhost:5000/api/affiliate/signup', {}, { headers })
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/affiliate/signup', {}, { headers })
     return response.data
   } catch (error) {
     console.error('Error signing up as affiliate:', error)
@@ -444,7 +444,7 @@ export const signupAffiliate = async () => {
 export const fetchAffiliateStats = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/affiliate/stats', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/affiliate/stats', { headers })
     return response.data
   } catch (error) {
     console.error('Error fetching affiliate stats:', error)
@@ -455,7 +455,7 @@ export const fetchAffiliateStats = async () => {
 export const fetchAffiliateReferrals = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/affiliate/referrals', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/affiliate/referrals', { headers })
     return response.data || []
   } catch (error) {
     console.error('Error fetching affiliate referrals:', error)
@@ -466,7 +466,7 @@ export const fetchAffiliateReferrals = async () => {
 export const fetchAffiliateEarnings = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/affiliate/earnings', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/affiliate/earnings', { headers })
     return response.data || []
   } catch (error) {
     console.error('Error fetching affiliate earnings:', error)
@@ -476,7 +476,7 @@ export const fetchAffiliateEarnings = async () => {
 
 export const referUser = async (referralCode, userId) => {
   try {
-    const response = await apiClient.post(' http://localhost:5000/api/affiliate/refer', { referralCode, userId })
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/affiliate/refer', { referralCode, userId })
     return response.data
   } catch (error) {
     console.error('Error referring user:', error)
@@ -488,7 +488,7 @@ export const referUser = async (referralCode, userId) => {
 export const fetchAllAffiliates = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/admin/affiliates', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/admin/affiliates', { headers })
     return response.data || []
   } catch (error) {
     console.error('Error fetching all affiliates:', error)
@@ -499,7 +499,7 @@ export const fetchAllAffiliates = async () => {
 export const fetchAllEarnings = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/admin/earnings', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/admin/earnings', { headers })
     return response.data || []
   } catch (error) {
     console.error('Error fetching all earnings:', error)
@@ -510,7 +510,7 @@ export const fetchAllEarnings = async () => {
 export const updateEarningStatus = async (earningId, status) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.patch(` http://localhost:5000/api/admin/earnings/${earningId}`, { status }, { headers })
+    const response = await apiClient.patch(` https://iyonicwebmaster.onrender.com/api/admin/earnings/${earningId}`, { status }, { headers })
     return response.data
   } catch (error) {
     console.error('Error updating earning status:', error)
@@ -521,7 +521,7 @@ export const updateEarningStatus = async (earningId, status) => {
 export const requestWithdrawal = async (withdrawalData) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.post(' http://localhost:5000/api/affiliate/withdraw', withdrawalData, { headers })
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/affiliate/withdraw', withdrawalData, { headers })
     return response.data
   } catch (error) {
     console.error('Error requesting withdrawal:', error)
@@ -532,7 +532,7 @@ export const requestWithdrawal = async (withdrawalData) => {
 export const fetchAffiliateWithdrawals = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/affiliate/withdrawals', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/affiliate/withdrawals', { headers })
     return response.data || []
   } catch (error) {
     console.error('Error fetching affiliate withdrawals:', error)
@@ -543,7 +543,7 @@ export const fetchAffiliateWithdrawals = async () => {
 export const fetchAllWithdrawals = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/admin/withdrawals', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/admin/withdrawals', { headers })
     return response.data || []
   } catch (error) {
     console.error('Error fetching all withdrawals:', error)
@@ -554,7 +554,7 @@ export const fetchAllWithdrawals = async () => {
 export const updateWithdrawalStatus = async (id, data) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.patch(` http://localhost:5000/api/admin/withdrawals/${id}`, data, { headers })
+    const response = await apiClient.patch(` https://iyonicwebmaster.onrender.com/api/admin/withdrawals/${id}`, data, { headers })
     return response.data
   } catch (error) {
     console.error('Error updating withdrawal status:', error)
@@ -565,7 +565,7 @@ export const updateWithdrawalStatus = async (id, data) => {
 export const fetchPayments = async (orderId) => {
   try {
     const headers = getAuthHeader()
-    const url = orderId ? `http://localhost:5000/api/payments?orderId=${orderId}` : 'http://localhost:5000/api/payments';
+    const url = orderId ? `https://iyonicwebmaster.onrender.com/api/payments?orderId=${orderId}` : 'https://iyonicwebmaster.onrender.com/api/payments';
     const response = await apiClient.get(url, { headers })
     return response.data || []
   } catch (error) {
@@ -577,7 +577,7 @@ export const fetchPayments = async (orderId) => {
 export const recordPayment = async (paymentData) => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.post(' http://localhost:5000/api/payments', paymentData, { headers })
+    const response = await apiClient.post(' https://iyonicwebmaster.onrender.com/api/payments', paymentData, { headers })
     return response.data
   } catch (error) {
     console.error('Error recording payment:', error)
@@ -588,7 +588,7 @@ export const recordPayment = async (paymentData) => {
 export const fetchAffiliatePayments = async () => {
   try {
     const headers = getAuthHeader()
-    const response = await apiClient.get(' http://localhost:5000/api/affiliate/payments', { headers })
+    const response = await apiClient.get(' https://iyonicwebmaster.onrender.com/api/affiliate/payments', { headers })
     return response.data || []
   } catch (error) {
     console.error('Error fetching affiliate payments:', error)
