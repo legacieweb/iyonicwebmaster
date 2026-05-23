@@ -329,6 +329,22 @@ const LandingPage = ({ onLoginClick }) => {
   }, [isInteracting])
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search)
+    const typeParam = searchParams.get('type')
+    if (typeParam) {
+      const exists = WEBSITE_TYPES.find(t => t.id === typeParam)
+      if (exists) {
+        setSelectedType(exists.name)
+        // Optionally scroll to the catalog section
+        const catalogEl = document.getElementById('catalog')
+        if (catalogEl) {
+          catalogEl.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+    }
+  }, [])
+
+  useEffect(() => {
     const targetId = location.state?.scrollTo || (location.hash ? location.hash.substring(1) : null)
     if (targetId) {
       const el = document.getElementById(targetId)

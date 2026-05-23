@@ -212,6 +212,13 @@ const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = '
       const nextBillingDate = new Date()
       nextBillingDate.setMonth(nextBillingDate.getMonth() + 1)
       
+      // Calculate discounted price if referred
+      const tier = Object.values(MEMBERSHIP_TIERS).find(t => t.id === tierId)
+      let finalPrice = tier.price
+      if (currentUser?.referral_code) {
+        finalPrice = finalPrice * 0.90 // 10% off membership
+      }
+
       await updateUserProfile(currentUser.id, { 
         membership_tier: tierId,
         subscription_status: 'active',
@@ -222,13 +229,12 @@ const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = '
       const updatedUser = await refreshUser()
       
       // Save order record
-      const tier = Object.values(MEMBERSHIP_TIERS).find(t => t.id === tierId)
       const orderData = {
         order_number: `SUB-${reference}`,
         service_id: 'membership-subscription',
         service_name: `Membership Upgrade (${tier.name})`,
         plan_name: 'Monthly Subscription',
-        amount: tier.price,
+        amount: finalPrice,
         status: 'paid',
         userId: currentUser.id
       }
@@ -246,12 +252,18 @@ const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = '
   const handlePurchase = async (plan) => {
     try {
       setRefreshing(true)
+      let finalAmount = parseFloat(plan.price.toString().replace(/[^0-9.]/g, ''))
+      
+      if (currentUser?.referral_code) {
+        finalAmount = finalAmount * 0.70 // 30% off initial purchase
+      }
+
       const orderData = {
         order_number: `ORD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
         service_id: selectedService.id,
         service_name: selectedService.title,
         plan_name: plan.name,
-        amount: parseFloat(plan.price.toString().replace(/[^0-9.]/g, '')),
+        amount: finalAmount,
         status: 'pending',
         userId: currentUser.id
       }
@@ -727,6 +739,11 @@ const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = '
                             ? `${MEMBERSHIP_TIERS[currentUser?.membership_tier?.toUpperCase()]?.name || currentUser.membership_tier} - Subscribed` 
                             : 'No Active Membership'}
                         </span>
+                        {(currentUser?.is_affiliate || currentUser?.referral_code) && (
+                          <span className="px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border shadow-sm bg-blue-50 text-blue-600 border-blue-100">
+                            {currentUser?.is_affiliate ? 'Alliance Partner' : 'Alliance Discount Active'}
+                          </span>
+                        )}
                         <span className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
                           <Clock size={12} className="text-cyan-600" /> Session Active
                         </span>

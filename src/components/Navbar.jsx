@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Menu as MenuIcon, X, LogOut, LayoutDashboard, ArrowRight, Sparkles, ChevronDown, User } from 'lucide-react'
+import { Menu as MenuIcon, X, LogOut, LayoutDashboard, ArrowRight, Sparkles, ChevronDown, User, Users } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -20,6 +20,7 @@ const Navbar = ({ onLoginClick }) => {
     { label: 'Process', href: '/#how-it-works' },
     { label: 'Pricing', href: '/#pricing' },
     { label: 'Partnership', href: '/#partnership' },
+    ...(currentUser?.is_affiliate ? [{ label: 'Affiliate', href: '/affiliate' }] : []),
   ]
 
   useEffect(() => {
@@ -155,6 +156,18 @@ const Navbar = ({ onLoginClick }) => {
                         <LayoutDashboard size={16} />
                         Dashboard
                       </button>
+                      {currentUser?.is_affiliate && (
+                        <button
+                          onClick={() => {
+                            setUserDropdownOpen(false)
+                            handleNavigate('/affiliate')
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-xs font-black text-neutral-600 hover:text-blue-600 hover:bg-blue-50 transition-all uppercase tracking-widest"
+                        >
+                          <Users size={16} />
+                          Affiliate Portal
+                        </button>
+                      )}
                       <div className="h-px bg-neutral-50 my-1 mx-2" />
                       <button
                         onClick={handleLogout}
@@ -227,6 +240,15 @@ const Navbar = ({ onLoginClick }) => {
                       <LayoutDashboard size={18} />
                       Dashboard
                     </button>
+                    {currentUser?.is_affiliate && (
+                      <button
+                        onClick={() => handleNavigate('/affiliate')}
+                        className="w-full py-5 bg-blue-50 text-blue-600 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3"
+                      >
+                        <Users size={18} />
+                        Affiliate Portal
+                      </button>
+                    )}
                     <button
                       onClick={handleLogout}
                       className="w-full py-5 bg-rose-50 text-rose-600 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3"

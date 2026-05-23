@@ -1,14 +1,40 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
+import { useLocation } from 'react-router-dom'
 import { ArrowLeft, Code2, Loader, AlertCircle, Eye, Sparkles, Star, Users, Search, Layout, ArrowRight } from 'lucide-react'
 import { fetchTemplates } from '../utils/api'
+import { WEBSITE_TYPES } from '../utils/constants'
 
 const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
+  const location = useLocation()
   const [templates, setTemplates] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+
+  const updateFiltersFromUrl = () => {
+    const params = new URLSearchParams(location.search)
+    let typeId = params.get('type')
+
+    if (!typeId && window.location.hash.includes('?')) {
+      const hashSearch = window.location.hash.split('?')[1]
+      const hashParams = new URLSearchParams(hashSearch)
+      typeId = hashParams.get('type')
+    }
+
+    if (typeId) {
+      const typeObj = WEBSITE_TYPES.find(t => t.id === typeId)
+      const searchVal = typeObj ? typeObj.name : typeId
+      
+      // If the search value matches an existing category, select it
+      // Note: categories might not be loaded yet, so we handle it in useEffect too
+      if (searchVal) {
+        setSearchTerm(searchVal)
+      }
+    }
+  }
 
   useEffect(() => {
     const loadTemplates = async () => {
@@ -29,14 +55,42 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
     loadTemplates()
   }, [])
 
-  const categories = ['all', ...new Set(templates.map(t => t.category).filter(Boolean))]
+  useEffect(() => {
+    updateFiltersFromUrl()
+  }, [location.search, templates])
+
+  const categories = useMemo(() => 
+    ['all', ...new Set(templates.map(t => t.category).filter(Boolean))],
+    [templates]
+  )
+
+  // Extra useEffect to sync category if search matches
+  useEffect(() => {
+    if (searchTerm && categories.length > 1) {
+      const matchedCat = categories.find(c => c.toLowerCase() === searchTerm.toLowerCase())
+      if (matchedCat) {
+        setSelectedCategory(matchedCat)
+        setSearchTerm('') // Clear search term if we matched a category for cleaner UI
+      }
+    }
+  }, [searchTerm, categories])
   
-  const filteredTemplates = templates.filter(template => {
-    const matchesCategory = selectedCategory === 'all' || template.category === selectedCategory
-    const matchesSearch = template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         template.description?.toLowerCase().includes(searchTerm.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
+  const filteredTemplates = useMemo(() => {
+    const term = searchTerm.toLowerCase().trim()
+    return templates.filter(template => {
+      const matchesCategory = selectedCategory === 'all' || template.category === selectedCategory
+      
+      if (!term) return matchesCategory
+
+      const matchesSearch = 
+        template.name.toLowerCase().includes(term) ||
+        template.description?.toLowerCase().includes(term) ||
+        template.category?.toLowerCase().includes(term) ||
+        (template.type && template.type.toLowerCase().includes(term))
+        
+      return matchesCategory && matchesSearch
+    })
+  }, [templates, searchTerm, selectedCategory])
 
   const templateGradients = [
     'from-blue-600 to-indigo-600',

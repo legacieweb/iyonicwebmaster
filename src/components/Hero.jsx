@@ -1,259 +1,188 @@
-import { useRef, useEffect, useState } from 'react'
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { Play, Sparkles, Zap, Shield, Globe, ArrowRight, Activity, Cpu, Code } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowRight, Play, Sparkles, Shield, Zap, Globe, Cpu, Database, Activity } from 'lucide-react'
+import { useRef } from 'react'
 
-const Hero = ({ onGetStarted }) => {
+const Hero = ({ onGetStarted, onSignUp }) => {
   const containerRef = useRef(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  
-  const handleMouseMove = (e) => {
-    if (!containerRef.current) return
-    const rect = containerRef.current.getBoundingClientRect()
-    setMousePosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    })
-  }
-
-  const { scrollY } = useScroll()
-  const y1 = useTransform(scrollY, [0, 500], [0, 200])
-  const y2 = useTransform(scrollY, [0, 500], [0, -150])
-  const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
   return (
     <section 
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
       id="hero" 
-      className="relative min-h-[110vh] flex items-center justify-center overflow-hidden bg-[#fafafa]"
+      ref={containerRef}
+      className="relative min-h-screen flex items-center overflow-hidden bg-[#fafafa] selection:bg-blue-600 selection:text-white pt-32 lg:pt-40 pb-20"
     >
-      {/* Dynamic Background Layer */}
-      <div className="absolute inset-0 z-0">
-        {/* Full Page Logo Watermark */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-          <motion.img 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 0.1, scale: 1 }}
-            transition={{ duration: 2 }}
-            src="https://i.imgur.com/6nGQFtj.png" 
-            alt="" 
-            className="w-[120%] h-[120%] object-contain grayscale opacity-10 blur-sm"
-          />
+      {/* Advanced Background Layer */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Static Mesh Gradients */}
+        <div className="absolute inset-0 opacity-60">
+          <div className="absolute -top-[20%] -left-[10%] w-[80%] h-[80%] bg-blue-400/15 rounded-full blur-[160px]" />
+          <div className="absolute top-[10%] -right-[20%] w-[70%] h-[70%] bg-purple-400/15 rounded-full blur-[140px]" />
+          <div className="absolute -bottom-[20%] left-[20%] w-[75%] h-[75%] bg-emerald-400/15 rounded-full blur-[180px]" />
         </div>
 
-        {/* Interactive Radial Gradient */}
-        <div 
-          className="absolute inset-0 transition-opacity duration-1000"
-          style={{
-            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(37, 99, 235, 0.06), transparent 80%)`
-          }}
-        />
+        {/* Grid & Noise Pattern */}
+        <div className="absolute inset-0 opacity-[0.05] mix-blend-overlay pointer-events-none" style={{ 
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
+        }} />
+        <div className="absolute inset-0" style={{ 
+          backgroundImage: `radial-gradient(circle at 2px 2px, rgba(0,0,0,0.04) 1px, transparent 0)`,
+          backgroundSize: '40px 40px' 
+        }} />
         
-        {/* Subtle Grid Pattern */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-          style={{ 
-            backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
-            backgroundSize: '40px 40px' 
-          }} 
-        />
-
-        {/* Floating Decorative Elements */}
-        <motion.div 
-          style={{ y: y1, opacity }}
-          className="absolute top-20 left-[10%] w-64 h-64 bg-blue-100/20 blur-3xl rounded-full"
-        />
-        <motion.div 
-          style={{ y: y2, opacity }}
-          className="absolute bottom-20 right-[15%] w-96 h-96 bg-indigo-100/20 blur-3xl rounded-full"
-        />
+        {/* Static Particles */}
+        {[...Array(12)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-px h-32 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent hidden lg:block opacity-20"
+            style={{ 
+              left: `${(i * 9) % 100}%`, 
+              top: `${(i * 13) % 100}%` 
+            }}
+          />
+        ))}
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full relative z-10 pt-20">
-        <div className="grid lg:grid-cols-12 gap-12 items-center">
+      <div className="w-full max-w-[2560px] mx-auto relative z-10 px-6 lg:px-24">
+        <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-16 lg:gap-20 xl:gap-32">
           
-          {/* Main Content */}
-          <div className="lg:col-span-8 flex flex-col items-start text-left">
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-3 px-4 py-2 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-neutral-100 rounded-2xl mb-8"
-            >
-              <div className="flex -space-x-2">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="w-6 h-6 rounded-full border-2 border-white bg-neutral-200 overflow-hidden">
-                    <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="" className="w-full h-full object-cover grayscale" />
-                  </div>
-                ))}
+          {/* Left Content Column */}
+          <div className="w-full lg:w-1/2 xl:w-[55%] text-left">
+            {/* Live Status Badge */}
+            <div className="inline-flex items-center gap-3 px-4 sm:px-6 py-2 sm:py-3 rounded-full bg-white/80 border border-neutral-200 shadow-xl mb-8 sm:mb-10 group cursor-default backdrop-blur-md">
+              <div className="relative w-2 h-2 sm:w-2.5 sm:h-2.5">
+                <div className="relative w-full h-full bg-emerald-500 rounded-full" />
               </div>
-              <div className="h-4 w-px bg-neutral-200 mx-1" />
-              <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                Trusted by 500+ Innovators
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-neutral-500">
+                System Status: <span className="text-emerald-600">Active</span>
               </span>
-            </motion.div>
-
-            <div className="relative mb-10 w-full">
-              <motion.h1 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-6xl sm:text-7xl md:text-8xl lg:text-[10rem] xl:text-[11rem] font-black leading-[0.8] tracking-tighter text-neutral-950 uppercase"
-              >
-                Next <br />
-                <span className="text-blue-600 inline-flex items-center">
-                  Level
-                  <motion.div
-                    animate={{ rotate: [0, 10, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="ml-4 hidden md:block"
-                  >
-                    <Sparkles className="w-20 h-20 text-blue-200" />
-                  </motion.div>
-                </span> <br />
-                Digital.
-              </motion.h1>
-              
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-                className="absolute -right-12 top-1/2 -translate-y-1/2 hidden xl:block"
-              >
-                <div className="bg-white p-6 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-neutral-100 backdrop-blur-xl">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
-                      <Activity size={20} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Performance</p>
-                      <p className="text-lg font-black text-neutral-950">99.9% Score</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    {[40, 70, 45, 90, 65, 80].map((h, i) => (
-                      <motion.div 
-                        key={i}
-                        initial={{ height: 0 }}
-                        animate={{ height: h/2 }}
-                        transition={{ delay: 1 + (i*0.1), duration: 1 }}
-                        className="w-1.5 bg-blue-100 rounded-full self-end"
-                      />
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
+              <div className="w-px h-3 sm:h-4 bg-neutral-200 mx-1 sm:mx-2" />
+              <Sparkles size={12} className="text-blue-600" />
             </div>
 
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-xl md:text-2xl text-neutral-500 mb-12 max-w-xl font-medium leading-relaxed text-left"
-            >
-              We don't just build websites. We architect <span className="text-neutral-950 font-bold italic underline decoration-blue-500/30 decoration-4 underline-offset-4">high-velocity systems</span> that dominate your industry.
-            </motion.p>
+            {/* Headline */}
+            <div className="relative mb-6 sm:mb-8">
+              <h1 className="text-5xl sm:text-7xl md:text-8xl xl:text-9xl 2xl:text-[11rem] font-black tracking-tighter text-neutral-950 leading-[0.8] uppercase flex flex-col">
+                <span className="relative inline-block pb-2 sm:pb-4">
+                  Next Gen
+                </span>
+                <span className="relative inline-block italic text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 py-2 sm:py-4 drop-shadow-2xl">
+                  Systems
+                </span>
+              </h1>
+            </div>
 
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
-            >
+            {/* Description */}
+            <p className="text-lg sm:text-xl md:text-2xl xl:text-3xl text-neutral-500 max-w-2xl mb-10 sm:mb-12 font-medium leading-tight">
+              We engineer high-performance digital infrastructure for visionary brands who demand 
+              <span className="text-neutral-950 px-2 font-black italic">absolute scale</span> 
+              and technical supremacy.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
               <button 
                 onClick={onGetStarted}
-                className="px-10 py-6 bg-neutral-950 text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:bg-blue-600 transition-all flex items-center justify-center gap-4 group relative overflow-hidden"
+                className="group relative w-full sm:w-auto px-8 sm:px-10 py-5 sm:py-6 bg-neutral-950 text-white rounded-2xl sm:rounded-[2rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.3em] overflow-hidden transition-all hover:shadow-[0_20px_60px_rgba(37,99,235,0.3)] hover:-translate-y-1 active:scale-95"
               >
-                <span className="relative z-10">Start Your Engine</span>
-                <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <span className="relative z-10 flex items-center justify-center gap-3 sm:gap-4">
+                  Initialize Project
+                  <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+                </span>
               </button>
 
               <a 
                 href="https://www.youtube.com/@iyonicorp"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-10 py-6 bg-white border border-neutral-200 text-neutral-950 rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] hover:border-neutral-950 transition-all flex items-center justify-center gap-4 group"
+                className="group flex items-center justify-center gap-4 sm:gap-5 px-8 sm:px-10 py-5 sm:py-6 rounded-2xl sm:rounded-[2rem] border-2 border-neutral-200 bg-white hover:bg-neutral-50 hover:border-neutral-950 transition-all active:scale-95 shadow-xl w-full sm:w-auto"
               >
-                <div className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center group-hover:bg-neutral-950 group-hover:text-white transition-colors">
-                  <Play size={14} fill="currentColor" />
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-neutral-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all">
+                  <Play size={12} fill="currentColor" />
                 </div>
-                View Showreel
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-neutral-600 group-hover:text-neutral-950">
+                  Systems Archive
+                </span>
               </a>
-            </motion.div>
+            </div>
           </div>
 
-          {/* Side Visual / Stats Panel */}
-          <div className="lg:col-span-4 hidden lg:flex flex-col gap-6">
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-              className="p-8 bg-white rounded-[3rem] border border-neutral-100 shadow-[0_30px_60px_rgba(0,0,0,0.03)] relative overflow-hidden group"
-            >
-              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Cpu size={120} />
-              </div>
-              <div className="relative z-10">
-                <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-6">
-                  <Zap size={24} />
-                </div>
-                <h3 className="text-2xl font-black text-neutral-950 mb-2 uppercase italic">Extreme Velocity</h3>
-                <p className="text-sm text-neutral-500 font-medium leading-relaxed">
-                  Optimized infrastructure achieving sub-100ms response times globally.
-                </p>
-              </div>
-            </motion.div>
+          {/* Right Visual Column */}
+          <div className="relative w-full lg:w-1/2 xl:w-[45%] flex justify-center lg:justify-end mt-12 lg:mt-0">
+            <div className="relative w-full max-w-[650px] aspect-square">
+              {/* Main Visual Card */}
+              <div className="absolute inset-0 rounded-[40px] sm:rounded-[64px] bg-white border border-neutral-200 shadow-[0_60px_100px_rgba(0,0,0,0.08)] p-6 sm:p-12 overflow-hidden backdrop-blur-xl bg-white/70">
+                <div className="flex flex-col h-full">
+                  <div className="flex items-center justify-between mb-8 sm:mb-12">
+                    <div className="flex gap-2 sm:gap-3">
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-rose-400/50" />
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-amber-400/50" />
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-emerald-400/50" />
+                    </div>
+                    <div className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-neutral-100 text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400">
+                      Live Environment
+                    </div>
+                  </div>
+                  
+                  {/* System UI Mockup */}
+                  <div className="flex-1 space-y-6 sm:space-y-10">
+                    <div className="h-32 sm:h-48 bg-neutral-900 rounded-[24px] sm:rounded-[40px] border border-white/10 p-4 sm:p-8 flex flex-col justify-between relative overflow-hidden group">
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="relative z-10 flex items-center justify-between">
+                        <div className="flex flex-col">
+                          <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1">Throughput</span>
+                          <span className="text-xl sm:text-2xl font-black text-white">4.8 GB/s</span>
+                        </div>
+                        <Activity size={18} className="text-blue-500" />
+                      </div>
+                      <div className="relative z-10 flex items-end gap-1 sm:gap-1.5 h-10 sm:h-16">
+                        {[...Array(15)].map((_, i) => (
+                          <motion.div
+                            key={i}
+                            animate={{ height: [`${[20, 50, 35, 60, 30][i % 5]}%`, `${[40, 70, 55, 80, 50][i % 5]}%`, `${[20, 50, 35, 60, 30][i % 5]}%`] }}
+                            transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.05 }}
+                            className="flex-1 bg-gradient-to-t from-blue-600 to-indigo-400 rounded-t-sm"
+                          />
+                        ))}
+                      </div>
+                    </div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-              className="p-8 bg-neutral-950 rounded-[3rem] text-white shadow-[0_30px_60px_rgba(0,0,0,0.1)] relative overflow-hidden group"
-            >
-               <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Code size={120} />
-              </div>
-              <div className="relative z-10">
-                <div className="w-12 h-12 bg-white/10 text-white rounded-2xl flex items-center justify-center mb-6 backdrop-blur-md">
-                  <Shield size={24} />
+                    <div className="grid grid-cols-2 gap-3 sm:gap-6">
+                      {[
+                        { label: 'Latency', value: '0.8ms', icon: <Cpu size={16} /> },
+                        { label: 'Uptime', value: '99.99%', icon: <Globe size={16} /> },
+                        { label: 'Nodes', value: '1,024', icon: <Database size={16} /> },
+                        { label: 'Security', value: 'Hardened', icon: <Shield size={16} /> }
+                      ].map((stat, i) => (
+                        <div key={i} className="p-4 sm:p-6 bg-neutral-50 rounded-[24px] sm:rounded-[32px] border border-neutral-100">
+                          <div className="flex items-center gap-2 sm:gap-3 mb-2 text-neutral-400">
+                            {stat.icon}
+                            <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em]">{stat.label}</span>
+                          </div>
+                          <div className="text-lg sm:text-2xl font-black text-neutral-950 tracking-tighter">{stat.value}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-2xl font-black mb-2 uppercase italic text-white">Hardened Security</h3>
-                <p className="text-sm text-white/60 font-medium leading-relaxed">
-                  Enterprise-grade protection with multi-layered encryption by default.
-                </p>
               </div>
-            </motion.div>
+
+              {/* External Floating Orbs */}
+              <div className="absolute -top-8 -left-8 sm:-top-16 sm:-left-16 w-16 h-16 sm:w-32 sm:h-32 bg-white border border-neutral-200 rounded-2xl sm:rounded-[3rem] shadow-2xl flex items-center justify-center p-4 sm:p-8 z-20">
+                <Globe className="text-blue-600" size={24} />
+              </div>
+
+              <div className="absolute -bottom-6 -right-6 sm:-bottom-12 sm:-right-12 px-6 py-4 sm:px-10 sm:py-8 bg-neutral-950 text-white rounded-2xl sm:rounded-[3rem] shadow-2xl flex items-center gap-3 sm:gap-6 z-20">
+                <Zap size={20} className="text-blue-500" />
+                <div>
+                  <div className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] text-blue-400">Scale</div>
+                  <div className="text-xl sm:text-3xl font-black italic">+840%</div>
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
-
-        {/* Bottom Trust Ticker */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-24 pt-10 border-t border-neutral-200/50 flex flex-wrap justify-between items-center gap-8"
-        >
-          <div className="flex flex-col">
-            <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-1">Infrastructure</span>
-            <div className="flex gap-6">
-              <span className="text-xs font-black text-neutral-950 uppercase italic tracking-tighter">AWS Edge</span>
-              <span className="text-xs font-black text-neutral-950 uppercase italic tracking-tighter">Vercel Turbo</span>
-              <span className="text-xs font-black text-neutral-950 uppercase italic tracking-tighter">Cloudflare</span>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-12">
-             {[
-                { label: '99.9% Uptime', icon: Shield },
-                { label: 'Global Edge', icon: Globe }
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <item.icon size={16} className="text-blue-600" />
-                  <span className="text-[10px] font-black text-neutral-950 uppercase tracking-[0.2em]">{item.label}</span>
-                </div>
-              ))}
-          </div>
-        </motion.div>
       </div>
 
     </section>

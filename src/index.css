@@ -100,6 +100,37 @@ body {
     @apply max-w-6xl mx-auto;
   }
 
+  /* Glassmorphism */
+  .glass-card {
+    @apply bg-white/40 backdrop-blur-xl border border-white/20 shadow-xl;
+  }
+
+  .glass-button {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all duration-300;
+  }
+
+  /* Animated Gradient Background */
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-flow 15s ease infinite;
+  }
+
+  @keyframes gradient-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Mesh Gradient */
+  .mesh-gradient {
+    background-color: #fafafa;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(220, 100%, 95%, 1) 0px, transparent 50%),
+      radial-gradient(at 50% 0%, hsla(280, 100%, 95%, 1) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(220, 100%, 95%, 1) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, hsla(0, 0%, 100%, 1) 0px, transparent 50%);
+  }
+
   /* Divider */
   .divider-minimal {
     @apply h-px bg-neutral-200;

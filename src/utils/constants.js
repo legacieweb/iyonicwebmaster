@@ -522,21 +522,21 @@ export const CATALOG_ITEMS = {
       name: 'Modern Shop',
       type: 'Ecommerce',
       description: 'High-end e-commerce experience for premium brands.',
-      price: 2999,
+      price: 3000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://modern-shop-1.onrender.com',
       moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth'],
-      minTier: 'premium_plus'
+      minTier: 'premium'
     },
     {
       id: 're-2',
       name: 'Gift Shop',
       type: 'Ecommerce',
       description: 'Robust e-commerce platform with advanced inventory and user management.',
-      price: 4999,
+      price: 5000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://giftshop2-1.onrender.com',
-      moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
+      moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth', 'premium_seo'],
       minTier: 'premium_plus'
     },
         {
@@ -544,7 +544,7 @@ export const CATALOG_ITEMS = {
       name: 'Lumina Beauty',
       type: 'Beauty shops',
       description: 'Elegant beauty shop with inventory management and customer profiles.',
-      price: 3990,
+      price: 3000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://luminabeauty-1.onrender.com/',
       moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
@@ -555,7 +555,7 @@ export const CATALOG_ITEMS = {
       name: 'Fashion Vela',
       type: 'Ecommerce',
       description: 'High-end fashion e-commerce experience for premium brands.',
-      price: 3990,
+      price: 3000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://fashionvela-1.onrender.com/',
       moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
@@ -567,29 +567,29 @@ export const CATALOG_ITEMS = {
       name: 'African artifacts',
       type: 'Ecommerce',
       description: 'Best for selling handmade products',
-      price: 2799,
+      price: 3000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://africanartifacts.iyonicorp.com/',
       moduleIds: ['product catalog', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
-      minTier: 'free'
+      minTier: 'premium'
     },
                 {
       id: 're-6',
       name: 'Wimson',
       type: 'Ebooks',
       description: 'Best for selling ebooks and digital products',
-      price: 800,
+      price: 1000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://wimson.iyonicorp.com/',
       moduleIds: ['product catalog', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
-      minTier: 'premium_plus'
+      minTier: 'premium'
     },
         {
       id: 're-7',
       name: 'Shabil fashion',
       type: 'Ecommerce',
       description: 'Stylish fashion e-commerce platform for trendy clothing and accessories.',
-      price: 2500,
+      price: 3000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://shabil.iyonicorp.com/',
       moduleIds: ['inventory','premium_seo', 'auth', 'cloud_infra', 'crm'],
@@ -600,18 +600,18 @@ export const CATALOG_ITEMS = {
       name: 'Plugin',
       type: 'Ecommerce',
       description: 'premium cannabis store.',
-      price: 2900,
+      price: 3000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://plugin.iyonicorp.com/',
       moduleIds: ['crm', 'inventory', 'speed optimization', 'auth', 'premium_seo'],
-      minTier: 'enterprise'
+      minTier: 'premium'
     },
             {
       id: 're-9',
       name: 'Zenpos',
       type: 'Point of Sale',
       description: 'Full-featured point of sale system with inventory and customer management.',
-      price: 1800,
+      price: 1500,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://zenpos-1.onrender.com',
       moduleIds: ['pos', 'inventory', 'customer management', 'analytics'],
@@ -623,7 +623,7 @@ export const CATALOG_ITEMS = {
       name: 'Lighters',
       type: 'Ecommerce',
       description: 'Elegant gift shop featuring premium lighters, custom engraving options and luxury accessories.',
-      price: 2500,
+      price: 1500,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://blazecity.iyonicorp.com/',
       moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics'],
@@ -639,7 +639,7 @@ export const CATALOG_ITEMS = {
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://beanhaven.iyonicorp.com/',
       moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics'],
-      minTier: 'basic'
+      minTier: 'premium'
     },
                       {
       id: 're-12',
@@ -657,11 +657,11 @@ export const CATALOG_ITEMS = {
       name: 'Elegant men\'s footwear',
       type: 'Ecommerce',
       description: 'High-end men\'s footwear e-commerce experience for premium brands.',
-      price: 2999,
+      price: 3000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://elegantmen.iyonicorp.com/',
       moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
-      minTier: 'premium_plus'
+      minTier: 'premium'
     },
             {
       id: 're-14',
@@ -672,7 +672,7 @@ export const CATALOG_ITEMS = {
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://pos-1-qwh3.onrender.com/',
       moduleIds: ['pos', 'inventory', 'customer management', 'analytics'],
-      minTier: 'premium'
+      minTier: 'basic'
     },
                 {
       id: 're-15',
@@ -683,14 +683,14 @@ export const CATALOG_ITEMS = {
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://pos2-night-club.onrender.com',
       moduleIds: ['pos', 'inventory', 'customer management', 'analytics'],
-      minTier: 'premium'
+      minTier: 'basic'
     },
                     {
       id: 're-16',
       name: 'Booktels',
       type: 'Event Planner',
       description: 'Comprehensive event planning platform with vendor management, guest lists, and scheduling tools.',
-      price: 850,
+      price: 2000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://eventplanner.iyonicorp.com',
       moduleIds: ['event management', 'vendor management', 'guest management', 'scheduling'],
@@ -701,7 +701,7 @@ export const CATALOG_ITEMS = {
       name: 'Sunny Delights',
       type: 'Bakeries',
       description: 'Elegant online bakery store with detailed product pages, inventory management, and customer reviews.',
-      price: 800,
+      price: 2000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://sunnydelights.iyonicorp.com',
       moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics'],
@@ -712,11 +712,33 @@ export const CATALOG_ITEMS = {
       name: 'Luxwatch',
       type: 'Ecommerce',
       description: 'High-end watch store with detailed product pages, inventory management, and customer reviews.',
-      price: 2000,
+      price: 4000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://luxwatch-1.onrender.com',
       moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics'],
       minTier: 'premium_plus'
+    },
+                          {
+      id: 're-19',
+      name: 'Exclusive Phone shop',
+      type: 'Ecommerce',
+      description: 'Elegant mobile phone store with detailed product pages, inventory management, and customer reviews.',
+      price: 4000,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://phones2-1.onrender.com/',
+      moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics', 'premium_seo'],
+      minTier: 'Premium_plus'
+    },
+                              {
+      id: 're-20',
+      name: 'Modern home decor',
+      type: 'Ecommerce',
+      description: 'High-end home decor store with detailed product pages, inventory management, and customer dashboard.',
+      price: 1000,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://homedeco2-1.onrender.com/',
+      moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics', 'premium_seo'],
+      minTier: 'Premium'
     },
   ],
 

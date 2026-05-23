@@ -94,13 +94,11 @@ const TemplateViewer = ({ template, onBack }) => {
   }
 
   useEffect(() => {
-    if (template && !template.url) {
-      // Ensure we wait for DOM to be updated
-      const timeoutId = setTimeout(() => {
-        renderBlocksPreview()
-      }, 200)
-      return () => clearTimeout(timeoutId)
-    }
+    // Ensure we wait for DOM to be updated
+    const timeoutId = setTimeout(() => {
+      renderBlocksPreview()
+    }, 200)
+    return () => clearTimeout(timeoutId)
   }, [template, deviceMode])
 
   const handleRequestCustomization = () => {

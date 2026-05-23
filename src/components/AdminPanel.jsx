@@ -10,7 +10,9 @@ import { useAuth } from '../contexts/AuthContext'
 import { 
   fetchLeads, fetchAllProjects, deleteLead, deleteProject, updateLead, updateProject,
   fetchAllUsers, deleteUser, updateUserProfile, fetchUserOrders, fetchPartnershipRequests, updatePartnershipRequest,
-  fetchTemplates, updateTemplate, deleteTemplate, saveTemplate
+  fetchTemplates, updateTemplate, deleteTemplate, saveTemplate,
+  fetchAllAffiliates, fetchAllEarnings, updateEarningStatus,
+  fetchAllWithdrawals, updateWithdrawalStatus
 } from '../utils/api'
 import { MEMBERSHIP_TIERS } from '../utils/membership'
 import { CATALOG_ITEMS } from '../utils/constants'
@@ -23,6 +25,9 @@ const AdminPanel = ({ onBack }) => {
   const [orders, setOrders] = useState([])
   const [partnershipRequests, setPartnershipRequests] = useState([])
   const [templates, setTemplates] = useState([])
+  const [affiliates, setAffiliates] = useState([])
+  const [allEarnings, setAllEarnings] = useState([])
+  const [withdrawals, setWithdrawals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [editingId, setEditingId] = useState(null)
@@ -50,6 +55,9 @@ const AdminPanel = ({ onBack }) => {
         const ordersData = await fetchUserOrders().catch(err => { if (err.response?.status === 401) return []; return []; })
         const partnershipData = await fetchPartnershipRequests().catch(err => { if (err.response?.status === 401) return []; return []; })
         const templatesData = await fetchTemplates().catch(err => [])
+        const affiliatesData = await fetchAllAffiliates().catch(err => [])
+        const earningsData = await fetchAllEarnings().catch(err => [])
+        const withdrawalsData = await fetchAllWithdrawals().catch(err => [])
         
         setLeads(leadsData || [])
         setProjects(projectsData || [])
@@ -57,6 +65,9 @@ const AdminPanel = ({ onBack }) => {
         setOrders(ordersData || [])
         setPartnershipRequests(partnershipData || [])
         setTemplates(templatesData || [])
+        setAffiliates(affiliatesData || [])
+        setAllEarnings(earningsData || [])
+        setWithdrawals(withdrawalsData || [])
         setError(null)
       } catch (err) {
         setError('Failed to load system data. Some services might be restricted.')
@@ -173,6 +184,48 @@ const AdminPanel = ({ onBack }) => {
       setError('Failed to update template')
     } finally {
       setProcessing(prev => ({ ...prev, [id]: false }))
+    }
+  }
+
+  const handleUpdateEarningStatus = async (id, status) => {
+    try {
+      setProcessing(prev => ({ ...prev, [id]: true }));
+      const updatedEarning = await updateEarningStatus(id, status);
+      setAllEarnings(prev => prev.map(e => e.id === id ? { ...e, status: updatedEarning.status } : e));
+      
+      // If status became paid, we should also update the affiliate's current balance in local state
+      if (status === 'paid') {
+        setAffiliates(prev => prev.map(a => {
+          if (a.id === updatedEarning.affiliate_id) {
+            return { ...a, current_balance: parseFloat(a.current_balance) - parseFloat(updatedEarning.amount) };
+          }
+          return a;
+        }));
+      }
+    } catch (err) {
+      console.error('Update earning status error:', err);
+      setError('Failed to update payout status');
+    } finally {
+      setProcessing(prev => ({ ...prev, [id]: false }));
+    }
+  }
+
+  const handleUpdateWithdrawalStatus = async (id, status, adminNotes = '') => {
+    try {
+      setProcessing(prev => ({ ...prev, [id]: true }));
+      const updatedWithdrawal = await updateWithdrawalStatus(id, { status, adminNotes });
+      setWithdrawals(prev => prev.map(w => w.id === id ? { ...w, status: updatedWithdrawal.status, admin_notes: updatedWithdrawal.admin_notes } : w));
+      
+      // If rejected, we might want to refresh affiliate stats as well, but for simplicity:
+      if (status === 'rejected') {
+        const affiliatesData = await fetchAllAffiliates().catch(err => []);
+        setAffiliates(affiliatesData);
+      }
+    } catch (err) {
+      console.error('Update withdrawal status error:', err);
+      setError('Failed to update withdrawal status');
+    } finally {
+      setProcessing(prev => ({ ...prev, [id]: false }));
     }
   }
 
@@ -388,6 +441,8 @@ const AdminPanel = ({ onBack }) => {
                     { id: 'marketing', label: 'Marketing Hub', icon: Activity },
                     { id: 'leads', label: 'Lead Engine', icon: Sparkles },
                     { id: 'templates', label: 'Asset Matrix', icon: Database },
+                    { id: 'affiliates', label: 'Affiliates', icon: HeartHandshake },
+                    { id: 'withdrawals', label: 'Treasury Hub', icon: CreditCard },
                     { id: 'projects', label: 'Project Matrix', icon: Box },
                   ].map((item) => {
                     const Icon = item.icon
@@ -442,6 +497,8 @@ const AdminPanel = ({ onBack }) => {
               { id: 'marketing', label: 'Marketing Hub', icon: Activity },
               { id: 'leads', label: 'Lead Engine', icon: Sparkles },
               { id: 'templates', label: 'Asset Matrix', icon: Database },
+              { id: 'affiliates', label: 'Affiliates', icon: HeartHandshake },
+              { id: 'withdrawals', label: 'Withdrawals', icon: CreditCard },
               { id: 'projects', label: 'Project Matrix', icon: Box },
             ].map((item) => {
               const Icon = item.icon
@@ -1572,6 +1629,283 @@ const AdminPanel = ({ onBack }) => {
                               </div>
                             </motion.div>
                           ))
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Affiliates Tab */}
+                  {activeTab === 'affiliates' && (
+                    <div className="space-y-12 pb-20">
+                      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div>
+                          <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] mb-3">Alliance Management Hub</p>
+                          <h2 className="text-4xl sm:text-5xl font-black text-neutral-950 uppercase italic tracking-tighter leading-none">
+                            Partner <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Network</span>
+                          </h2>
+                          <p className="text-slate-500 font-medium text-sm mt-4 max-w-2xl">
+                            Real-time monitoring of all alliance partners, their referral performance, and treasury allocations.
+                          </p>
+                        </div>
+                        <div className="flex gap-4">
+                          <div className="bg-white px-6 py-4 rounded-2xl border border-slate-100 shadow-sm">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Affiliates</p>
+                            <p className="text-2xl font-black text-blue-600 italic">{affiliates.length}</p>
+                          </div>
+                          <div className="bg-white px-6 py-4 rounded-2xl border border-slate-100 shadow-sm">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Payouts Due</p>
+                            <p className="text-2xl font-black text-emerald-600 italic">
+                              ${allEarnings.filter(e => e.status !== 'paid').reduce((sum, e) => sum + parseFloat(e.amount), 0).toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Affiliates List */}
+                      <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+                        <div className="p-8 border-b border-slate-50 flex items-center justify-between">
+                          <h3 className="text-xl font-black uppercase italic tracking-tighter text-slate-900">Registered Partners</h3>
+                        </div>
+                        {affiliates.length === 0 ? (
+                          <div className="p-24 text-center">
+                            <Users className="w-16 h-16 text-slate-100 mx-auto mb-6" />
+                            <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">No Active Partners Detected</p>
+                          </div>
+                        ) : (
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                              <thead>
+                                <tr className="bg-slate-50 border-b border-slate-100">
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Identity</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Code</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Network</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Treasury</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Balance</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Status</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-slate-50">
+                                {affiliates.map((aff) => (
+                                  <tr key={aff.id} className="group hover:bg-slate-50/50 transition-colors">
+                                    <td className="px-8 py-6">
+                                      <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xs">
+                                          {aff.name?.substring(0, 2) || '??'}
+                                        </div>
+                                        <div>
+                                          <div className="text-sm font-black text-slate-900 mb-0.5">{aff.name}</div>
+                                          <div className="text-[10px] font-bold text-slate-400">{aff.email}</div>
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td className="px-8 py-6 font-mono text-xs font-black text-blue-600 tracking-widest">
+                                      {aff.referral_code}
+                                    </td>
+                                    <td className="px-8 py-6">
+                                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase tracking-widest border border-indigo-100">
+                                        {aff.referral_count} Clients
+                                      </div>
+                                    </td>
+                                    <td className="px-8 py-6 font-black text-slate-900 italic">
+                                      ${parseFloat(aff.total_earnings).toFixed(2)}
+                                    </td>
+                                    <td className="px-8 py-6 font-black text-emerald-600 italic">
+                                      ${parseFloat(aff.current_balance).toFixed(2)}
+                                    </td>
+                                    <td className="px-8 py-6 text-right">
+                                      <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest border border-emerald-100">
+                                        Active
+                                      </span>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Treasury Payouts */}
+                      <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+                        <div className="p-8 border-b border-slate-50 flex items-center justify-between">
+                          <h3 className="text-xl font-black uppercase italic tracking-tighter text-slate-900">Treasury Payout Requests</h3>
+                        </div>
+                        {allEarnings.length === 0 ? (
+                          <div className="p-24 text-center">
+                            <CreditCard className="w-16 h-16 text-slate-100 mx-auto mb-6" />
+                            <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Treasury remains balanced</p>
+                          </div>
+                        ) : (
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                              <thead>
+                                <tr className="bg-slate-50 border-b border-slate-100">
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Partner Identity</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Yield Type</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Revenue</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Reference</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Allocation Date</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Yield Control</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-slate-50">
+                                {allEarnings.map((earn) => (
+                                  <tr key={earn.id} className="group hover:bg-slate-50/50 transition-colors">
+                                    <td className="px-8 py-6">
+                                      <div>
+                                        <div className="text-sm font-black text-slate-900 mb-0.5">{earn.affiliate_name}</div>
+                                        <div className="text-[10px] font-bold text-slate-400">{earn.referral_code}</div>
+                                      </div>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                      <div className="text-[10px] font-black text-blue-600 uppercase tracking-widest">
+                                        {earn.type === 'sale' ? '30% Acquisition' : '10% Recurring Yield'}
+                                      </div>
+                                    </td>
+                                    <td className="px-8 py-6 font-black text-emerald-600 italic">
+                                      +${parseFloat(earn.amount).toFixed(2)}
+                                    </td>
+                                    <td className="px-8 py-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                      {earn.order_number || 'SYSTEM'}
+                                    </td>
+                                    <td className="px-8 py-6 text-sm font-bold text-slate-500">
+                                      {new Date(earn.created_at).toLocaleDateString()}
+                                    </td>
+                                    <td className="px-8 py-6 text-right">
+                                      {earn.status === 'paid' ? (
+                                        <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-widest border border-slate-200">
+                                          Released
+                                        </span>
+                                      ) : earn.status === 'pending' ? (
+                                        <button 
+                                          onClick={() => handleUpdateEarningStatus(earn.id, 'available')}
+                                          disabled={processing[earn.id]}
+                                          className="px-6 py-2 bg-amber-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/20 active:scale-95 disabled:opacity-50"
+                                        >
+                                          {processing[earn.id] ? <RefreshCw size={12} className="animate-spin" /> : 'Authorize Yield'}
+                                        </button>
+                                      ) : (
+                                        <button 
+                                          onClick={() => handleUpdateEarningStatus(earn.id, 'paid')}
+                                          disabled={processing[earn.id]}
+                                          className="px-6 py-2 bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 active:scale-95 disabled:opacity-50"
+                                        >
+                                          {processing[earn.id] ? <RefreshCw size={12} className="animate-spin" /> : 'Release Yield'}
+                                        </button>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Withdrawals Tab */}
+                  {activeTab === 'withdrawals' && (
+                    <div className="space-y-12 pb-20">
+                      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div>
+                          <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] mb-3">Treasury Control</p>
+                          <h2 className="text-4xl sm:text-5xl font-black text-neutral-950 uppercase italic tracking-tighter leading-none">
+                            Withdrawal <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Requests</span>
+                          </h2>
+                          <p className="text-slate-500 font-medium text-sm mt-4 max-w-2xl">
+                            Process and manage all partner withdrawal requests from the treasury.
+                          </p>
+                        </div>
+                        <div className="flex gap-4">
+                          <div className="bg-white px-6 py-4 rounded-2xl border border-slate-100 shadow-sm">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Pending Requests</p>
+                            <p className="text-2xl font-black text-blue-600 italic">{withdrawals.filter(w => w.status === 'pending').length}</p>
+                          </div>
+                          <div className="bg-white px-6 py-4 rounded-2xl border border-slate-100 shadow-sm">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Withdrawn</p>
+                            <p className="text-2xl font-black text-emerald-600 italic">
+                              ${withdrawals.filter(w => w.status === 'completed' || w.status === 'approved').reduce((sum, w) => sum + parseFloat(w.amount), 0).toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+                        <div className="p-8 border-b border-slate-50 flex items-center justify-between">
+                          <h3 className="text-xl font-black uppercase italic tracking-tighter text-slate-900">Active Requests</h3>
+                        </div>
+                        {withdrawals.length === 0 ? (
+                          <div className="p-24 text-center">
+                            <CreditCard className="w-16 h-16 text-slate-100 mx-auto mb-6" />
+                            <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">No Withdrawal Requests</p>
+                          </div>
+                        ) : (
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                              <thead>
+                                <tr className="bg-slate-50 border-b border-slate-100">
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Partner</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Amount</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Method</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Details</th>
+                                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-slate-50">
+                                {withdrawals.map((w) => (
+                                  <tr key={w.id} className="group hover:bg-slate-50/50 transition-colors">
+                                    <td className="px-8 py-6">
+                                      <div>
+                                        <div className="text-sm font-black text-slate-900 mb-0.5">{w.affiliate_name}</div>
+                                        <div className="text-[10px] font-bold text-slate-400">{w.affiliate_email}</div>
+                                      </div>
+                                    </td>
+                                    <td className="px-8 py-6 font-black text-slate-900 italic">
+                                      ${parseFloat(w.amount).toFixed(2)}
+                                    </td>
+                                    <td className="px-8 py-6">
+                                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest border border-blue-100">
+                                        {w.payment_method}
+                                      </div>
+                                    </td>
+                                    <td className="px-8 py-6 text-[10px] font-bold text-slate-500 uppercase">
+                                      {w.payment_details}
+                                    </td>
+                                    <td className="px-8 py-6 text-right">
+                                      {w.status === 'pending' ? (
+                                        <div className="flex justify-end gap-2">
+                                          <button 
+                                            onClick={() => handleUpdateWithdrawalStatus(w.id, 'completed')}
+                                            disabled={processing[w.id]}
+                                            className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"
+                                          >
+                                            {processing[w.id] ? <RefreshCw size={12} className="animate-spin" /> : 'Complete'}
+                                          </button>
+                                          <button 
+                                            onClick={() => {
+                                              const notes = prompt('Enter rejection reason:');
+                                              if (notes !== null) handleUpdateWithdrawalStatus(w.id, 'rejected', notes);
+                                            }}
+                                            disabled={processing[w.id]}
+                                            className="px-4 py-2 bg-rose-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-700 transition-all shadow-lg shadow-rose-600/20"
+                                          >
+                                            Reject
+                                          </button>
+                                        </div>
+                                      ) : (
+                                        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                                          w.status === 'completed' || w.status === 'approved' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'
+                                        }`}>
+                                          {w.status}
+                                        </span>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
                         )}
                       </div>
                     </div>

@@ -356,10 +356,10 @@ const pool = new Pool({
   ssl: {
     rejectUnauthorized: false
   },
-  max: 20, // Maximum number of clients in the pool
-  idleTimeoutMillis: 30000, // How long a client is allowed to remain idle before being closed
-  connectionTimeoutMillis: 10000, // How long to wait when connecting a new client
-  keepAlive: true // Add keepalive to prevent idle connection termination
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 30000, // Increased from 10s to 30s
+  keepAlive: true
 });
 
 // Handle pool errors
@@ -396,6 +396,42 @@ async function initializeDatabase() {
     
     // Ensure 'suspended' column exists for users
     await queryWithRetry('ALTER TABLE users ADD COLUMN IF NOT EXISTS suspended BOOLEAN DEFAULT false');
+    
+    // Create withdrawals table
+    await queryWithRetry(`
+      CREATE TABLE IF NOT EXISTS withdrawals (
+        id SERIAL PRIMARY KEY,
+        affiliate_id INTEGER REFERENCES affiliates(id),
+        amount DECIMAL(15,2) NOT NULL,
+        status VARCHAR(50) DEFAULT 'pending', -- 'pending', 'approved', 'rejected', 'completed'
+        payment_method VARCHAR(100),
+        payment_details TEXT,
+        admin_notes TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create payments table
+    await queryWithRetry(`
+      CREATE TABLE IF NOT EXISTS payments (
+        id SERIAL PRIMARY KEY,
+        order_id INTEGER REFERENCES orders(id),
+        amount DECIMAL(15,2) NOT NULL,
+        payment_method VARCHAR(100),
+        transaction_id VARCHAR(255),
+        status VARCHAR(50) DEFAULT 'completed',
+        notes TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Ensure status column in affiliate_earnings allows 'available' status
+    // Statuses: 'pending' (client hasn't paid), 'available' (client paid, ready for withdrawal), 'withdrawn' (added to a withdrawal request)
+    
+    // Ensure pages column exists for templates
+    await queryWithRetry('ALTER TABLE templates ADD COLUMN IF NOT EXISTS pages JSONB DEFAULT \'[]\'');
+    await queryWithRetry('ALTER TABLE templates ADD COLUMN IF NOT EXISTS url TEXT');
     
     // Ensure new project columns exist
     await queryWithRetry('ALTER TABLE projects ADD COLUMN IF NOT EXISTS domain TEXT');
@@ -607,11 +643,320 @@ app.post('/api/auth/signup', async (req, res) => {
   }
 });
 
+// Affiliate Routes
+app.get('/api/affiliate/status', authenticate, async (req, res) => {
+  try {
+    const result = await queryWithRetry('SELECT * FROM affiliates WHERE userid = $1', [req.userId]);
+    if (result.rows.length === 0) {
+      return res.json({ isAffiliate: false });
+    }
+    res.json({ isAffiliate: true, affiliate: result.rows[0] });
+  } catch (err) {
+    console.error('Affiliate status error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post('/api/affiliate/signup', authenticate, async (req, res) => {
+  try {
+    // Check if already an affiliate
+    const check = await queryWithRetry('SELECT * FROM affiliates WHERE userid = $1', [req.userId]);
+    if (check.rows.length > 0) {
+      return res.status(400).json({ message: 'Already an affiliate' });
+    }
+
+    // Generate referral code
+    const referralCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+    
+    const result = await queryWithRetry(
+      'INSERT INTO affiliates (userid, referral_code) VALUES ($1, $2) RETURNING *',
+      [req.userId, referralCode]
+    );
+    
+    await queryWithRetry('UPDATE users SET is_affiliate = true, referral_code = $1 WHERE id = $2', [referralCode, req.userId]);
+
+    res.json({ message: 'Signed up as affiliate successfully', affiliate: result.rows[0] });
+  } catch (err) {
+    console.error('Affiliate signup error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/api/affiliate/stats', authenticate, async (req, res) => {
+  try {
+    const affiliateResult = await queryWithRetry('SELECT id FROM affiliates WHERE userid = $1', [req.userId]);
+    if (affiliateResult.rows.length === 0) {
+      return res.status(403).json({ message: 'Not an affiliate' });
+    }
+    const affiliateId = affiliateResult.rows[0].id;
+
+    const statsResult = await queryWithRetry(`
+      SELECT 
+        (SELECT COUNT(*) FROM referrals WHERE affiliate_id = $1) as total_referrals,
+        COALESCE((SELECT SUM(amount) FROM affiliate_earnings WHERE affiliate_id = $1 AND status != 'pending'), 0) as total_earnings,
+        COALESCE((SELECT SUM(amount) FROM affiliate_earnings WHERE affiliate_id = $1 AND status = 'pending'), 0) as pending_earnings,
+        (SELECT current_balance FROM affiliates WHERE id = $1) as current_balance
+    `, [affiliateId]);
+
+    res.json(statsResult.rows[0]);
+  } catch (err) {
+    console.error('Affiliate stats error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/api/affiliate/referrals', authenticate, async (req, res) => {
+  try {
+    const affiliateResult = await queryWithRetry('SELECT id FROM affiliates WHERE userid = $1', [req.userId]);
+    if (affiliateResult.rows.length === 0) {
+      return res.status(403).json({ message: 'Not an affiliate' });
+    }
+    const affiliateId = affiliateResult.rows[0].id;
+
+    const referralsResult = await queryWithRetry(`
+      SELECT u.id, u.name, u.email, u.subscription_status, r.created_at
+      FROM referrals r
+      JOIN users u ON r.referred_user_id = u.id
+      WHERE r.affiliate_id = $1
+      ORDER BY r.created_at DESC
+    `, [affiliateId]);
+
+    res.json(referralsResult.rows);
+  } catch (err) {
+    console.error('Affiliate referrals error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/api/affiliate/earnings', authenticate, async (req, res) => {
+  try {
+    const affiliateResult = await queryWithRetry('SELECT id FROM affiliates WHERE userid = $1', [req.userId]);
+    if (affiliateResult.rows.length === 0) {
+      return res.status(403).json({ message: 'Not an affiliate' });
+    }
+    const affiliateId = affiliateResult.rows[0].id;
+
+    const earningsResult = await queryWithRetry(`
+      SELECT e.*, o.order_number, o.service_name, o.plan_name
+      FROM affiliate_earnings e
+      LEFT JOIN orders o ON e.order_id = o.id
+      WHERE e.affiliate_id = $1
+      ORDER BY e.created_at DESC
+    `, [affiliateId]);
+
+    res.json(earningsResult.rows);
+  } catch (err) {
+    console.error('Affiliate earnings error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Refer user by code
+app.post('/api/affiliate/refer', async (req, res) => {
+  const { referralCode, userId } = req.body;
+  try {
+    const affiliateResult = await queryWithRetry('SELECT id FROM affiliates WHERE referral_code = $1', [referralCode]);
+    if (affiliateResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Invalid referral code' });
+    }
+    const affiliateId = affiliateResult.rows[0].id;
+
+    // Check if user already referred
+    const check = await queryWithRetry('SELECT * FROM referrals WHERE referred_user_id = $1', [userId]);
+    if (check.rows.length > 0) {
+      return res.status(400).json({ message: 'User already referred' });
+    }
+
+    await queryWithRetry(
+      'INSERT INTO referrals (affiliate_id, referred_user_id) VALUES ($1, $2)',
+      [affiliateId, userId]
+    );
+
+    res.json({ message: 'User referred successfully' });
+  } catch (err) {
+    console.error('Refer user error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin Affiliate Routes
+app.get('/api/admin/affiliates', authenticate, async (req, res) => {
+  try {
+    const result = await queryWithRetry(`
+      SELECT a.*, u.name, u.email, 
+        (SELECT COUNT(*) FROM referrals WHERE affiliate_id = a.id) as referral_count
+      FROM affiliates a
+      JOIN users u ON a.userid = u.id
+      ORDER BY a.created_at DESC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Admin fetch affiliates error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/api/admin/earnings', authenticate, async (req, res) => {
+  try {
+    const result = await queryWithRetry(`
+      SELECT e.*, a.referral_code, u.name as affiliate_name, o.order_number, o.service_name, o.amount as order_amount
+      FROM affiliate_earnings e
+      JOIN affiliates a ON e.affiliate_id = a.id
+      JOIN users u ON a.userid = u.id
+      LEFT JOIN orders o ON e.order_id = o.id
+      ORDER BY e.created_at DESC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Admin fetch earnings error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.patch('/api/admin/earnings/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  try {
+    const earningResult = await queryWithRetry('SELECT amount, affiliate_id, status FROM affiliate_earnings WHERE id = $1', [id]);
+    const earning = earningResult.rows[0];
+
+    if (!earning) {
+      return res.status(404).json({ message: 'Earning not found' });
+    }
+
+    // If changing from pending to available, increment current_balance
+    if (status === 'available' && earning.status === 'pending') {
+      await queryWithRetry('UPDATE affiliates SET current_balance = current_balance + $1 WHERE id = $2', [earning.amount, earning.affiliate_id]);
+    }
+    
+    // If marking as paid (from available/pending), it doesn't necessarily change balance 
+    // because withdrawals already handle balance decrement.
+    // However, if we're manually marking it as 'paid' and it was 'pending', 
+    // maybe we should assume it's settled.
+    
+    const result = await queryWithRetry(
+      'UPDATE affiliate_earnings SET status = $1 WHERE id = $2 RETURNING *',
+      [status, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Admin update earning status error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Withdrawal Routes
+app.post('/api/affiliate/withdraw', authenticate, async (req, res) => {
+  const { amount, paymentMethod, paymentDetails } = req.body;
+  try {
+    const affiliateResult = await queryWithRetry('SELECT id, current_balance FROM affiliates WHERE userid = $1', [req.userId]);
+    if (affiliateResult.rows.length === 0) {
+      return res.status(403).json({ message: 'Not an affiliate' });
+    }
+    const affiliate = affiliateResult.rows[0];
+
+    if (parseFloat(amount) > parseFloat(affiliate.current_balance)) {
+      return res.status(400).json({ message: 'Insufficient balance' });
+    }
+
+    if (parseFloat(amount) < 10) {
+      return res.status(400).json({ message: 'Minimum withdrawal is $10' });
+    }
+
+    // Start a transaction would be better here, but using queryWithRetry for now
+    await queryWithRetry('BEGIN');
+    
+    const withdrawalResult = await queryWithRetry(
+      'INSERT INTO withdrawals (affiliate_id, amount, payment_method, payment_details, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [affiliate.id, amount, paymentMethod, paymentDetails, 'pending']
+    );
+
+    await queryWithRetry(
+      'UPDATE affiliates SET current_balance = current_balance - $1 WHERE id = $2',
+      [amount, affiliate.id]
+    );
+
+    await queryWithRetry('COMMIT');
+
+    res.json(withdrawalResult.rows[0]);
+  } catch (err) {
+    await queryWithRetry('ROLLBACK').catch(() => {});
+    console.error('Withdrawal error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/api/affiliate/withdrawals', authenticate, async (req, res) => {
+  try {
+    const affiliateResult = await queryWithRetry('SELECT id FROM affiliates WHERE userid = $1', [req.userId]);
+    if (affiliateResult.rows.length === 0) {
+      return res.status(403).json({ message: 'Not an affiliate' });
+    }
+    const affiliateId = affiliateResult.rows[0].id;
+
+    const result = await queryWithRetry(
+      'SELECT * FROM withdrawals WHERE affiliate_id = $1 ORDER BY created_at DESC',
+      [affiliateId]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch withdrawals error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin Withdrawal Routes
+app.get('/api/admin/withdrawals', authenticate, async (req, res) => {
+  try {
+    const result = await queryWithRetry(`
+      SELECT w.*, u.name as affiliate_name, u.email as affiliate_email, a.referral_code
+      FROM withdrawals w
+      JOIN affiliates a ON w.affiliate_id = a.id
+      JOIN users u ON a.userid = u.id
+      ORDER BY w.created_at DESC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Admin fetch withdrawals error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.patch('/api/admin/withdrawals/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const { status, adminNotes } = req.body;
+  try {
+    const withdrawalResult = await queryWithRetry('SELECT * FROM withdrawals WHERE id = $1', [id]);
+    const withdrawal = withdrawalResult.rows[0];
+
+    if (!withdrawal) {
+      return res.status(404).json({ message: 'Withdrawal not found' });
+    }
+
+    // If rejecting, return funds to affiliate balance
+    if (status === 'rejected' && withdrawal.status !== 'rejected') {
+      await queryWithRetry(
+        'UPDATE affiliates SET current_balance = current_balance + $1 WHERE id = $2',
+        [withdrawal.amount, withdrawal.affiliate_id]
+      );
+    }
+
+    const result = await queryWithRetry(
+      'UPDATE withdrawals SET status = $1, admin_notes = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *',
+      [status, adminNotes, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Admin update withdrawal error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // User Routes
 app.get('/api/users', authenticate, async (req, res) => {
   try {
     const result = await queryWithRetry(
-      'SELECT id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, role, created_at FROM users ORDER BY created_at DESC'
+      'SELECT id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, role, is_affiliate, referral_code, created_at FROM users ORDER BY created_at DESC'
     );
     res.json(result.rows);
   } catch (err) {
@@ -627,7 +972,7 @@ app.get('/api/users/:id', authenticate, async (req, res) => {
   }
   try {
     const result = await queryWithRetry(
-      'SELECT id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, role, created_at FROM users WHERE id = $1',
+      'SELECT id, email, name, first_name, last_name, phone_number, membership_tier, unlocked_tools, activated_tools, next_billing_date, subscription_status, role, is_affiliate, referral_code, created_at FROM users WHERE id = $1',
       [id]
     );
     if (result.rows.length === 0) {
@@ -764,6 +1109,39 @@ app.patch('/api/users/:id', authenticate, async (req, res) => {
     if (fields.membership_tier !== undefined || fields.subscription_status !== undefined) {
       const newTier = fields.membership_tier || currentUser.membership_tier;
       const newStatus = fields.subscription_status || currentUser.subscription_status;
+
+      // Handle commission if it's a new membership or status is active
+      if (fields.membership_tier && newStatus === 'active' && currentUser.membership_tier !== newTier) {
+        try {
+          const referralResult = await queryWithRetry('SELECT affiliate_id FROM referrals WHERE referred_user_id = $1', [id]);
+          if (referralResult.rows.length > 0) {
+            const affiliateId = referralResult.rows[0].affiliate_id;
+            // Membership prices mapping
+            const membershipPrices = {
+              'basic': 12,
+              'premium': 25,
+              'premium_plus': 60,
+              'enterprise': 130
+            };
+            const price = membershipPrices[newTier.toLowerCase()] || 0;
+            const commissionAmount = price * 0.10;
+
+            if (commissionAmount > 0) {
+              await queryWithRetry(
+                'INSERT INTO affiliate_earnings (affiliate_id, amount, percentage, type) VALUES ($1, $2, $3, $4)',
+                [affiliateId, commissionAmount, 10, 'membership']
+              );
+              // Update affiliate balance
+              await queryWithRetry(
+                'UPDATE affiliates SET total_earnings = total_earnings + $1, current_balance = current_balance + $1 WHERE id = $2',
+                [commissionAmount, affiliateId]
+              );
+            }
+          }
+        } catch (err) {
+          console.error('Membership commission error:', err);
+        }
+      }
       
       sendEmail(
         currentUser.email,
@@ -1132,15 +1510,43 @@ app.post('/api/orders', authenticate, async (req, res) => {
   try {
     const userIdToUse = userId || req.userId;
     
+    // Check if user has an affiliate
+    const referralResult = await queryWithRetry('SELECT affiliate_id FROM referrals WHERE referred_user_id = $1', [userIdToUse]);
+    let finalAmount = parseFloat(amount);
+    let commissionAmount = 0;
+    let affiliateId = null;
+
+    if (referralResult.rows.length > 0) {
+      affiliateId = referralResult.rows[0].affiliate_id;
+      // Apply 30% discount for website acquisition (orders are typically website sales)
+      // If the frontend already applied it, we should be careful. 
+      // For now, let's assume the backend ensures the commission is recorded.
+      commissionAmount = finalAmount * 0.30;
+    }
+
     // Get user info for email
     const userResult = await queryWithRetry('SELECT * FROM users WHERE id = $1', [userIdToUse]);
     const user = userResult.rows[0];
     
     const result = await queryWithRetry(
       'INSERT INTO orders (order_number, service_id, service_name, plan_name, amount, status, user_id, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-      [order_number, service_id, service_name, plan_name, amount, status || 'pending', userIdToUse, description]
+      [order_number, service_id, service_name, plan_name, finalAmount, status || 'pending', userIdToUse, description]
     );
     const order = result.rows[0];
+
+    // If there's an affiliate, record commission as PENDING
+    if (affiliateId && commissionAmount > 0) {
+      await queryWithRetry(
+        'INSERT INTO affiliate_earnings (affiliate_id, order_id, amount, percentage, type, status) VALUES ($1, $2, $3, $4, $5, $6)',
+        [affiliateId, order.id, commissionAmount, 30, 'sale', 'pending']
+      );
+      // NOTE: We don't update current_balance yet because it's pending
+      // We only update total_earnings to show potential yield
+      await queryWithRetry(
+        'UPDATE affiliates SET total_earnings = total_earnings + $1 WHERE id = $2',
+        [commissionAmount, affiliateId]
+      );
+    }
     
     // Send order confirmation email
     sendEmail(
@@ -1250,6 +1656,105 @@ app.patch('/api/orders/:id', authenticate, async (req, res) => {
   }
 });
 
+app.post('/api/payments', authenticate, async (req, res) => {
+  const { orderId, amount, paymentMethod, transactionId, notes } = req.body;
+  try {
+    // 1. Insert payment record
+    const paymentResult = await queryWithRetry(
+      'INSERT INTO payments (order_id, amount, payment_method, transaction_id, notes) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [orderId, amount, paymentMethod, transactionId, notes]
+    );
+    const payment = paymentResult.rows[0];
+
+    // 2. Check if the order has an affiliate
+    const orderResult = await queryWithRetry('SELECT user_id FROM orders WHERE id = $1', [orderId]);
+    const order = orderResult.rows[0];
+    
+    if (order) {
+      const referralResult = await queryWithRetry('SELECT affiliate_id FROM referrals WHERE referred_user_id = $1', [order.user_id]);
+      if (referralResult.rows.length > 0) {
+        const affiliateId = referralResult.rows[0].affiliate_id;
+        const commissionAmount = parseFloat(amount) * 0.30; // 30% commission on every installment
+
+        // 3. Insert available commission for this specific payment
+        await queryWithRetry(
+          'INSERT INTO affiliate_earnings (affiliate_id, order_id, amount, percentage, type, status) VALUES ($1, $2, $3, $4, $5, $6)',
+          [affiliateId, orderId, commissionAmount, 30, 'sale', 'available']
+        );
+
+        // 4. Update affiliate balance
+        await queryWithRetry(
+          'UPDATE affiliates SET total_earnings = total_earnings + $1, current_balance = current_balance + $1 WHERE id = $2',
+          [commissionAmount, affiliateId]
+        );
+
+        // 5. Deduct from pending commission if it exists
+        await queryWithRetry(
+          'UPDATE affiliate_earnings SET amount = amount - $1 WHERE affiliate_id = $2 AND order_id = $3 AND status = $4',
+          [commissionAmount, affiliateId, orderId, 'pending']
+        );
+
+        // Delete pending if it's empty
+        await queryWithRetry(
+          'DELETE FROM affiliate_earnings WHERE affiliate_id = $1 AND order_id = $2 AND status = $3 AND amount <= 0',
+          [affiliateId, orderId, 'pending']
+        );
+      }
+    }
+
+    res.json(payment);
+  } catch (err) {
+    console.error('Record payment error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/api/payments', authenticate, async (req, res) => {
+  const { orderId } = req.query;
+  try {
+    let query = 'SELECT p.*, o.order_number FROM payments p JOIN orders o ON p.order_id = o.id';
+    let params = [];
+    
+    if (orderId) {
+      query += ' WHERE p.order_id = $1';
+      params.push(orderId);
+    }
+    
+    query += ' ORDER BY p.created_at DESC';
+    
+    const result = await queryWithRetry(query, params);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch payments error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/api/affiliate/payments', authenticate, async (req, res) => {
+  try {
+    const affiliateResult = await queryWithRetry('SELECT id FROM affiliates WHERE userid = $1', [req.userId]);
+    if (affiliateResult.rows.length === 0) {
+      return res.status(403).json({ message: 'Not an affiliate' });
+    }
+    const affiliateId = affiliateResult.rows[0].id;
+
+    // Fetch payments for orders that belong to users referred by this affiliate
+    const result = await queryWithRetry(`
+      SELECT p.*, o.order_number, o.service_name
+      FROM payments p
+      JOIN orders o ON p.order_id = o.id
+      JOIN referrals r ON o.user_id = r.referred_user_id
+      WHERE r.affiliate_id = $1
+      ORDER BY p.created_at DESC
+    `, [affiliateId]);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch affiliate payments error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Support Tickets Routes
 app.post('/api/support-tickets', authenticate, async (req, res) => {
   const { subject, message, priority, userId } = req.body;
@@ -1283,11 +1788,11 @@ app.get('/api/templates', async (req, res) => {
 });
 
 app.post('/api/templates', authenticate, async (req, res) => {
-  const { name, description, category, thumbnail, html_content, css_content, js_content, deployed, status, price } = req.body;
+  const { name, description, category, thumbnail, html_content, css_content, js_content, deployed, status, price, pages, url } = req.body;
   try {
     const result = await queryWithRetry(
-      'INSERT INTO templates (name, description, category, thumbnail, html_content, css_content, js_content, deployed, status, price) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
-      [name, description, category, thumbnail, html_content, css_content, js_content, deployed || false, status || 'draft', price || 0]
+      'INSERT INTO templates (name, description, category, thumbnail, html_content, css_content, js_content, deployed, status, price, pages, url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *',
+      [name, description, category, thumbnail, html_content, css_content, js_content, deployed || false, status || 'draft', price || 0, JSON.stringify(pages || []), url || null]
     );
     res.json(result.rows[0]);
   } catch (err) {
@@ -1300,7 +1805,10 @@ app.patch('/api/templates/:id', authenticate, async (req, res) => {
   const { id } = req.params;
   const fields = req.body;
   const keys = Object.keys(fields).filter(k => k !== 'id' && k !== 'created_at');
-  const values = keys.map(k => fields[k]);
+  const values = keys.map(k => {
+    if (k === 'pages') return JSON.stringify(fields[k]);
+    return fields[k];
+  });
   
   const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
   

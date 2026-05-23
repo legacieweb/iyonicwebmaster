@@ -11,6 +11,7 @@ import { useAuth } from './contexts/AuthContext'
 import LandingPage from './pages/LandingPage'
 import DashboardPage from './pages/DashboardPage'
 import AdminPage from './pages/AdminPage'
+import AffiliatePage from './pages/AffiliatePage'
 
 // Lazy load or import other views as components for now to keep it simple
 import About from './components/About'
@@ -63,6 +64,20 @@ function App() {
   const { isAuthModalOpen, authModalMode, toggleAuthModal, closeAuthModal } = useAuth()
 
   useEffect(() => {
+    // Capture referral code from URL (both standard search and hash search)
+    const searchParams = new URLSearchParams(window.location.search)
+    let ref = searchParams.get('ref')
+    
+    if (!ref && window.location.hash.includes('?')) {
+      const hashSearch = window.location.hash.split('?')[1]
+      const hashParams = new URLSearchParams(hashSearch)
+      ref = hashParams.get('ref')
+    }
+
+    if (ref) {
+      localStorage.setItem('iyonicorp_referral_code', ref)
+    }
+
     const checkStatus = async () => {
       const status = await checkAPIStatus()
       setApiOnline(status)
@@ -148,8 +163,9 @@ function AppContent({ isAuthModalOpen, authModalMode, toggleAuthModal, closeAuth
         {/* Routes WITHOUT standard Navbar/Footer (handled internally) */}
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/affiliate" element={<AffiliatePage />} />
         <Route path="/store" element={<Store onBack={() => {}} />} />
-        <Route path="/deployed-templates" element={<DeployedTemplates onBack={() => {}} />} />
+        <Route path="/deployed-templates" element={<DeployedTemplatesWrapper />} />
         
         {/* Specialized views */}
         <Route path="/edit-project" element={<WebsiteEditorWrapper />} />
@@ -204,6 +220,16 @@ const ServiceCatalogWrapper = () => {
       serviceId={plan?.name || serviceId} 
       onBack={() => navigate(-1)} 
       onPreview={(template) => navigate('/view-template', { state: { template } })}
+    />
+  )
+}
+
+const DeployedTemplatesWrapper = () => {
+  const navigate = useNavigate()
+  return (
+    <DeployedTemplates 
+      onBack={() => navigate('/')} 
+      onSelectTemplate={(template) => navigate('/view-template', { state: { template } })} 
     />
   )
 }
