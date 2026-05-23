@@ -439,6 +439,29 @@ async function initializeDatabase() {
     await queryWithRetry('ALTER TABLE projects ADD COLUMN IF NOT EXISTS latest_update TEXT');
     await queryWithRetry('ALTER TABLE projects ADD COLUMN IF NOT EXISTS recommended_modules JSONB');
     
+    // Ensure Admin User exists
+    const adminEmail = process.env.VITE_ADMIN_EMAIL;
+    const adminPassword = process.env.VITE_ADMIN_PASSWORD;
+
+    if (adminEmail && adminPassword) {
+      console.log('Checking for admin user:', adminEmail);
+      const adminCheck = await queryWithRetry('SELECT id FROM users WHERE LOWER(email) = LOWER($1)', [adminEmail]);
+      
+      if (adminCheck.rows.length === 0) {
+        console.log('Creating admin user...');
+        const hashedPassword = bcrypt.hashSync(adminPassword, 10);
+        await queryWithRetry(
+          "INSERT INTO users (email, password, name, first_name, last_name, role, subscription_status) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+          [adminEmail, hashedPassword, 'Admin User', 'Admin', 'User', 'admin', 'active']
+        );
+        console.log('Admin user created successfully');
+      } else {
+        // Ensure the existing user has admin role
+        await queryWithRetry("UPDATE users SET role = 'admin' WHERE LOWER(email) = LOWER($1)", [adminEmail]);
+        console.log('Admin user verified');
+      }
+    }
+
     console.log('Database schema checks completed');
   } catch (err) {
     console.error('Database initialization error:', err);
@@ -491,6 +514,38 @@ app.get('/api/health', (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
   console.log('Login attempt:', { email, passwordReceived: !!password });
+
+  // Fallback for Admin from environment variables
+  const envAdminEmail = process.env.VITE_ADMIN_EMAIL;
+  const envAdminPassword = process.env.VITE_ADMIN_PASSWORD;
+
+  if (envAdminEmail && envAdminPassword && 
+      email?.toLowerCase() === envAdminEmail.toLowerCase() && 
+      password === envAdminPassword) {
+    console.log('Admin login via environment variables successful');
+    
+    // Try to get existing user ID or use a placeholder
+    let adminId = 999;
+    try {
+      const adminCheck = await queryWithRetry('SELECT id FROM users WHERE LOWER(email) = LOWER($1)', [envAdminEmail]);
+      if (adminCheck.rows.length > 0) adminId = adminCheck.rows[0].id;
+    } catch (e) {
+      console.error('Error fetching admin ID during fallback login:', e);
+    }
+
+    const token = jwt.sign({ id: adminId }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    return res.json({
+      token,
+      user: {
+        id: adminId,
+        email: envAdminEmail,
+        name: 'Admin User',
+        role: 'admin',
+        membership_tier: 'admin'
+      }
+    });
+  }
+
   try {
     const result = await queryWithRetry('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
     const user = result.rows[0];

@@ -166,6 +166,7 @@ export const AuthProvider = ({ children }) => {
         membership_tier: data.user.membership_tier || null,
         unlocked_tools: data.user.unlocked_tools || [],
         activated_tools: data.user.activated_tools || [],
+        role: data.user.role,
         name: data.user.first_name ? `${data.user.first_name} ${data.user.last_name}` : email.split('@')[0],
       }
 
@@ -177,7 +178,7 @@ export const AuthProvider = ({ children }) => {
         token: data.token,
       })
 
-      return { success: true, user: userData, token: data.token }
+      return { success: true, user: userData, token: data.token, isAdmin: data.user.role === 'admin' }
     } catch (err) {
       const errorMsg = err.response?.data?.message || err.message || 'Login failed'
       setError(errorMsg)
@@ -220,7 +221,7 @@ export const AuthProvider = ({ children }) => {
     setError(null)
   }
 
-  const isAdmin = currentUser?.email === import.meta.env.VITE_ADMIN_EMAIL
+  const isAdmin = currentUser?.role === 'admin' || currentUser?.email === import.meta.env.VITE_ADMIN_EMAIL
 
   const value = {
     currentUser,
