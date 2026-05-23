@@ -100,11 +100,11 @@ const Store = ({ onBack }) => {
   const cartTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
 
   return (
-    <div className="min-h-screen bg-dark pt-20">
+    <div className="min-h-screen bg-neutral-50 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-12">
         <motion.button
           onClick={() => onBack('landing')}
-          className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 mb-8 transition-colors"
+          className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-8 transition-colors font-medium"
           whileHover={{ x: -5 }}
         >
           <ArrowLeft size={20} />
@@ -117,15 +117,15 @@ const Store = ({ onBack }) => {
           className="mb-12"
         >
           <h1 className="text-5xl font-bold mb-2">
-            Extend Your <span className="gradient-text">Builder</span>
+            Extend Your <span className="text-neutral-900">Builder</span>
           </h1>
-          <p className="text-gray-400 text-lg">Premium templates, features, and support to enhance your website building experience</p>
+          <p className="text-neutral-500 text-lg">Premium templates, features, and support to enhance your website building experience</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="glass-dark p-6 rounded-2xl sticky top-24 space-y-6">
+            <div className="bg-white border border-neutral-200 shadow-sm p-6 rounded-2xl sticky top-24 space-y-6">
               <div>
                 <h3 className="font-bold mb-4 flex items-center gap-2">
                   <Filter size={18} />
@@ -137,8 +137,8 @@ const Store = ({ onBack }) => {
                     onClick={() => setSelectedCategory(cat)}
                     className={`w-full text-left px-4 py-2 rounded-lg mb-2 font-medium capitalize transition-colors ${
                       selectedCategory === cat
-                        ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/50'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                        ? 'bg-neutral-900 text-white'
+                        : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50'
                     }`}
                   >
                     {cat}
@@ -170,11 +170,11 @@ const Store = ({ onBack }) => {
                     <div className="border-t border-white/10 pt-2">
                       <div className="flex justify-between font-bold text-lg">
                         <span>Total:</span>
-                        <span className="text-cyan-400">${cartTotal.toFixed(2)}</span>
+                        <span className="text-neutral-900">${cartTotal.toFixed(2)}</span>
                       </div>
                       <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        className="w-full mt-4 bg-gradient-to-r from-cyan-600 to-blue-600 py-2 rounded-lg font-semibold"
+                        whileHover={{ scale: 1.02 }}
+                        className="w-full mt-4 bg-neutral-900 text-white py-3 rounded-xl font-semibold transition-all shadow-lg shadow-neutral-200"
                       >
                         Checkout
                       </motion.button>
@@ -195,7 +195,7 @@ const Store = ({ onBack }) => {
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
+                className="w-full pl-12 pr-4 py-3 bg-white border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 transition-colors shadow-sm"
               />
             </div>
 
@@ -207,7 +207,7 @@ const Store = ({ onBack }) => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="glass-dark rounded-2xl overflow-hidden hover:border-cyan-400/50 border border-white/10 transition-all group"
+                  className="bg-white border border-neutral-200 shadow-sm rounded-2xl overflow-hidden hover:border-neutral-300 transition-all group"
                 >
                   <div className={`h-40 ${product.image} relative`}>
                     <motion.button
@@ -235,14 +235,14 @@ const Store = ({ onBack }) => {
                         <Star size={16} fill="currentColor" />
                         <span className="text-sm font-medium">{product.rating}</span>
                       </div>
-                      <span className="text-2xl font-bold text-cyan-400">${product.price}</span>
+                      <span className="text-2xl font-bold text-neutral-900">${product.price}</span>
                     </div>
 
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => addToCart(product)}
-                      className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 py-2 rounded-lg font-semibold flex items-center justify-center gap-2 hover:shadow-glow transition-all"
+                      className="w-full bg-neutral-900 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all shadow-lg shadow-neutral-100"
                     >
                       <ShoppingCart size={18} />
                       Add to Cart

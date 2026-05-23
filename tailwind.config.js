@@ -7,9 +7,6 @@ export default {
   theme: {
     extend: {
       colors: {
-        'dark': '#0a0a0a',
-        'dark-secondary': '#1a1a1a',
-        'dark-tertiary': '#2a2a2a',
       },
       backdropFilter: {
         'none': 'none',
