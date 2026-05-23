@@ -46,7 +46,7 @@ server: {
 Updated `src/utils/api.js`:
 
 ```javascript
-const API_BASE_URL = import.meta.env.PROD 
+const BASE_URL = import.meta.env.PROD 
   ? 'https://pendant-authors-walls-tune.trycloudflare.com'  // Production
   : '/api'  // Development (proxied)
 ```

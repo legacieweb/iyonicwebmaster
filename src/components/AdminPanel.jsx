@@ -344,7 +344,7 @@ const AdminPanel = ({ onBack }) => {
             onClick={() => onBack(false)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="w-full py-4 bg-neutral-950 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-lg hover:shadow-neutral-200 transition-all"
+            className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all"
           >
             Return to Surface
           </motion.button>
@@ -536,15 +536,15 @@ const AdminPanel = ({ onBack }) => {
           </div>
 
           <div className="pt-6 border-t border-slate-200">
-            <div className="bg-neutral-950 p-6 rounded-[2rem] border border-neutral-800 relative overflow-hidden group shadow-xl">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all duration-700" />
+            <div className="bg-white p-6 rounded-[2rem] border border-slate-200 relative overflow-hidden group shadow-sm">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-all duration-700" />
               <div className="relative z-10">
-                <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] mb-2">System Status</p>
+                <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-2">System Status</p>
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                  <span className="text-xs font-bold text-white uppercase tracking-widest">Operational</span>
+                  <span className="text-xs font-bold text-slate-900 uppercase tracking-widest">Operational</span>
                 </div>
-                <p className="text-[10px] text-neutral-500 leading-relaxed font-medium">All infrastructure nodes are healthy and performing at peak efficiency.</p>
+                <p className="text-[10px] text-slate-500 leading-relaxed font-medium">All infrastructure nodes are healthy and performing at peak efficiency.</p>
               </div>
             </div>
           </div>
@@ -675,13 +675,13 @@ const AdminPanel = ({ onBack }) => {
                           </div>
                         </div>
 
-                        <div className="bg-neutral-950 p-8 rounded-[2.5rem] text-white flex flex-col justify-between overflow-hidden relative">
-                          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 rounded-full blur-[100px]" />
+                        <div className="bg-white p-8 rounded-[2.5rem] border border-slate-200 flex flex-col justify-between overflow-hidden relative shadow-sm">
+                          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 rounded-full blur-[100px]" />
                           <div className="relative z-10">
-                            <h3 className="text-xl font-black uppercase italic tracking-tight mb-6">Quick Actions</h3>
+                            <h3 className="text-xl font-black text-slate-900 uppercase italic tracking-tight mb-6">Quick Actions</h3>
                             <div className="space-y-4">
-                              <button onClick={() => setActiveTab('users')} className="w-full flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-2xl text-white hover:bg-blue-600 transition-all group">
-                                <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-white">
+                              <button onClick={() => setActiveTab('users')} className="w-full flex items-center gap-4 p-4 bg-blue-50/50 border border-blue-100 rounded-2xl text-blue-700 hover:bg-blue-600 hover:text-white transition-all group">
+                                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-600 group-hover:bg-blue-500 group-hover:text-white shadow-sm">
                                   <Users size={20} />
                                 </div>
                                 <span className="font-bold text-sm uppercase tracking-widest">Manage Users</span>
@@ -697,19 +697,19 @@ const AdminPanel = ({ onBack }) => {
                   {activeTab === 'partnership' && (
                     <div className="space-y-16 pb-20">
                       {/* Header Section */}
-                      <div className="bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-800 rounded-[3rem] p-12 md:p-16 text-white relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
+                      <div className="bg-white rounded-[3rem] p-12 md:p-16 border border-slate-200 relative overflow-hidden shadow-sm">
+                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
                         <div className="relative z-10">
                           <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
+                            <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
                               <HeartHandshake size={24} />
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400">Alliance Protocol</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Alliance Protocol</span>
                           </div>
-                          <h2 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter leading-none mb-6">
-                            Partnership <span className="text-blue-500">Requests</span>
+                          <h2 className="text-5xl md:text-7xl font-black text-slate-900 uppercase italic tracking-tighter leading-none mb-6">
+                            Partnership <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Requests</span>
                           </h2>
-                          <p className="text-neutral-400 font-medium text-lg max-w-xl">
+                          <p className="text-slate-500 font-medium text-lg max-w-xl">
                             Review and manage alliance partner applications. Approve or reject business partnerships.
                           </p>
                         </div>
@@ -924,25 +924,25 @@ const AdminPanel = ({ onBack }) => {
                   {activeTab === 'users' && (
                     <div className="space-y-16 pb-20">
                       {/* Header Section */}
-                      <div className="bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-800 rounded-[3rem] p-12 md:p-16 text-white relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
+                      <div className="bg-white rounded-[3rem] p-12 md:p-16 border border-slate-200 relative overflow-hidden shadow-sm">
+                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-600/5 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
                         <div className="relative z-10">
                           <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center">
+                            <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
                               <Users size={24} />
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400">Identity Matrix</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-600">Identity Matrix</span>
                           </div>
-                          <h2 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter leading-none mb-6">
-                            User <span className="text-indigo-500">Hub</span>
+                          <h2 className="text-5xl md:text-7xl font-black text-slate-900 uppercase italic tracking-tighter leading-none mb-6">
+                            User <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600">Hub</span>
                           </h2>
-                          <p className="text-neutral-400 font-medium text-lg max-w-xl">
+                          <p className="text-slate-500 font-medium text-lg max-w-xl">
                             Manage and view all registered users. Access comprehensive user details and account controls.
                           </p>
                         </div>
                       </div>
                       
-                      <div className="bg-white rounded-[3rem] border border-neutral-100 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] overflow-hidden">
+                      <div className="bg-white rounded-[3rem] border border-slate-100 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] overflow-hidden">
                         {users.length === 0 ? (
                           <div className="p-24 text-center">
                             <Users className="w-16 h-16 text-slate-100 mx-auto mb-6" />
@@ -955,7 +955,7 @@ const AdminPanel = ({ onBack }) => {
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                                   <div className="flex items-center gap-5">
                                     <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center text-slate-400 font-black text-xl transition-all uppercase ${
-                                      user.suspended ? 'bg-slate-200 border-slate-300' : 'bg-white border-slate-200 group-hover:bg-neutral-950 group-hover:text-white group-hover:border-neutral-950'
+                                      user.suspended ? 'bg-slate-200 border-slate-300' : 'bg-white border-slate-200 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600'
                                     }`}>
                                       {(user.name || user.first_name || user.email)?.charAt(0) || 'U'}
                                     </div>
@@ -1331,12 +1331,12 @@ const AdminPanel = ({ onBack }) => {
                                               </div>
                                             </div>
 
-                                            <div className="p-6 bg-neutral-950 rounded-[2rem] text-white">
+                                            <div className="p-6 bg-indigo-50 border border-indigo-100 rounded-[2rem] text-indigo-900">
                                               <div className="flex items-center justify-between mb-4">
-                                                <span className="text-[9px] font-black uppercase tracking-widest text-indigo-400">Security Pulse</span>
-                                                <ShieldCheck size={14} className="text-indigo-400" />
+                                                <span className="text-[9px] font-black uppercase tracking-widest text-indigo-600">Security Pulse</span>
+                                                <ShieldCheck size={14} className="text-indigo-600" />
                                               </div>
-                                              <p className="text-[10px] font-medium text-slate-400 leading-relaxed">
+                                              <p className="text-[10px] font-medium text-indigo-700/80 leading-relaxed">
                                                 This identity node is currently {user.suspended ? 'DECOMMISSIONED' : 'OPERATIONAL'}. All encryption protocols are active.
                                               </p>
                                             </div>
@@ -1433,7 +1433,7 @@ const AdminPanel = ({ onBack }) => {
                               <div key={lead.id} className="p-6 sm:p-8 hover:bg-slate-50/50 transition-colors group">
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                                   <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-white rounded-2xl border border-slate-200 flex items-center justify-center text-slate-400 font-black text-xl group-hover:bg-neutral-950 group-hover:text-white group-hover:border-neutral-950 transition-all uppercase">
+                                    <div className="w-14 h-14 bg-white rounded-2xl border border-slate-200 flex items-center justify-center text-slate-400 font-black text-xl group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all uppercase">
                                       {lead.name?.charAt(0) || 'L'}
                                     </div>
                                     <div>
@@ -1994,26 +1994,27 @@ const AdminPanel = ({ onBack }) => {
                                       >
                                         <div className="mt-8 grid lg:grid-cols-3 gap-8">
                                           {/* Owner Card */}
-                                          <div className="lg:col-span-1 p-8 bg-slate-900 rounded-[2.5rem] text-white flex flex-col justify-between">
-                                            <div>
-                                              <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-6">Website Owner</p>
+                                          <div className="lg:col-span-1 p-8 bg-white border border-slate-200 rounded-[2.5rem] text-slate-900 flex flex-col justify-between shadow-sm relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-3xl" />
+                                            <div className="relative z-10">
+                                              <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-6">Website Owner</p>
                                               <div className="flex items-center gap-4 mb-8">
-                                                <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-white font-black text-xl backdrop-blur-md border border-white/10">
+                                                <div className="w-14 h-14 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center text-blue-600 font-black text-xl shadow-sm">
                                                   {projectOwner?.email?.charAt(0).toUpperCase() || 'U'}
                                                 </div>
                                                 <div>
-                                                  <p className="text-sm font-black uppercase tracking-tight truncate max-w-[150px]">{projectOwner?.email || 'Anonymous Node'}</p>
+                                                  <p className="text-sm font-black text-slate-900 uppercase tracking-tight truncate max-w-[150px]">{projectOwner?.email || 'Anonymous Node'}</p>
                                                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">ID: {projectOwner?.id || 'Root'}</p>
                                                 </div>
                                               </div>
                                               <div className="space-y-3">
                                                 <div className="flex justify-between text-[9px] font-black uppercase tracking-widest">
-                                                  <span className="text-slate-500">Tier:</span>
-                                                  <span className="text-blue-400">{projectOwner?.membership_tier || 'FREE'}</span>
+                                                  <span className="text-slate-400">Tier:</span>
+                                                  <span className="text-blue-600">{projectOwner?.membership_tier || 'FREE'}</span>
                                                 </div>
                                                 <div className="flex justify-between text-[9px] font-black uppercase tracking-widest">
-                                                  <span className="text-slate-500">Subscription:</span>
-                                                  <span className={projectOwner?.subscription_status === 'active' ? 'text-emerald-400' : 'text-rose-400'}>
+                                                  <span className="text-slate-400">Subscription:</span>
+                                                  <span className={projectOwner?.subscription_status === 'active' ? 'text-emerald-600' : 'text-rose-600'}>
                                                     {projectOwner?.subscription_status?.toUpperCase() || 'INACTIVE'}
                                                   </span>
                                                 </div>
@@ -2021,7 +2022,7 @@ const AdminPanel = ({ onBack }) => {
                                             </div>
                                             <button 
                                               onClick={() => projectOwner && navigateToUser(projectOwner.id)}
-                                              className="mt-10 w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
+                                              className="mt-10 w-full py-4 bg-slate-900 hover:bg-black text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-slate-900/10"
                                             >
                                               Deep Core Audit
                                             </button>
@@ -2143,7 +2144,7 @@ const AdminPanel = ({ onBack }) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setDeleteConfirm(null)}
-              className="absolute inset-0 bg-neutral-950/40 backdrop-blur-sm"
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
             />
             <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 20 }}

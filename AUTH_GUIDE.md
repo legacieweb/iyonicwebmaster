@@ -301,7 +301,7 @@ const isAdmin = currentUser?.email === 'your-admin@email.com'
 
 Edit `src/utils/api.js`:
 ```javascript
-const API_BASE_URL = 'https://your-api-url.com'
+const BASE_URL = 'https://your-api-url.com'
 ```
 
 ### Token Storage Key

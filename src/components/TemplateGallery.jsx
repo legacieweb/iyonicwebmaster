@@ -127,11 +127,11 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
   })
 
   return (
-    <div className="min-h-screen bg-dark pt-20">
+    <div className="min-h-screen bg-neutral-50 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-12">
         <motion.button
           onClick={() => onBack?.('landing')}
-          className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 mb-8 transition-colors"
+          className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-8 transition-colors font-medium"
           whileHover={{ x: -5 }}
         >
           <ArrowLeft size={20} />

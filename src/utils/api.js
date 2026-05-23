@@ -1,11 +1,11 @@
 import axios from 'axios'
 
-export const API_BASE_URL = import.meta.env.PROD 
+export const BASE_URL = import.meta.env.PROD 
   ? 'https://iyonicwebmaster.onrender.com'
   : ''
 
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: BASE_URL,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -593,5 +593,27 @@ export const fetchAffiliatePayments = async () => {
   } catch (error) {
     console.error('Error fetching affiliate payments:', error)
     return []
+  }
+}
+
+export const deleteAffiliate = async (id) => {
+  try {
+    const headers = getAuthHeader()
+    const response = await apiClient.delete(`/api/admin/affiliates/${id}`, { headers })
+    return response.data
+  } catch (error) {
+    console.error('Error deleting affiliate:', error)
+    throw error
+  }
+}
+
+export const deleteEarning = async (id) => {
+  try {
+    const headers = getAuthHeader()
+    const response = await apiClient.delete(`/api/admin/earnings/${id}`, { headers })
+    return response.data
+  } catch (error) {
+    console.error('Error deleting earning:', error)
+    throw error
   }
 }

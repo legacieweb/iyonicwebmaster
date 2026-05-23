@@ -9,7 +9,7 @@ import {
   HeartHandshake, Rocket, Sparkles, Clock, Wallet, FileText, Lock, CheckCircle2, Cpu, ShieldCheck, Database, Mail, Repeat, Coins
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
-import { fetchUserProjects, deleteProject, fetchUserOrders, saveOrder, updateProject, saveProject, API_BASE_URL, updateUserProfile, updateOrder, submitPartnershipRequest, uploadPartnershipDocument } from '../utils/api'
+import { fetchUserProjects, deleteProject, fetchUserOrders, saveOrder, updateProject, saveProject, BASE_URL, updateUserProfile, updateOrder, submitPartnershipRequest, uploadPartnershipDocument } from '../utils/api'
 import { SERVICES, PRICING_DATA } from '../utils/constants'
 import { MEMBERSHIP_TIERS, MODULES, checkAccess, getUnlockedToolsForTier } from '../utils/membership'
 import { PaystackButton } from 'react-paystack'
@@ -1193,7 +1193,7 @@ const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = '
                           <div className="absolute inset-0 flex items-center justify-center">
                             {project.image || project.thumbnail ? (
                               <img 
-                                src={project.image ? `${API_BASE_URL}/api/files/projects/${project.id}/${project.image}` : project.thumbnail} 
+                                src={project.image ? `${BASE_URL}/api/files/projects/${project.id}/${project.image}` : project.thumbnail} 
                                 alt="" 
                                 className="w-full h-full object-cover"
                               />

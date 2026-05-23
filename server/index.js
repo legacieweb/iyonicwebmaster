@@ -906,6 +906,46 @@ app.get('/api/affiliate/withdrawals', authenticate, async (req, res) => {
 });
 
 // Admin Withdrawal Routes
+app.delete('/api/admin/earnings/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  try {
+    await queryWithRetry('DELETE FROM affiliate_earnings WHERE id = $1', [id]);
+    res.status(204).end();
+  } catch (err) {
+    console.error('Admin delete earning error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.delete('/api/admin/affiliates/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Get affiliate info to update user table
+    const affiliateResult = await queryWithRetry('SELECT userid FROM affiliates WHERE id = $1', [id]);
+    const affiliate = affiliateResult.rows[0];
+
+    if (!affiliate) {
+      return res.status(404).json({ message: 'Affiliate not found' });
+    }
+
+    // Delete related data first
+    await queryWithRetry('DELETE FROM withdrawals WHERE affiliate_id = $1', [id]);
+    await queryWithRetry('DELETE FROM affiliate_earnings WHERE affiliate_id = $1', [id]);
+    await queryWithRetry('DELETE FROM referrals WHERE affiliate_id = $1', [id]);
+    
+    // Delete the affiliate record
+    await queryWithRetry('DELETE FROM affiliates WHERE id = $1', [id]);
+    
+    // Update user record
+    await queryWithRetry('UPDATE users SET is_affiliate = false, referral_code = NULL WHERE id = $1', [affiliate.userid]);
+
+    res.status(204).end();
+  } catch (err) {
+    console.error('Admin delete affiliate error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 app.get('/api/admin/withdrawals', authenticate, async (req, res) => {
   try {
     const result = await queryWithRetry(`
@@ -1196,6 +1236,19 @@ app.delete('/api/users/:id', authenticate, async (req, res) => {
     await queryWithRetry('DELETE FROM support_tickets WHERE userid = $1', [id]);
     await queryWithRetry('DELETE FROM partnership_requests WHERE userid = $1', [id]);
     
+    // Affiliate cleanup
+    const affiliateResult = await queryWithRetry('SELECT id FROM affiliates WHERE userid = $1', [id]);
+    if (affiliateResult.rows.length > 0) {
+      const affiliateId = affiliateResult.rows[0].id;
+      await queryWithRetry('DELETE FROM withdrawals WHERE affiliate_id = $1', [affiliateId]);
+      await queryWithRetry('DELETE FROM affiliate_earnings WHERE affiliate_id = $1', [affiliateId]);
+      await queryWithRetry('DELETE FROM referrals WHERE affiliate_id = $1', [affiliateId]);
+      await queryWithRetry('DELETE FROM affiliates WHERE id = $1', [affiliateId]);
+    }
+    
+    // Also cleanup any referrals where THIS user was referred
+    await queryWithRetry('DELETE FROM referrals WHERE referred_userid = $1', [id]);
+
     // Handle coupons - complex foreign key relationships
     // 1. Delete usages where this user was the one who used a coupon
     await queryWithRetry('DELETE FROM used_coupons WHERE user_id = $1', [id]);
