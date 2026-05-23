@@ -1287,7 +1287,11 @@ app.delete('/api/users/:id', authenticate, async (req, res) => {
     
     // Delete all related records first to avoid foreign key constraint issues
     await queryWithRetry('DELETE FROM projects WHERE userid = $1', [id]);
+    
+    // Handle payments related to user orders before deleting orders
+    await queryWithRetry('DELETE FROM payments WHERE order_id IN (SELECT id FROM orders WHERE user_id = $1)', [id]);
     await queryWithRetry('DELETE FROM orders WHERE user_id = $1', [id]);
+    
     await queryWithRetry('DELETE FROM support_tickets WHERE userid = $1', [id]);
     await queryWithRetry('DELETE FROM partnership_requests WHERE userid = $1', [id]);
     
@@ -1295,14 +1299,15 @@ app.delete('/api/users/:id', authenticate, async (req, res) => {
     const affiliateResult = await queryWithRetry('SELECT id FROM affiliates WHERE userid = $1', [id]);
     if (affiliateResult.rows.length > 0) {
       const affiliateId = affiliateResult.rows[0].id;
-      await queryWithRetry('DELETE FROM withdrawals WHERE affiliate_id = $1', [affiliateId]);
+      // Also delete earnings associated with this affiliate
       await queryWithRetry('DELETE FROM affiliate_earnings WHERE affiliate_id = $1', [affiliateId]);
+      await queryWithRetry('DELETE FROM withdrawals WHERE affiliate_id = $1', [affiliateId]);
       await queryWithRetry('DELETE FROM referrals WHERE affiliate_id = $1', [affiliateId]);
       await queryWithRetry('DELETE FROM affiliates WHERE id = $1', [affiliateId]);
     }
     
     // Also cleanup any referrals where THIS user was referred
-    await queryWithRetry('DELETE FROM referrals WHERE referred_userid = $1', [id]);
+    await queryWithRetry('DELETE FROM referrals WHERE referred_user_id = $1', [id]);
 
     // Handle coupons - complex foreign key relationships
     // 1. Delete usages where this user was the one who used a coupon
