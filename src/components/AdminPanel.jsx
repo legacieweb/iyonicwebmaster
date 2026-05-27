@@ -12,10 +12,12 @@ import {
   fetchAllUsers, deleteUser, updateUserProfile, fetchUserOrders, fetchPartnershipRequests, updatePartnershipRequest,
   fetchTemplates, updateTemplate, deleteTemplate, saveTemplate,
   fetchAllAffiliates, fetchAllEarnings, updateEarningStatus,
-  fetchAllWithdrawals, updateWithdrawalStatus
+  fetchAllWithdrawals, updateWithdrawalStatus,
+  fetchPipelineLeads, createPipelineLead, updatePipelineLead, deletePipelineLead
 } from '../utils/api'
 import { MEMBERSHIP_TIERS } from '../utils/membership'
 import { CATALOG_ITEMS } from '../utils/constants'
+import PipelineSection from './PipelineSection'
 
 const AdminPanel = ({ onBack }) => {
   const { currentUser, isAdmin } = useAuth()
@@ -28,6 +30,7 @@ const AdminPanel = ({ onBack }) => {
   const [affiliates, setAffiliates] = useState([])
   const [allEarnings, setAllEarnings] = useState([])
   const [withdrawals, setWithdrawals] = useState([])
+  const [pipelineLeads, setPipelineLeads] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [editingId, setEditingId] = useState(null)
@@ -58,6 +61,7 @@ const AdminPanel = ({ onBack }) => {
         const affiliatesData = await fetchAllAffiliates().catch(err => [])
         const earningsData = await fetchAllEarnings().catch(err => [])
         const withdrawalsData = await fetchAllWithdrawals().catch(err => [])
+        const pipelineData = await fetchPipelineLeads().catch(err => [])
         
         setLeads(leadsData || [])
         setProjects(projectsData || [])
@@ -68,6 +72,7 @@ const AdminPanel = ({ onBack }) => {
         setAffiliates(affiliatesData || [])
         setAllEarnings(earningsData || [])
         setWithdrawals(withdrawalsData || [])
+        setPipelineLeads(pipelineData || [])
         setError(null)
       } catch (err) {
         setError('Failed to load system data. Some services might be restricted.')
@@ -320,6 +325,66 @@ const AdminPanel = ({ onBack }) => {
     }
   }
 
+  const handleAddPipelineLead = async (data) => {
+    try {
+      setLoading(true)
+      const newLead = await createPipelineLead(data)
+      setPipelineLeads(prev => [newLead, ...prev])
+      return newLead
+    } catch (err) {
+      setError('Failed to add pipeline lead')
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleUpdatePipelineLead = async (id, data) => {
+    try {
+      setProcessing(prev => ({ ...prev, [id]: true }))
+      const updated = await updatePipelineLead(id, data)
+      setPipelineLeads(prev => prev.map(l => l.id === id ? updated : l))
+      setEditingId(null)
+      return updated
+    } catch (err) {
+      setError('Failed to update pipeline lead')
+      throw err
+    } finally {
+      setProcessing(prev => ({ ...prev, [id]: false }))
+    }
+  }
+
+  const handleDeletePipelineLead = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this lead?')) return
+    try {
+      setProcessing(prev => ({ ...prev, [id]: true }))
+      await deletePipelineLead(id)
+      setPipelineLeads(prev => prev.filter(l => l.id !== id))
+    } catch (err) {
+      setError('Failed to delete pipeline lead')
+    } finally {
+      setProcessing(prev => ({ ...prev, [id]: false }))
+    }
+  }
+
+  const handleAddPipelineNote = async (id, noteText) => {
+    try {
+      const lead = pipelineLeads.find(l => l.id === id)
+      if (!lead) return
+      
+      const newNote = {
+        text: noteText,
+        author: 'Admin',
+        date: new Date().toISOString()
+      }
+      
+      const updatedNotes = [...(lead.notes || []), newNote]
+      await handleUpdatePipelineLead(id, { notes: updatedNotes })
+    } catch (err) {
+      console.error('Failed to add note:', err)
+    }
+  }
+
   const navigateToUser = (userId) => {
     setActiveTab('users');
     setExpandedItems({ [userId]: true });
@@ -443,6 +508,7 @@ const AdminPanel = ({ onBack }) => {
                     { id: 'templates', label: 'Asset Matrix', icon: Database },
                     { id: 'affiliates', label: 'Affiliates', icon: HeartHandshake },
                     { id: 'withdrawals', label: 'Treasury Hub', icon: CreditCard },
+                    { id: 'pipeline', label: 'Lead Pipeline', icon: Rocket },
                     { id: 'projects', label: 'Project Matrix', icon: Box },
                   ].map((item) => {
                     const Icon = item.icon
@@ -499,6 +565,7 @@ const AdminPanel = ({ onBack }) => {
               { id: 'templates', label: 'Asset Matrix', icon: Database },
               { id: 'affiliates', label: 'Affiliates', icon: HeartHandshake },
               { id: 'withdrawals', label: 'Withdrawals', icon: CreditCard },
+              { id: 'pipeline', label: 'Lead Pipeline', icon: Rocket },
               { id: 'projects', label: 'Project Matrix', icon: Box },
             ].map((item) => {
               const Icon = item.icon
@@ -1909,6 +1976,18 @@ const AdminPanel = ({ onBack }) => {
                         )}
                       </div>
                     </div>
+                  )}
+
+                  {/* Pipeline Tab */}
+                  {activeTab === 'pipeline' && (
+                    <PipelineSection 
+                      leads={pipelineLeads}
+                      onAdd={handleAddPipelineLead}
+                      onUpdate={handleUpdatePipelineLead}
+                      onDelete={handleDeletePipelineLead}
+                      onAddNote={handleAddPipelineNote}
+                      processing={processing}
+                    />
                   )}
 
                   {/* Projects Tab */}

@@ -10,10 +10,12 @@ import {
 import { 
   fetchAffiliateStatus, signupAffiliate, fetchAffiliateStats, 
   fetchAffiliateReferrals, fetchAffiliateEarnings,
-  requestWithdrawal, fetchAffiliateWithdrawals, fetchAffiliatePayments
+  requestWithdrawal, fetchAffiliateWithdrawals, fetchAffiliatePayments,
+  fetchPipelineLeads, updatePipelineLead
 } from '../utils/api'
 import { useAuth } from '../contexts/AuthContext'
 import { WEBSITE_TYPES, CATALOG_ITEMS } from '../utils/constants'
+import AffiliatePipeline from './AffiliatePipeline'
 
 const AffiliateDashboard = ({ onBack }) => {
   const { currentUser } = useAuth()
@@ -24,6 +26,7 @@ const AffiliateDashboard = ({ onBack }) => {
   const [earnings, setEarnings] = useState([])
   const [withdrawals, setWithdrawals] = useState([])
   const [payments, setPayments] = useState([])
+  const [pipelineLeads, setPipelineLeads] = useState([])
   const [loading, setLoading] = useState(true)
   const [signingUp, setSigningUp] = useState(false)
   const [activeTab, setActiveTab] = useState('overview')
@@ -45,12 +48,13 @@ const AffiliateDashboard = ({ onBack }) => {
         setIsAffiliate(true)
         setAffiliateData(statusRes.affiliate)
         
-        const [statsRes, referralsRes, earningsRes, withdrawalsRes, paymentsRes] = await Promise.all([
+        const [statsRes, referralsRes, earningsRes, withdrawalsRes, paymentsRes, pipelineRes] = await Promise.all([
           fetchAffiliateStats(),
           fetchAffiliateReferrals(),
           fetchAffiliateEarnings(),
           fetchAffiliateWithdrawals(),
-          fetchAffiliatePayments()
+          fetchAffiliatePayments(),
+          fetchPipelineLeads().catch(err => [])
         ])
         
         setStats(statsRes)
@@ -58,6 +62,7 @@ const AffiliateDashboard = ({ onBack }) => {
         setEarnings(earningsRes)
         setWithdrawals(withdrawalsRes)
         setPayments(paymentsRes)
+        setPipelineLeads(pipelineRes)
       }
     } catch (err) {
       console.error('Error loading affiliate data:', err)
@@ -98,6 +103,12 @@ const AffiliateDashboard = ({ onBack }) => {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const copyCustomLink = (path = '') => {
+    const link = `${window.location.origin}${path}${path.includes('?') ? '&' : '?'}ref=${affiliateData.referral_code}`
+    navigator.clipboard.writeText(link)
+    showToast('Marketing link copied with your code!')
+  }
+
   const handleWithdrawalRequest = async (e) => {
     e.preventDefault()
     if (!withdrawalForm.amount || parseFloat(withdrawalForm.amount) > parseFloat(stats?.current_balance)) return
@@ -116,6 +127,34 @@ const AffiliateDashboard = ({ onBack }) => {
       console.error('Withdrawal error:', err)
     } finally {
       setWithdrawalLoading(false)
+    }
+  }
+
+  const handleUpdatePipelineLead = async (id, data) => {
+    try {
+      const updated = await updatePipelineLead(id, data)
+      setPipelineLeads(prev => prev.map(l => l.id === id ? updated : l))
+      return updated
+    } catch (err) {
+      console.error('Failed to update pipeline lead:', err)
+    }
+  }
+
+  const handleAddPipelineNote = async (id, noteText) => {
+    try {
+      const lead = pipelineLeads.find(l => l.id === id)
+      if (!lead) return
+      
+      const newNote = {
+        text: noteText,
+        author: currentUser.name || currentUser.email || 'Affiliate',
+        date: new Date().toISOString()
+      }
+      
+      const updatedNotes = [...(lead.notes || []), newNote]
+      await handleUpdatePipelineLead(id, { notes: updatedNotes })
+    } catch (err) {
+      console.error('Failed to add note:', err)
     }
   }
 
@@ -162,6 +201,7 @@ const AffiliateDashboard = ({ onBack }) => {
             { id: 'overview', icon: PieChart, label: 'Performance' },
             { id: 'shop', icon: ShoppingBag, label: 'Alliance Shop' },
             { id: 'referrals', icon: Users, label: 'Network' },
+            { id: 'pipeline', icon: Rocket, label: 'Pipeline' },
             { id: 'earnings', icon: Wallet, label: 'Treasury' }
           ].map((item) => (
             <button
@@ -202,6 +242,7 @@ const AffiliateDashboard = ({ onBack }) => {
                 {activeTab === 'overview' && 'System Performance'}
                 {activeTab === 'shop' && 'Alliance Storefront'}
                 {activeTab === 'referrals' && 'Client Network'}
+                {activeTab === 'pipeline' && 'Lead Pipeline'}
                 {activeTab === 'earnings' && 'Treasury Control'}
               </h1>
               <p className="text-neutral-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
@@ -269,7 +310,7 @@ const AffiliateDashboard = ({ onBack }) => {
                 <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/20 blur-[120px] rounded-full -mr-48 -mt-48" />
                 <div className="relative z-10">
                   <div className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-6">Strategic Notice</div>
-                  <h3 className="text-3xl font-black mb-6 max-w-xl leading-tight">30% High-Performance Bonus and 10% Recurring Yield is now Active.</h3>
+                  <h3 className="text-3xl text-white font-black mb-6 max-w-xl leading-tight">30% High-Performance Bonus and 10% Recurring Yield is now Active.</h3>
                   <p className="text-neutral-400 font-medium max-w-lg leading-relaxed mb-10">
                     Your clients automatically receive a <span className="text-white font-bold">30% discount</span> on initial infrastructure and <span className="text-white font-bold">10% discount</span> on recurring memberships when using your link.
                   </p>
@@ -280,6 +321,68 @@ const AffiliateDashboard = ({ onBack }) => {
                     Enter Alliance Shop
                     <ChevronRight size={16} />
                   </button>
+                </div>
+              </div>
+
+              {/* Marketing Kit Section */}
+              <div className="space-y-8">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-black text-neutral-900 flex items-center gap-3 italic uppercase tracking-tight">
+                    <Rocket className="text-blue-600" size={24} />
+                    Alliance Marketing Kit
+                  </h3>
+                </div>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* Main Website Link */}
+                  <div className="p-8 bg-white border border-neutral-100 rounded-[32px] shadow-sm hover:shadow-md transition-all group">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <Globe size={22} />
+                    </div>
+                    <h4 className="text-sm font-black text-neutral-900 uppercase tracking-widest mb-2">Main Terminal</h4>
+                    <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-6">Redirect to homepage with code</p>
+                    <button 
+                      onClick={() => copyCustomLink('/')}
+                      className="w-full py-4 bg-neutral-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 transition-all flex items-center justify-center gap-2"
+                    >
+                      <Copy size={14} /> Copy Mission URL
+                    </button>
+                  </div>
+
+                  {/* Blueprints / Catalog Link */}
+                  <div className="p-8 bg-white border border-neutral-100 rounded-[32px] shadow-sm hover:shadow-md transition-all group">
+                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <Layout size={22} />
+                    </div>
+                    <h4 className="text-sm font-black text-neutral-900 uppercase tracking-widest mb-2">Asset Blueprints</h4>
+                    <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-6">Direct access to website catalog</p>
+                    <button 
+                      onClick={() => copyCustomLink('/blueprints')}
+                      className="w-full py-4 bg-neutral-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 transition-all flex items-center justify-center gap-2"
+                    >
+                      <Copy size={14} /> Copy Blueprint Link
+                    </button>
+                  </div>
+
+                  {/* Category Specific Links */}
+                  <div className="p-8 bg-white border border-neutral-100 rounded-[32px] shadow-sm hover:shadow-md transition-all group">
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <Sparkles size={22} />
+                    </div>
+                    <h4 className="text-sm font-black text-neutral-900 uppercase tracking-widest mb-2">Sector Targeted</h4>
+                    <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-6">Filter catalog by specific niche</p>
+                    <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+                      {['Real Estate', 'E-commerce', 'Portfolio'].map(cat => (
+                        <button 
+                          key={cat}
+                          onClick={() => copyCustomLink(`/blueprints?category=${cat}`)}
+                          className="px-4 py-2 bg-neutral-50 hover:bg-emerald-50 text-neutral-400 hover:text-emerald-600 border border-neutral-100 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all whitespace-nowrap"
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -464,6 +567,20 @@ const AffiliateDashboard = ({ onBack }) => {
             </div>
           </motion.div>
         )}
+
+          {activeTab === 'pipeline' && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <AffiliatePipeline 
+                leads={pipelineLeads}
+                onUpdate={handleUpdatePipelineLead}
+                onAddNote={handleAddPipelineNote}
+              />
+            </motion.div>
+          )}
 
           {activeTab === 'earnings' && (
             <motion.div 

@@ -1,4 +1,4 @@
-import { Linkedin, Twitter, Mail, ArrowRight, Instagram, Sparkles, MapPin, CheckCircle2, Youtube, Facebook, Music } from 'lucide-react'
+import { Linkedin, Twitter, Mail, ArrowRight, Instagram, Sparkles, MapPin, CheckCircle2, Youtube, Facebook, Music, Zap, Users } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
@@ -104,158 +104,143 @@ const Footer = () => {
   }
 
   return (
-    <footer className="relative bg-[#fafafa] pt-32 pb-12 overflow-hidden border-t border-neutral-200/60">
-      {/* Background Grand Text */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none select-none overflow-hidden opacity-[0.02]">
-        <h2 className="text-[20vw] font-black italic tracking-tighter leading-none -ml-4">IYONICORP</h2>
-      </div>
+    <footer className="bg-white text-neutral-800 border-t border-neutral-200">
+      <div className="container-minimal px-6 py-20">
+        {/* Top CTA Row: Affiliate + Newsletter (clean, subtle) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="p-8 rounded-2xl bg-neutral-50 border border-neutral-100"
+          >
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div>
+                <h3 className="text-xl font-bold text-neutral-900">Become an Affiliate</h3>
+                <p className="text-sm text-neutral-600 mt-2 max-w-md">Share our products and earn recurring commissions with a simple, transparent program.</p>
+              </div>
 
-      <div className="container-minimal relative z-10 px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 mb-32">
-          
-          {/* Brand Column */}
-          <div className="lg:col-span-5">
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="inline-flex items-center gap-4 mb-10 cursor-pointer group"
-              onClick={() => navigate('/')}
-            >
-              <img src="https://i.imgur.com/6nGQFtj.png" alt="Logo" className="w-12 h-12 grayscale group-hover:grayscale-0 transition-all duration-500" />
-              <span className="text-3xl font-black italic tracking-tighter text-neutral-950 uppercase">Iyonicorp</span>
-            </motion.div>
-            
-            <p className="text-xl text-neutral-500 mb-12 max-w-md leading-tight font-medium">
-              We architect high-performance digital infrastructure for innovators who demand <span className="text-neutral-900">precision and scale</span>.
-            </p>
-
-            <div className="flex gap-4">
-              {[
-                { icon: Twitter, href: 'https://twitter.com/iyonicorp' },
-                { icon: Linkedin, href: 'https://www.linkedin.com/company/iyonicorp' },
-                { icon: Facebook, href: 'https://facebook.com/iyonicweb' },
-                { icon: TikTokIcon, href: 'https://tiktok.com/@iyonicorp' },
-                { icon: PinterestIcon, href: 'https://pinterest.com/iyonicorp' },
-                { icon: Youtube, href: 'https://youtube.com/@iyonicorp' }
-              ].map((social, i) => (
-                <motion.a
-                  key={i}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -4 }}
-                  className="w-12 h-12 bg-white border border-neutral-200 rounded-xl flex items-center justify-center text-neutral-400 hover:text-neutral-950 hover:border-neutral-950 transition-all shadow-sm"
+              <div>
+                <button
+                  onClick={() => navigate('/affiliate')}
+                  className="inline-flex items-center gap-3 px-5 py-2 rounded-lg bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-800 transition"
                 >
-                  <social.icon size={18} strokeWidth={2.5} />
-                </motion.a>
+                  Join as Partner
+                  <ArrowRight size={16} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="p-8 rounded-2xl bg-neutral-50 border border-neutral-100"
+          >
+            <h3 className="text-xl font-bold text-neutral-900">Newsletter</h3>
+            <p className="text-sm text-neutral-600 mt-2 mb-4">Actionable updates on infrastructure, product releases, and case studies.</p>
+
+            {isSuccess ? (
+              <div className="inline-flex items-center gap-3 p-3 rounded-lg bg-emerald-50 text-emerald-700 font-semibold">
+                <CheckCircle2 size={18} />
+                Subscribed — thank you!
+              </div>
+            ) : (
+              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3">
+                <label htmlFor="footer-email" className="sr-only">Email</label>
+                <input
+                  id="footer-email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@email.com"
+                  className="flex-1 px-4 py-3 border border-neutral-200 rounded-lg bg-white text-sm placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-200"
+                />
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-4 py-3 rounded-lg bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-800 disabled:opacity-60"
+                >
+                  {isSubmitting ? 'Sending...' : 'Subscribe'}
+                </button>
+              </form>
+            )}
+          </motion.div>
+        </div>
+
+        {/* Main footer grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-12">
+          <div className="lg:col-span-4">
+            <div className="flex items-center gap-4 mb-6 cursor-pointer" onClick={() => navigate('/') }>
+              <img src="https://i.imgur.com/6nGQFtj.png" alt="Iyonicorp logo" className="w-12 h-12" />
+              <div>
+                <div className="text-lg font-bold text-neutral-900">Iyonicorp</div>
+                <div className="text-xs text-neutral-500 uppercase tracking-wide">Digital Infrastructure</div>
+              </div>
+            </div>
+
+            <p className="text-sm text-neutral-600 mb-6 max-w-sm">We build reliable, scalable infrastructure for teams that demand performance and clarity.</p>
+
+            <div className="flex gap-3">
+              {[
+                { icon: Twitter, href: 'https://twitter.com/iyonicorp', label: 'Twitter' },
+                { icon: Linkedin, href: 'https://www.linkedin.com/company/iyonicorp', label: 'LinkedIn' },
+                { icon: Facebook, href: 'https://facebook.com/iyonicweb', label: 'Facebook' },
+                { icon: TikTokIcon, href: 'https://tiktok.com/@iyonicorp', label: 'TikTok' },
+                { icon: PinterestIcon, href: 'https://pinterest.com/iyonicorp', label: 'Pinterest' },
+                { icon: Youtube, href: 'https://youtube.com/@iyonicorp', label: 'YouTube' }
+              ].map((social, i) => (
+                <a key={i} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label} className="w-9 h-9 flex items-center justify-center border border-neutral-200 rounded-md text-neutral-600 hover:bg-neutral-100 transition">
+                  <social.icon size={16} />
+                </a>
               ))}
             </div>
           </div>
 
-          {/* Newsletter Column */}
-          <div className="lg:col-span-7">
-            <div className="relative p-10 md:p-14 bg-white border border-neutral-200 rounded-[40px] shadow-2xl shadow-neutral-200/50 overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-              
-              <div className="relative z-10">
-                <div className="inline-flex items-center gap-2 mb-6 text-blue-600">
-                  <Sparkles size={16} />
-                  <span className="text-[10px] font-black uppercase tracking-[0.3em]">Stay Synchronized</span>
-                </div>
-                
-                <h3 className="text-3xl md:text-4xl font-black italic tracking-tighter text-neutral-950 mb-4 uppercase">Join the Inner Circle</h3>
-                <p className="text-neutral-500 mb-10 text-lg font-medium">Get exclusive engineering breakthroughs and digital insights.</p>
-                
-                {isSuccess ? (
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="flex items-center gap-4 p-6 bg-emerald-50 border border-emerald-500/10 rounded-2xl text-emerald-600 font-bold"
-                  >
-                    <CheckCircle2 size={24} />
-                    Welcome aboard. Vision received.
-                  </motion.div>
-                ) : (
-                  <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4">
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="your@email.com"
-                      className="flex-1 px-8 py-5 bg-neutral-50 border border-neutral-200 rounded-2xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-950 transition-all font-bold text-sm"
-                    />
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="px-10 py-5 bg-neutral-950 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-neutral-950/20 disabled:opacity-50 flex items-center justify-center gap-3"
-                    >
-                      {isSubmitting ? 'Syncing...' : 'Join Now'}
-                      <ArrowRight size={16} />
-                    </button>
-                  </form>
-                )}
+          <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+            {footerSections.map((section, i) => (
+              <div key={i}>
+                <h4 className="text-xs font-semibold text-neutral-700 uppercase tracking-wide mb-4">{section.title}</h4>
+                <ul className="space-y-3">
+                  {section.links.map((link, j) => (
+                    <li key={j}>
+                      <a href="#" onClick={(e) => handleLinkClick(e, link.id)} className="text-sm text-neutral-600 hover:text-neutral-900 transition">{link.name}</a>
+                    </li>
+                  ))}
+                </ul>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Contact / Location */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start pb-8 border-b border-neutral-100 mb-8">
+          <div className="flex items-start gap-4">
+            <div className="mt-1 text-neutral-600"><MapPin size={18} /></div>
+            <div>
+              <div className="text-xs font-semibold text-neutral-700 uppercase mb-1">Location</div>
+              <div className="text-sm text-neutral-600">Nairobi Central, Business District, Kenya</div>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-4">
+            <div className="mt-1 text-neutral-600"><Mail size={18} /></div>
+            <div>
+              <div className="text-xs font-semibold text-neutral-700 uppercase mb-1">Email</div>
+              <a href="mailto:hello@iyonicorp.com" className="text-sm text-neutral-600 hover:text-neutral-900">hello@iyonicorp.com</a>
             </div>
           </div>
         </div>
 
-        {/* Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-32">
-          {footerSections.map((section, i) => (
-            <div key={i}>
-              <h4 className="text-[10px] font-black text-neutral-950 uppercase tracking-[0.4em] mb-10 opacity-30">{section.title}</h4>
-              <ul className="space-y-4">
-                {section.links.map((link, j) => (
-                  <li key={j}>
-                    <a 
-                      href="#" 
-                      onClick={(e) => handleLinkClick(e, link.id)}
-                      className="text-sm font-bold text-neutral-500 hover:text-neutral-950 transition-colors"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-          
-          <div className="col-span-2 md:col-span-1">
-            <h4 className="text-[10px] font-black text-neutral-950 uppercase tracking-[0.4em] mb-10 opacity-30">Location</h4>
-            <div className="flex items-start gap-4">
-              <div className="mt-1 text-neutral-950">
-                <MapPin size={16} />
-              </div>
-              <p className="text-sm font-bold text-neutral-500 leading-relaxed">
-                Nairobi Central Business District,<br />Kenya
-              </p>
-            </div>
-          </div>
-
-          <div className="col-span-2 md:col-span-1">
-            <h4 className="text-[10px] font-black text-neutral-950 uppercase tracking-[0.4em] mb-10 opacity-30">Contact</h4>
-            <div className="flex items-center gap-4">
-              <div className="text-neutral-950">
-                <Mail size={16} />
-              </div>
-              <p className="text-sm font-bold text-neutral-500">hello@iyonicorp.com</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="pt-12 border-t border-neutral-200/60 flex flex-col md:flex-row justify-between items-center gap-8">
-          <p className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.3em]">
-            © {currentYear} Iyonicorp. All Rights Reserved.
-          </p>
-          
-          <div className="flex items-center gap-8 text-[10px] font-black text-neutral-400 uppercase tracking-[0.3em]">
-            <a href="#" onClick={(e) => handleLinkClick(e, 'privacy-policy')} className="hover:text-neutral-950 transition-colors">Privacy</a>
-            <a href="#" onClick={(e) => handleLinkClick(e, 'terms-of-service')} className="hover:text-neutral-950 transition-colors">Terms</a>
-            <div className="flex items-center gap-2 text-emerald-500">
-              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-              Systems Online
-            </div>
+        {/* Bottom */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mt-6">
+          <div className="text-xs text-neutral-500">© {currentYear} Iyonicorp. All rights reserved.</div>
+          <div className="flex gap-4 text-xs">
+            <a href="#" onClick={(e) => handleLinkClick(e, 'privacy-policy')} className="text-neutral-600 hover:text-neutral-900">Privacy</a>
+            <a href="#" onClick={(e) => handleLinkClick(e, 'terms-of-service')} className="text-neutral-600 hover:text-neutral-900">Terms</a>
+            <a href="#" onClick={(e) => handleLinkClick(e, 'cookie-policy')} className="text-neutral-600 hover:text-neutral-900">Cookies</a>
           </div>
         </div>
       </div>

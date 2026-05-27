@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const BASE_URL = import.meta.env.PROD 
   ? 'https://iyonicwebmaster.onrender.com'
-  : ''
+  : 'http://localhost:3000'
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
@@ -360,6 +360,51 @@ export const signup = async (userData) => {
     return response.data
   } catch (error) {
     console.error('Signup error:', error)
+    throw error
+  }
+}
+
+// Pipeline APIs
+export const fetchPipelineLeads = async () => {
+  try {
+    const headers = getAuthHeader()
+    const response = await apiClient.get('/api/pipeline', { headers })
+    return response.data || []
+  } catch (error) {
+    console.error('Error fetching pipeline leads:', error)
+    return []
+  }
+}
+
+export const createPipelineLead = async (data) => {
+  try {
+    const headers = getAuthHeader()
+    const response = await apiClient.post('/api/pipeline', data, { headers })
+    return response.data
+  } catch (error) {
+    console.error('Error creating pipeline lead:', error)
+    throw error
+  }
+}
+
+export const updatePipelineLead = async (id, data) => {
+  try {
+    const headers = getAuthHeader()
+    const response = await apiClient.patch(`/api/pipeline/${id}`, data, { headers })
+    return response.data
+  } catch (error) {
+    console.error('Error updating pipeline lead:', error)
+    throw error
+  }
+}
+
+export const deletePipelineLead = async (id) => {
+  try {
+    const headers = getAuthHeader()
+    const response = await apiClient.delete(`/api/pipeline/${id}`, { headers })
+    return response.data
+  } catch (error) {
+    console.error('Error deleting pipeline lead:', error)
     throw error
   }
 }

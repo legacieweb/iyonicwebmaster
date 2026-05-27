@@ -1506,6 +1506,78 @@ app.delete('/api/projects/:id', authenticate, async (req, res) => {
   }
 });
 
+// Pipeline Routes
+app.get('/api/pipeline', authenticate, async (req, res) => {
+  try {
+    const result = await queryWithRetry('SELECT * FROM pipeline_leads ORDER BY created_at DESC');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch pipeline leads error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post('/api/pipeline', authenticate, async (req, res) => {
+  const { business_name, social_media, contact_info, business_type } = req.body;
+  try {
+    const result = await queryWithRetry(
+      'INSERT INTO pipeline_leads (business_name, social_media, contact_info, business_type) VALUES ($1, $2, $3, $4) RETURNING *',
+      [business_name, social_media, contact_info, business_type]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Create pipeline lead error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.patch('/api/pipeline/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const { business_name, social_media, contact_info, business_type, status, notes } = req.body;
+  
+  const fields = { business_name, social_media, contact_info, business_type, status, notes };
+  const keys = Object.keys(fields).filter(key => fields[key] !== undefined);
+  
+  if (keys.length === 0) {
+    return res.status(400).json({ message: 'No fields to update' });
+  }
+
+  const values = keys.map(k => {
+    const val = fields[k];
+    if (k === 'notes' && typeof val === 'object') {
+      return JSON.stringify(val);
+    }
+    return val;
+  });
+
+  const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
+
+  try {
+    const result = await queryWithRetry(
+      `UPDATE pipeline_leads SET ${setClause}, updated_at = CURRENT_TIMESTAMP WHERE id = $${keys.length + 1} RETURNING *`,
+      [...values, id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Lead not found' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Update pipeline lead error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.delete('/api/pipeline/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await queryWithRetry('DELETE FROM pipeline_leads WHERE id = $1', [id]);
+    res.status(204).end();
+  } catch (err) {
+    console.error('Delete pipeline lead error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Leads Routes
 app.get('/api/leads', authenticate, async (req, res) => {
   try {
