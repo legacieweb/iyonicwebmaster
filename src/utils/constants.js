@@ -234,6 +234,7 @@ export const WEBSITE_TYPES = [
   { name: 'Real Estate & Property Management', price: 1100, id: 'real-estate' },
   { name: 'Contractors', price: 500, id: 'contractors' },
   { name: 'Streaming', price: 2500, id: 'streaming' },
+  { name: 'Saas', price: 10000, id: 'saas' },
   { name: 'Social Platforms', price: 3500, id: 'social-platforms' },
   { name: 'Business Profiles', price: 400, id: 'business-profiles' },
   { name: 'Professional Services', price: 500, id: 'professional-services' },
@@ -514,6 +515,29 @@ export const CATALOG_ITEMS = {
       moduleIds: ['vendor management', 'guest lists', 'scheduling tools'],
       minTier: 'premium'
     },
+                          {
+      id: 'cp-18',
+      name: 'Crown stroke',
+      type: 'Saas',
+      description: 'Print on demand platform with product customization, order management, and customer profiles.',
+      price: 30000,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://crownstroke.iyonicorp.com',
+      moduleIds: ['product customization', 'order management', 'customer profiles', 'admin dashboard'],
+      minTier: 'enterprise'
+    },
+                              {
+      id: 'cp-19',
+      name: 'Iyonicweb',
+      type: 'Saas',
+      description: 'Muliti tenant ecommerce with inbuilt payment system like paypal and Bots intergration for everything',
+      price: 60000,
+      image: 'https://i.imgur.com/6nGQFtj.png',
+      url: 'https://web.iyonicorp.com',
+      moduleIds: ['product customization', 'order management', 'customer profiles', 'admin dashboard', 'payment gateway', 'chatbots', 'analytics', 'manager dashboard', 'crm', 'collaboration', 'inventory', 'cloud_infra', 'auth', 'db_basic', 'seo_basic', 'enterprise_seo', 'speed optimization'],
+      minTier: 'enterprise'
+    },
+
   ],
   
   'Retail Engine': [
