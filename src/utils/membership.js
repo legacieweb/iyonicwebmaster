@@ -7,7 +7,7 @@ export const MODULES = [
     minTier: 'basic',
     icon: 'Users',
     prices: { oneTime: 45 },
-    serviceId: 'web-development'
+    serviceId: 'corporate-holdings'
   },
   {
     id: 'auth',
@@ -16,7 +16,7 @@ export const MODULES = [
     minTier: 'basic',
     icon: 'ShieldCheck',
     prices: { oneTime: 75 },
-    serviceId: 'web-development'
+    serviceId: 'corporate-holdings'
   },
   {
     id: 'db_basic',
@@ -25,7 +25,7 @@ export const MODULES = [
     minTier: 'basic',
     icon: 'Database',
     prices: { oneTime: 30 },
-    serviceId: 'web-development'
+    serviceId: 'corporate-holdings'
   },
   {
     id: 'invoicing',
@@ -52,7 +52,7 @@ export const MODULES = [
     minTier: 'basic',
     icon: 'Briefcase',
     prices: { oneTime: 55 },
-    serviceId: 'web-development'
+    serviceId: 'corporate-holdings'
   },
   {
     id: 'seo_basic',
@@ -90,7 +90,7 @@ export const MODULES = [
     minTier: 'premium',
     icon: 'Box',
     prices: { oneTime: 280 },
-    serviceId: 'web-development'
+    serviceId: 'corporate-holdings'
   },
   {
     id: 'security',
@@ -215,7 +215,7 @@ export const MODULES = [
     minTier: 'enterprise',
     icon: 'Globe',
     prices: { oneTime: 2500 },
-    serviceId: 'web-development',
+    serviceId: 'corporate-holdings',
     tierExclusive: true
   },
   {
@@ -246,12 +246,12 @@ export const MEMBERSHIP_TIERS = {
     id: 'basic',
     name: 'Basic',
     price: 12,
-    websites: 2,
+    businesses: 2,
     maxModules: 4,
     features: [
-      '2 Infrastructure Nodes (2 Websites)',
-      '4 Modules for the 2 websites upgrade',
-      'Free Maintenance for the 2 websites',
+      '2 Infrastructure Nodes (2 Businesses)',
+      '4 Modules for the 2 businesses upgrade',
+      'Free Maintenance for the 2 businesses',
       'Custom Domain Integration',
       'SEO Starter Pack',
       'Mail Engine Access',
@@ -264,14 +264,14 @@ export const MEMBERSHIP_TIERS = {
     id: 'premium',
     name: 'Premium',
     price: 25,
-    websites: 3,
+    businesses: 3,
     maxModules: 8,
     features: [
       'Everything in Basic',
       '1 Additional Infrastructure Node (3 Total)',
       'Advanced Business Analytics',
       '1 Dedicated Account Manager',
-      '8 Modules for all websites',
+      '8 Modules for all businesses',
       'All Payment Solution Services',
       'Market Intelligence Access',
       'Workflow Automation Core'
@@ -282,16 +282,16 @@ export const MEMBERSHIP_TIERS = {
     id: 'premium_plus',
     name: 'Premium Plus',
     price: 60,
-    websites: 4,
+    businesses: 4,
     maxModules: 100, // Unlimited modules in prompt
     features: [
       'Everything in Premium',
       '1 Additional Infrastructure Node (4 Total)',
-      'Unlimited Modules for all websites',
-      'AI-Powered Business Intelligence for all websites',
+      'Unlimited Modules for all businesses',
+      'AI-Powered Business Intelligence for all businesses',
       '24/7 VIP Engineering Support',
       '1 Basic Mobile App Inclusion',
-      'Advanced Analytics for all websites'
+      'Advanced Analytics for all businesses'
     ],
     level: 2
   },
@@ -299,7 +299,7 @@ export const MEMBERSHIP_TIERS = {
     id: 'enterprise',
     name: 'Enterprise',
     price: 130,
-    websites: 7,
+    businesses: 7,
     maxModules: 1000, // Unlimited scalability
     features: [
       'Everything in Premium Plus',
@@ -309,10 +309,10 @@ export const MEMBERSHIP_TIERS = {
       'Whitelabel Business Platform',
       'Direct API Access',
       'Unlimited Scalability',
-      'Unlimited AI and Automation Services for all websites',
-      'Unlimited Integrations for all websites',
-      'Dedicated Account Managers for all websites',
-      'Unlimited Digital Marketing for all websites'
+      'Unlimited AI and Automation Services for all businesses',
+      'Unlimited Integrations for all businesses',
+      'Dedicated Account Managers for all businesses',
+      'Unlimited Digital Marketing for all businesses'
     ],
     level: 3
   },
@@ -325,7 +325,7 @@ export const MEMBERSHIP_TIERS = {
     requiresApproval: true,
     features: [
       'Unlimited Ecommerce Modules',
-      'Limited Ecommerce Websites',
+      'Limited Ecommerce Businesses',
       'Shared Revenue Model (7% Commission)',
       'Dedicated Partner Support',
       'Automated Scaling',

@@ -59,9 +59,9 @@ const AffiliatePage = () => {
 
   if (isLoading || checkingStatus || joining) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <RefreshCw className="w-8 h-8 text-blue-600 animate-spin" />
+          <RefreshCw className="w-8 h-8 text-amber-400 animate-spin" />
           <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">
             {joining ? 'Initializing Alliance Account...' : 'Authenticating...'}
           </p>

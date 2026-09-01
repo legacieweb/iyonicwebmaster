@@ -56,14 +56,14 @@ function Toast({ toast, onClose }) {
     success: <CheckCircle className="text-emerald-500" size={20} />,
     error: <AlertCircle className="text-red-500" size={20} />,
     warning: <AlertTriangle className="text-amber-500" size={20} />,
-    info: <Info className="text-blue-500" size={20} />,
+    info: <Info className="text-amber-400" size={20} />,
   }
 
   const colors = {
     success: 'bg-emerald-50 border-emerald-200 text-emerald-900',
     error: 'bg-red-50 border-red-200 text-red-900',
     warning: 'bg-amber-50 border-amber-200 text-amber-900',
-    info: 'bg-blue-50 border-blue-200 text-blue-900',
+    info: 'bg-amber-500/10 border-amber-500/30 text-neutral-200',
   }
 
   return (

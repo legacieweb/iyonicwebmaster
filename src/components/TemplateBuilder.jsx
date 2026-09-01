@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Plus, Trash2, Edit2, AlertCircle, Code2, Zap, ChevronDown, 
@@ -210,7 +210,7 @@ const TemplateBuilder = () => {
         <motion.div 
           animate={{ rotate: 360 }} 
           transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          className="w-16 h-16 border-4 border-slate-100 border-t-indigo-600 rounded-full"
+          className="w-16 h-16 border-4 border-slate-100 border-t-amber-400 rounded-full"
         />
         <p className="mt-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] animate-pulse">Forging Assets...</p>
       </div>
@@ -224,7 +224,7 @@ const TemplateBuilder = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
             <div>
-              <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] mb-2">Design Infrastructure</p>
+              <p className="text-[10px] font-black text-amber-400 uppercase tracking-[0.3em] mb-2">Design Infrastructure</p>
               <h2 className="text-3xl font-black text-neutral-950 uppercase italic tracking-tight">Active Templates</h2>
             </div>
             <motion.button
@@ -269,11 +269,11 @@ const TemplateBuilder = () => {
                     setView('editor')
                   }}
                 >
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-3xl group-hover:bg-indigo-500/10 transition-all duration-700" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/5 rounded-full blur-3xl group-hover:bg-amber-400/10 transition-all duration-700" />
                   
                   <div className="relative z-10">
                     <div className="flex justify-between items-start mb-8">
-                      <div className="w-14 h-14 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all">
+                      <div className="w-14 h-14 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-amber-400 group-hover:text-white group-hover:border-amber-400 transition-all">
                         <Layout size={24} />
                       </div>
                       <span className={`text-[8px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border ${
@@ -285,7 +285,7 @@ const TemplateBuilder = () => {
                       </span>
                     </div>
 
-                    <h3 className="font-black text-neutral-950 text-xl uppercase italic tracking-tight mb-2 group-hover:text-indigo-600 transition-colors">{template.name}</h3>
+                    <h3 className="font-black text-neutral-950 text-xl uppercase italic tracking-tight mb-2 group-hover:text-amber-400 transition-colors">{template.name}</h3>
                     <p className="text-slate-500 font-bold text-[10px] uppercase tracking-widest">{(template.pages || []).length} Enterprise Nodes</p>
 
                     <div className="flex gap-4 mt-8 pt-6 border-t border-slate-50">
@@ -302,7 +302,7 @@ const TemplateBuilder = () => {
                         Erase
                       </button>
                       <div className="w-px h-10 bg-slate-50" />
-                      <button className="flex-1 flex items-center justify-center gap-2 py-3 text-blue-400 hover:text-blue-600 text-[10px] font-black uppercase tracking-widest transition-colors">
+                      <button className="flex-1 flex items-center justify-center gap-2 py-3 text-amber-400 hover:text-amber-400 text-[10px] font-black uppercase tracking-widest transition-colors">
                         Edit <ArrowRight size={14} />
                       </button>
                     </div>
@@ -318,7 +318,7 @@ const TemplateBuilder = () => {
       {view === 'create' && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-2xl mx-auto">
           <div className="bg-white p-12 rounded-[3rem] border border-slate-100 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-600 to-purple-600" />
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-neutral-700 to-purple-600" />
             <h2 className="text-3xl font-black text-neutral-950 uppercase italic tracking-tight mb-8">New Design Blueprint</h2>
 
             {error && (
@@ -343,7 +343,7 @@ const TemplateBuilder = () => {
                   value={templateName}
                   onChange={(e) => setTemplateName(e.target.value)}
                   placeholder="e.g., QUANTUM ENTERPRISE"
-                  className="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-neutral-950 font-bold placeholder-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                  className="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-neutral-950 font-bold placeholder-slate-300 focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all outline-none"
                 />
               </div>
 
@@ -380,7 +380,7 @@ const TemplateBuilder = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
             <div className="flex items-center gap-6">
-              <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+              <div className="w-16 h-16 bg-amber-400 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-amber-400/10">
                 <Layout size={32} />
               </div>
               <div>
@@ -414,7 +414,7 @@ const TemplateBuilder = () => {
                 {/* Add New Page */}
                 <div className="lg:col-span-4 space-y-8">
                   <div className="bg-neutral-950 p-8 rounded-[2.5rem] border border-neutral-800 shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl" />
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/10 rounded-full blur-3xl" />
                     <div className="relative z-10">
                       <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-8">Node Injection</h3>
                       <div className="space-y-6">
@@ -425,7 +425,7 @@ const TemplateBuilder = () => {
                             value={pageName}
                             onChange={(e) => setPageName(e.target.value)}
                             placeholder="e.g., Homepage"
-                            className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white font-bold placeholder-neutral-700 focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
+                            className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white font-bold placeholder-neutral-700 focus:ring-2 focus:ring-amber-400 transition-all outline-none"
                           />
                         </div>
 
@@ -436,7 +436,7 @@ const TemplateBuilder = () => {
                             onChange={(e) => setPageCode(e.target.value)}
                             placeholder="<div>Inject Content...</div>"
                             rows={6}
-                            className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white font-mono text-xs placeholder-neutral-700 focus:ring-2 focus:ring-indigo-500 transition-all outline-none resize-none"
+                            className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white font-mono text-xs placeholder-neutral-700 focus:ring-2 focus:ring-amber-400 transition-all outline-none resize-none"
                           />
                         </div>
 
@@ -445,7 +445,7 @@ const TemplateBuilder = () => {
                           whileHover={!saving ? { scale: 1.02, backgroundColor: '#ffffff', color: '#000000' } : {}}
                           whileTap={!saving ? { scale: 0.98 } : {}}
                           disabled={saving}
-                          className="w-full py-4 bg-indigo-600 text-white rounded-xl font-black uppercase tracking-widest text-[10px] disabled:opacity-50 transition-all flex items-center justify-center gap-3"
+                          className="w-full py-4 bg-amber-500 text-neutral-950 rounded-xl font-black uppercase tracking-widest text-[10px] disabled:opacity-50 transition-all flex items-center justify-center gap-3"
                         >
                           <Plus size={16} />
                           {saving ? 'Injecting...' : 'Inject Node'}
@@ -472,22 +472,22 @@ const TemplateBuilder = () => {
                         {(selectedTemplate.pages || []).map((page) => (
                           <div
                             key={page.id}
-                            className="p-6 bg-slate-50 border border-slate-100 rounded-3xl hover:bg-white hover:border-indigo-100 hover:shadow-xl hover:-translate-y-1 transition-all group"
+                            className="p-6 bg-slate-50 border border-slate-100 rounded-3xl hover:bg-white hover:border-neutral-700 hover:shadow-xl hover:-translate-y-1 transition-all group"
                           >
                             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                               <div className="flex items-center gap-5">
-                                <div className="w-12 h-12 bg-white rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                                <div className="w-12 h-12 bg-white rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-amber-400 group-hover:text-white transition-all">
                                   <Code2 size={20} />
                                 </div>
                                 <div>
                                   <h4 className="font-black text-neutral-950 uppercase tracking-tight">{page.name}</h4>
-                                  <p className="text-slate-500 font-bold text-[10px] uppercase tracking-widest">{page.code.length} bytes · {page.linkedPages?.length || 0} links</p>
+                                  <p className="text-slate-500 font-bold text-[10px] uppercase tracking-widest">{page.code.length} bytes Â· {page.linkedPages?.length || 0} links</p>
                                 </div>
                               </div>
                               <div className="flex items-center gap-3">
                                 <button
                                   onClick={() => setSelectedPage(page)}
-                                  className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all"
+                                  className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-amber-400 hover:border-neutral-600 transition-all"
                                 >
                                   <Edit2 size={16} />
                                 </button>
@@ -536,7 +536,7 @@ const TemplateBuilder = () => {
               >
                 <div className="flex justify-between items-center p-8 bg-neutral-950 border-b border-neutral-800">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white">
+                    <div className="w-10 h-10 bg-amber-400 rounded-xl flex items-center justify-center text-white">
                       <Code2 size={20} />
                     </div>
                     <h3 className="text-xl font-black text-white uppercase italic tracking-tight">Refining Node: {selectedPage.name}</h3>
@@ -554,12 +554,12 @@ const TemplateBuilder = () => {
                     <div className="lg:col-span-8 space-y-4">
                       <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">System Payload (HTML/CSS/JS)</label>
                       <div className="relative group">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl blur opacity-10 group-focus-within:opacity-25 transition-all" />
+                        <div className="absolute -inset-1 bg-gradient-to-r from-neutral-600 to-purple-500 rounded-2xl blur opacity-10 group-focus-within:opacity-25 transition-all" />
                         <textarea
                           value={selectedPage.code}
                           onChange={(e) => updatePageCode(selectedPage.id, e.target.value)}
                           rows={20}
-                          className="relative w-full px-8 py-8 bg-slate-900 border border-slate-800 rounded-2xl text-indigo-100 font-mono text-sm focus:ring-0 outline-none resize-none custom-scrollbar"
+                          className="relative w-full px-8 py-8 bg-slate-900 border border-slate-800 rounded-2xl text-neutral-300 font-mono text-sm focus:ring-0 outline-none resize-none custom-scrollbar"
                         />
                       </div>
                     </div>
@@ -577,7 +577,7 @@ const TemplateBuilder = () => {
                                 onClick={() => linkPagesToPage(selectedPage.id, page.id)}
                                 className={`w-full flex items-center justify-between p-5 rounded-2xl border transition-all ${
                                   isLinked 
-                                    ? 'bg-indigo-50 border-indigo-200 text-indigo-700' 
+                                    ? 'bg-neutral-800/30 border-neutral-600 text-amber-300' 
                                     : 'bg-white border-slate-100 text-slate-400 hover:border-slate-200 hover:bg-slate-50'
                                 }`}
                               >
@@ -592,12 +592,12 @@ const TemplateBuilder = () => {
                         </div>
                       </div>
 
-                      <div className="p-8 bg-indigo-50 rounded-[2rem] border border-indigo-100">
+                      <div className="p-8 bg-neutral-800/30 rounded-[2rem] border border-neutral-700">
                         <div className="flex items-center gap-3 mb-4">
-                          <Sparkles className="text-indigo-600" size={20} />
-                          <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em]">Deployment Guide</span>
+                          <Sparkles className="text-amber-400" size={20} />
+                          <span className="text-[10px] font-black text-amber-400 uppercase tracking-[0.2em]">Deployment Guide</span>
                         </div>
-                        <p className="text-[10px] text-indigo-900/60 leading-relaxed font-bold">Neural links allow seamless navigation between system nodes. Ensure all primary nodes are interlinked for optimal user traversal.</p>
+                        <p className="text-[10px] text-neutral-200/60 leading-relaxed font-bold">Neural links allow seamless navigation between system nodes. Ensure all primary nodes are interlinked for optimal user traversal.</p>
                       </div>
                     </div>
                   </div>
@@ -625,3 +625,4 @@ const TemplateBuilder = () => {
 }
 
 export default TemplateBuilder
+

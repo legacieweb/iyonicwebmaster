@@ -35,18 +35,18 @@ const Documentation = ({ onBack }) => {
               animate={{ opacity: 1, y: 0 }}
               className="text-7xl font-black text-neutral-950 tracking-tighter mb-8"
             >
-              Docs<span className="text-blue-600">.</span>
+              Docs<span className="text-amber-400">.</span>
             </motion.h1>
             <p className="text-xl text-neutral-500 font-medium leading-relaxed">
               Everything you need to build, deploy, and scale with Iyonicorp technologies.
             </p>
           </div>
           <div className="relative w-full md:w-96 group">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-blue-600 transition-colors" size={20} />
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-amber-400 transition-colors" size={20} />
             <input 
               type="text" 
               placeholder="Search documentation..."
-              className="w-full pl-16 pr-8 py-5 bg-neutral-50 border border-neutral-100 rounded-2xl focus:outline-none focus:border-blue-600 focus:bg-white transition-all font-bold text-sm"
+              className="w-full pl-16 pr-8 py-5 bg-neutral-50 border border-neutral-100 rounded-2xl focus:outline-none focus:border-amber-400 focus:bg-white transition-all font-bold text-sm"
             />
           </div>
         </div>
@@ -72,7 +72,7 @@ const Documentation = ({ onBack }) => {
                   <li key={i} className="group">
                     <a href="#" className="flex items-center justify-between p-4 rounded-xl hover:bg-neutral-50 transition-all">
                       <span className="text-sm font-bold text-neutral-500 group-hover:text-neutral-950 transition-colors">{item}</span>
-                      <ChevronRight size={16} className="text-neutral-300 group-hover:text-blue-600 transition-all group-hover:translate-x-1" />
+                      <ChevronRight size={16} className="text-neutral-300 group-hover:text-amber-400 transition-all group-hover:translate-x-1" />
                     </a>
                   </li>
                 ))}
@@ -90,7 +90,7 @@ const Documentation = ({ onBack }) => {
             <h2 className="text-3xl font-black mb-6 tracking-tight">Need custom help?</h2>
             <p className="text-neutral-400 font-medium leading-relaxed">Our technical support team is available 24/7 for enterprise partners.</p>
           </div>
-          <button className="px-12 py-6 bg-white text-neutral-950 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-50 transition-all shadow-2xl">
+          <button className="px-12 py-6 bg-white text-neutral-950 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-neutral-800/50 transition-all shadow-2xl">
             Open Support Ticket
           </button>
         </motion.div>

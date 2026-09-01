@@ -39,7 +39,7 @@ const Blog = ({ onBack }) => {
               animate={{ opacity: 1, y: 0 }}
               className="text-6xl md:text-8xl font-black text-neutral-950 tracking-tighter mb-8"
             >
-              The Journal<span className="text-blue-600">.</span>
+              The Journal<span className="text-amber-400">.</span>
             </motion.h1>
             <p className="text-xl text-neutral-500 max-w-xl font-medium leading-relaxed">
               Insights, thoughts, and technical deep-dives from our team of creators and engineers.
@@ -73,11 +73,11 @@ const Blog = ({ onBack }) => {
               </div>
               
               <div className="flex items-center gap-6 mb-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">
-                <span className="flex items-center gap-2"><Calendar size={12} className="text-blue-600" /> {post.date}</span>
+                <span className="flex items-center gap-2"><Calendar size={12} className="text-amber-400" /> {post.date}</span>
                 <span className="flex items-center gap-2"><User size={12} className="text-purple-600" /> {post.author}</span>
               </div>
 
-              <h2 className="text-2xl font-black text-neutral-950 mb-4 group-hover:text-blue-600 transition-colors tracking-tight leading-tight">
+              <h2 className="text-2xl font-black text-neutral-950 mb-4 group-hover:text-amber-400 transition-colors tracking-tight leading-tight">
                 {post.title}
               </h2>
               
@@ -86,7 +86,7 @@ const Blog = ({ onBack }) => {
               </p>
 
               <div className="flex items-center gap-3 text-xs font-black uppercase tracking-widest group-hover:gap-5 transition-all">
-                Read Article <ArrowRight size={14} className="text-blue-600" />
+                Read Article <ArrowRight size={14} className="text-amber-400" />
               </div>
             </motion.article>
           ))}

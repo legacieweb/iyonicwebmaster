@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ExternalLink, ArrowRight, Plus, Eye, Loader } from 'lucide-react'
 import { fetchTemplates } from '../utils/api'
@@ -41,7 +41,7 @@ const Portfolio = () => {
   if (loading) {
     return (
       <div className="py-24 flex justify-center bg-white">
-        <Loader className="w-8 h-8 text-blue-600 animate-spin" />
+        <Loader className="w-8 h-8 text-amber-400 animate-spin" />
       </div>
     )
   }
@@ -50,7 +50,7 @@ const Portfolio = () => {
 
   return (
     <section id="portfolio" className="py-24 bg-white overflow-hidden relative">
-      <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-indigo-50/50 rounded-full blur-[140px] -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-neutral-800/30/50 rounded-full blur-[140px] -translate-x-1/2 -translate-y-1/2" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
@@ -59,7 +59,7 @@ const Portfolio = () => {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-50 border border-indigo-100 rounded-full text-indigo-600 text-[10px] font-black mb-6 tracking-[0.2em] uppercase"
+              className="inline-flex items-center gap-2 px-4 py-1.5 bg-neutral-800/30 border border-neutral-700 rounded-full text-amber-400 text-[10px] font-black mb-6 tracking-[0.2em] uppercase"
             >
               The Archive
             </motion.div>
@@ -125,7 +125,7 @@ const Portfolio = () => {
                     className="inline-flex items-center gap-4 text-white font-black text-[10px] uppercase tracking-[0.2em] group/btn"
                   >
                     Explore Project
-                    <div className="w-12 h-12 rounded-2xl bg-white text-neutral-950 flex items-center justify-center group-hover/btn:bg-blue-600 group-hover/btn:text-white transition-all">
+                    <div className="w-12 h-12 rounded-2xl bg-white text-neutral-950 flex items-center justify-center group-hover/btn:bg-amber-400 group-hover/btn:text-white transition-all">
                       <ExternalLink size={20} />
                     </div>
                   </a>

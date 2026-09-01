@@ -1,147 +1,158 @@
-import { 
-  Code, ShoppingBag, Layout, Globe, Database, Smartphone, Zap, Shield, 
+﻿import {
+  Code, ShoppingBag, Layout, Globe, Database, Smartphone, Zap, Shield,
   Activity, Cloud, Layers, Lightbulb, Rocket, Heart, Star, Mail, ArrowRight,
   Award, Target, CheckCircle, Clock, Users, Headphones, HeartHandshake, ShieldCheck,
-  Phone, MapPin
+  Phone, MapPin, Building2, Briefcase, TrendingUp, BarChart3, PieChart,
+  FileSpreadsheet, ShieldCheck as ShieldIcon, Banknote, Wallet,
+  Gavel, Factory, Globe as GlobeIcon, Scale, RefreshCw
 } from 'lucide-react'
 
+export const COMPANY_CONTENT = {
+  name: 'Iyoni Corp',
+  fullName: 'Iyoni Corp',
+  tagline: 'Corporate Holding & Acquisition Platform',
+  subtitle: 'Turnkey Business Holdings',
+  description: 'Iyoni Corp is a corporate holding company that acquires, operates, and scales fully-functional turnkey businesses. Each asset in our portfolio is immediately operational, revenue-generating, and ready for acquisition by institutional and private investors.',
+  holdingsDescription: 'We engineer high-performance digital infrastructure for visionary brands who demand absolute scale and technical supremacy across their operational footprint.'
+}
+
 export const SERVICES_CONTENT = {
-  subtitle: 'Our Specialization',
-  title: 'Premium Web Development Services',
-  description: 'We specialize exclusively in high-end web development, delivering precision-engineered digital solutions. Every project comes with a custom logo, banner, flyers, and posters—completely free of charge.'
+  subtitle: 'Portfolio Sectors',
+  title: 'Operational Business Sectors',
+  description: 'Iyoni Corp maintains a diversified portfolio of turnkey business assets across high-growth market sectors. Each holding is fully operational and revenue-generating.'
 }
 
 export const HOW_IT_WORKS_STEPS = [
   {
-    title: 'Consultation',
-    description: 'We discuss your requirements, goals, and vision to understand the project scope.',
-    icon: Lightbulb,
+    title: 'Due Diligence Review',
+    description: 'Comprehensive audit of financials, operations, technology stack, and growth trajectory for each holding.',
+    icon: FileSpreadsheet,
     color: 'blue'
   },
   {
-    title: 'Design',
-    description: 'We create wireframes and mockups based on your requirements and brand identity.',
-    icon: Layout,
+    title: 'Valuation Assessment',
+    description: 'Institutional-grade business valuation models applied to determine accurate acquisition pricing.',
+    icon: BarChart3,
     color: 'purple'
   },
   {
-    title: 'Development',
-    description: 'We build your website with clean, scalable code using modern frameworks.',
-    icon: Code,
+    title: 'Acquisition Structuring',
+    description: 'Legal and financial structuring for seamless ownership transfer, with full IP and asset documentation.',
+    icon: Gavel,
     color: 'indigo'
   },
   {
-    title: 'Launch',
-    description: 'We deploy your website and ensure everything works perfectly.',
-    icon: Rocket,
+    title: 'Portfolio Integration',
+    description: 'Integration of acquired assets into the Iyoni Corp operational ecosystem for continued growth.',
+    icon: Factory,
     color: 'emerald'
   }
 ]
 
 export const WHY_CHOOSE_US_CONTENT = {
-  subtitle: 'Why Iyonicorp',
-  title: "We don't just build, we empower",
-  description: 'Choosing the right partner is the difference between a project that just exists and one that thrives. We bring a decade of expertise and a relentless focus on your ROI.'
+  subtitle: 'Why Iyoni Corp',
+  title: "Precision, Proven, Portfolio",
+  description: 'Iyoni Corp delivers institutional-grade acquisition opportunities with fully operational assets. Our portfolio companies are engineered for scale, profitability, and immediate return on investment.'
 }
 
 export const WHY_CHOOSE_US_FEATURES = [
   {
     icon: Shield,
-    title: 'Security First',
-    description: 'Enterprise-grade protocols with 24/7 monitoring and compliance.',
+    title: 'Rigorous Due Diligence',
+    description: 'Every holding undergoes comprehensive financial, legal, and technical audit before presentation.',
     color: 'blue'
   },
   {
-    icon: Rocket,
-    title: 'Fast Delivery',
-    description: 'Agile methodology ensures rapid deployment without compromises.',
+    icon: TrendingUp,
+    title: 'Revenue-Generating',
+    description: 'All portfolio companies are fully operational with proven revenue streams and growth metrics.',
     color: 'purple'
   },
   {
-    icon: Zap,
-    title: 'Modern Stack',
-    description: 'Leveraging the latest frameworks for future-proof solutions.',
+    icon: BarChart3,
+    title: 'Transparent Valuation',
+    description: 'Clear, market-anchored business valuations presented as straightforward acquisition prices.',
     color: 'indigo'
   },
   {
-    icon: Heart,
-    title: 'Client Centric',
-    description: 'Your success is our priority. We work as your dedicated partner.',
-    color: 'rose'
+    icon: Wallet,
+    title: 'Turnkey Ownership',
+    description: 'Seamless transfer of full operational control, assets, and intellectual property upon acquisition.',
+    color: 'emerald'
   }
 ]
 
 export const WHY_CHOOSE_US_METRICS = [
-  { label: 'Uptime Guarantee', value: '99.9%' },
-  { label: 'Project Success', value: '100%' },
-  { label: 'Client Retention', value: '95%' },
-  { label: 'Support Response', value: '< 2h' },
+  { label: 'Portfolio Assets', value: '70+' },
+  { label: 'Avg. Revenue Multiple', value: '3.2x' },
+  { label: 'Investor ROI', value: '180%' },
+  { label: 'Acquisition Success', value: '100%' },
 ]
 
 export const PARTNERSHIP_CONTENT = {
-  subtitle: 'E-commerce Alliance',
-  title: 'The 7% Standard.',
-  description: "We've eliminated the barriers to digital commerce. No upfront costs, no maintenance fees—just a single 7% performance fee that settles in 30 seconds."
+  subtitle: 'Investor Relations',
+  title: 'The Iyoni Standard.',
+  description: "Iyoni Corp eliminates the barriers between institutional capital and proven revenue-generating assets. Each holding in our portfolio is presented at its total business valuation with full operational transparency."
 }
 
 export const PARTNERSHIP_STEPS = [
   {
-    icon: Rocket,
-    title: 'Zero Upfront',
-    description: 'We build your high-conversion storefront with zero initial investment. We only win when you win.',
+    icon: FileSpreadsheet,
+    title: 'Operational Audit',
+    description: 'Comprehensive due diligence on all financials, operations, and technology of each holding.',
     color: 'blue'
   },
   {
-    icon: Zap,
-    title: '30s Settlement',
-    description: 'Get paid instantly. Sales are settled to your mobile money wallet within 30 seconds of purchase.',
+    icon: Banknote,
+    title: 'Valuation Pricing',
+    description: 'Each business is priced at its total valuation, displayed transparently as the acquisition cost.',
     color: 'indigo'
   },
   {
-    icon: HeartHandshake,
-    title: '7% All-In',
-    description: 'One flat fee covers everything: hosting, maintenance, transactions, and ongoing support.',
+    icon: Shield,
+    title: 'Secure Transfer',
+    description: 'Full ownership transfer including all assets, IP, domain, and operational data upon acquisition.',
     color: 'purple'
   }
 ]
 
 export const SHOPRIGHT_CONTENT = {
-  subtitle: 'New Launch: Shop',
-  title: 'Shop by Iyonicorp.',
-  description: "The ultimate merchant ecosystem. Sell products, manage inventory, and track performance with a precision-engineered online store that reflects your brand's excellence."
+  subtitle: 'Portfolio Insights',
+  title: 'Operational Intelligence',
+  description: "Iyoni Corp's holdings are engineered with institutional-grade infrastructure. Each business operates on a proven technology stack with full operational transparency, scalable architecture, and documented revenue streams."
 }
 
 export const SHOPRIGHT_FEATURES = [
-  { icon: Layout, text: 'Custom Storefronts' },
-  { icon: Zap, text: 'Instant Performance' },
-  { icon: Globe, text: 'Global Reach' },
-  { icon: ShieldCheck, text: 'Secure Transactions' }
+  { icon: Layout, text: 'Turnkey Operations' },
+  { icon: Zap, text: 'Proven Revenue' },
+  { icon: Globe, text: 'Global Markets' },
+  { icon: ShieldCheck, text: 'Secure Infrastructure' }
 ]
 
 export const CONTACT_CONTENT = {
-  subtitle: 'Get in Touch',
-  title: "Let's build something exceptional together",
-  description: "Have a vision? We have the expertise to bring it to life. Reach out and let's start a conversation about your next big project."
+  subtitle: 'Investor Relations',
+  title: "Let's discuss your next acquisition",
+  description: "Have acquisition criteria? Our investor relations team will review your requirements and present qualified portfolio opportunities."
 }
 
 export const CONTACT_INFO = [
   {
     icon: Mail,
-    label: 'Email us',
-    value: 'hello@iyonicorp.com',
-    color: 'text-blue-600',
-    bg: 'bg-blue-50'
+    label: 'Investor Relations',
+    value: 'investors@iyonicorp.com',
+    color: 'text-amber-400',
+    bg: 'bg-neutral-800/30',
   },
   {
     icon: Phone,
-    label: 'Call us',
+    label: 'Office',
     value: '+254 113203900',
-    color: 'text-purple-600',
-    bg: 'bg-purple-50'
+    color: 'text-amber-400',
+    bg: 'bg-neutral-800/30'
   },
   {
     icon: MapPin,
-    label: 'Visit us',
+    label: 'Headquarters',
     value: 'Nairobi, Kenya',
     color: 'text-emerald-600',
     bg: 'bg-emerald-50'
@@ -150,12 +161,12 @@ export const CONTACT_INFO = [
 
 export const SERVICES = [
   {
-    id: 'web-development',
-    icon: Code,
-    title: 'Precision Web Development',
-    description: 'Bespoke digital experiences crafted with industry-leading technology. We handle everything from the initial architecture to the final deployment, ensuring a seamless, high-performance web presence for your brand.',
+    id: 'corporate-holdings',
+    icon: Building2,
+    title: 'Corporate Holdings',
+    description: 'A diversified portfolio of fully-operational turnkey businesses across high-growth market sectors, all immediately revenue-generating and available for acquisition.',
     moduleIds: ['crm', 'collaboration', 'inventory', 'cloud_infra', 'seo_basic', 'auth', 'db_basic'],
-    color: 'bg-blue-600',
+    color: 'bg-amber-400',
     types: ['SaaS', 'E-commerce', 'Portfolios', 'Corporate'],
     architecture: 'Next.js / React',
     minPrice: 100
@@ -163,83 +174,85 @@ export const SERVICES = [
 ]
 
 export const PRICING_DATA = {
-  'web-development': [
+  'corporate-holdings': [
     {
-      name: 'Launch Pad',
+      name: 'Entry Portfolio',
       category: 'Entry Level',
       price: 100,
       maxPrice: 400,
-      description: 'Perfect for landing pages, simple portfolios, and startup presence.',
+      description: 'Ideal for emerging investor groups seeking exposure to proven revenue models.',
       moduleIds: ['crm', 'collaboration', 'auth'],
-      tag: 'Startup Ready',
-      color: 'blue',
-      design: {
-        gradient: 'from-blue-600 to-cyan-500',
-        pattern: 'bg-grid-white/[0.02]',
-        shadow: 'hover:shadow-blue-500/20'
+      tag: 'Acquisition Ready',
+       color: 'amber',
+       design: {
+         gradient: 'from-amber-400 to-neutral-700',
+         pattern: 'bg-grid-neutral/[0.02]',
+         shadow: 'hover:shadow-amber-400/20'
       }
     },
     {
-      name: 'Service Suite',
+      name: 'Growth Portfolio',
       category: 'Professional',
       price: 450,
       maxPrice: 1200,
-      description: 'Comprehensive business solutions with advanced functionality.',
+      description: 'Mid-market business assets with established revenue streams and scaling potential.',
       moduleIds: ['crm', 'collaboration', 'inventory', 'db_basic'],
       tag: 'Most Popular',
       popular: true,
       color: 'purple',
       design: {
-        gradient: 'from-purple-600 to-indigo-600',
+        gradient: 'from-purple-600 to-neutral-700',
         pattern: 'bg-dot-white/[0.05]',
         shadow: 'hover:shadow-purple-500/20'
       }
     },
     {
-      name: 'Enterprise Engine',
+      name: 'Enterprise Portfolio',
       category: 'Enterprise',
       price: 1500,
       maxPrice: 10000,
-      description: 'High-performance, scalable systems for large scale operations.',
+      description: 'Large-scale operational assets with institutional-grade infrastructure and proven market dominance.',
       moduleIds: ['crm', 'collaboration', 'inventory', 'cloud_infra', 'auth'],
-      tag: 'Enterprise',
+      tag: 'Institutional',
       color: 'indigo',
       design: {
-        gradient: 'from-indigo-600 to-blue-700',
+        gradient: 'from-neutral-700 to-amber-400',
         pattern: 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))]',
-        shadow: 'hover:shadow-indigo-500/20'
+        shadow: 'hover:shadow-amber-400/20'
       }
     }
   ]
 }
 
-export const WEBSITE_TYPES = [
-  { name: 'Portfolio', price: 100, id: 'portfolio' },
-  { name: 'Blogs', price: 150, id: 'blogs' },
+export const BUSINESS_SECTORS = [
+  { name: 'Health & Fitness', price: 100, id: 'health-fitness' },
+  { name: ' Blogs', price: 150, id: 'blogs' },
   { name: 'Ecommerce', price: 950, id: 'ecommerce' },
-  { name: 'Spa', price: 450, id: 'spa' },
-  { name: 'Ebooks', price: 700, id: 'ebooks' },
-  { name: 'Salons', price: 450, id: 'salons' },
-  { name: 'Beauty shops', price: 550, id: 'beauty-shops' },
-  { name: 'Bakeries', price: 500, id: 'bakeries' },
-  { name: 'Hotels & Restaurants', price: 750, id: 'hotels-restaurants' },
-  { name: 'Appointment Scheduling', price: 500, id: 'appointment-scheduling' },
-  { name: 'Health & Fitness', price: 550, id: 'health-fitness' },
-  { name: 'Automobiles', price: 850, id: 'automobiles' },
-  { name: 'Tours & Travels', price: 700, id: 'tours-travels' },
-  { name: 'Event Planner', price: 600, id: 'event-planner' },
+  { name: 'Spa & Wellness', price: 450, id: 'spa' },
+  { name: 'Media & Publishing', price: 700, id: 'ebooks' },
+  { name: 'Salons & Beauty', price: 450, id: 'salons' },
+  { name: 'Beauty Retail', price: 550, id: 'beauty-shops' },
+  { name: 'Food & Beverage', price: 500, id: 'bakeries' },
+  { name: 'Hospitality', price: 750, id: 'hotels-restaurants' },
+  { name: 'Professional Services', price: 500, id: 'appointment-scheduling' },
+  { name: 'Wellness', price: 550, id: 'health-fitness-2' },
+  { name: 'Automotive', price: 850, id: 'automobiles' },
+  { name: 'Travel & Tourism', price: 700, id: 'tours-travels' },
+  { name: 'Events', price: 600, id: 'event-planner' },
   { name: 'Point of Sale', price: 1200, id: 'pos' },
-  { name: 'Freelance', price: 200, id: 'freelance' },
-  { name: 'Tutoring', price: 300, id: 'tutoring' },
-  { name: 'Real Estate & Property Management', price: 1100, id: 'real-estate' },
-  { name: 'Contractors', price: 500, id: 'contractors' },
+  { name: 'Professional Services', price: 200, id: 'freelance' },
+  { name: 'Education & Tutoring', price: 300, id: 'tutoring' },
+  { name: 'Real Estate', price: 1100, id: 'real-estate' },
+  { name: 'Construction', price: 500, id: 'contractors' },
   { name: 'Streaming', price: 2500, id: 'streaming' },
-  { name: 'Saas', price: 10000, id: 'saas' },
+  { name: 'SaaS', price: 10000, id: 'saas' },
   { name: 'Social Platforms', price: 3500, id: 'social-platforms' },
-  { name: 'Business Profiles', price: 400, id: 'business-profiles' },
-  { name: 'Professional Services', price: 500, id: 'professional-services' },
+  { name: 'Business Services', price: 400, id: 'business-profiles' },
+  { name: 'Consulting', price: 500, id: 'professional-services' },
   { name: 'AI & Automation', price: 2500, id: 'ai-automation' }
 ]
+
+export const WEBSITE_TYPES = BUSINESS_SECTORS
 
 export const CATALOG_ITEMS = {
   // Web Development Plans
@@ -285,7 +298,7 @@ export const CATALOG_ITEMS = {
       name: 'Groundflex adventures',
       type: 'Tours & Travels',
       description: 'Get your idea online fast with this high-conversion landing page.',
-      price: 250,
+      price: 500,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://groundflexadventures.iyonicorp.com/',
       moduleIds: ['forms', 'bookings', 'customer management', 'ticketing', 'ticketvalidation'],
@@ -297,11 +310,11 @@ export const CATALOG_ITEMS = {
       name: 'Dream homes',
       type: 'Real Estate & Property Management',
       description: 'real estate listing and management platform with property search, agent profiles, and contact forms.',
-      price: 300,
+      price: 1500,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://dreamhomes.iyonicorp.com/',
       moduleIds: ['property listings', 'agent profiles', 'contact forms'],
-      minTier: 'basic'
+      minTier: 'premium'
     },
         {
       id: 'lp-1',
@@ -319,7 +332,7 @@ export const CATALOG_ITEMS = {
       name: 'Choma zone',
       type: 'Hotels & Restaurants',
       description: 'BBQ restaurant website with menu, ordering system, and reservation management.',
-      price: 300,
+      price: 500,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://chomazone.iyonicorp.com/',
       moduleIds: ['menu management', 'ordering system', 'reservation management'],
@@ -333,7 +346,7 @@ export const CATALOG_ITEMS = {
       name: 'Spa & Wellness Hub',
       type: 'Spa',
       description: 'Elegant booking and service portal for premium spas and wellness centers.',
-      price: 1499,
+      price: 2499,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://tranquil.iyonicorp.com/',
       moduleIds: ['Appointments', 'customer management', 'inventory', 'free basic db'],
@@ -377,7 +390,7 @@ export const CATALOG_ITEMS = {
       name: 'Iyonicorp Support',
       type: 'Appointment Scheduling',
       description: 'Robust appointment scheduling system with customer management and analytics.',
-      price: 450,
+      price: 1450,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://help.iyonicorp.com/',
       moduleIds: ['bookings', 'customer management', 'analytics', 'collaboration'],
@@ -388,21 +401,21 @@ export const CATALOG_ITEMS = {
       name: 'Iflix',
       type: 'Streaming',
       description: 'streaming platform with customer management and analytics.',
-      price: 8000,
+      price: 15000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://iflix-u9fu.onrender.com//',
-      moduleIds: ['streaming', 'customer management', 'analytics', 'collaboration'],
+      moduleIds: ['streaming', 'customer management', 'analytics', 'collaboration', 'basic ai assistant', 'payment gateway', 'premium seo', 'speed optimization', 'enterprise seo', 'cloud_infra', 'auth', 'db_basic'],
       minTier: 'enterprise'
     },
                     {
       id: 'cp-7',
       name: 'Essayme',
       type: 'Freelance',
-      description: 'streaming platform with customer management and analytics.',
+      description: 'homework and essay management platform with analytics and conversation management.',
       price: 3000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://essayme.iyonicorp.com//',
-      moduleIds: ['freelance', 'essay management', 'analytics', 'conversation management', 'basic ai assistant'],
+      moduleIds: ['freelance', 'essay management', 'analytics', 'conversation management', 'advertisement', 'payment gateway', 'premium seo', 'speed optimization', 'enterprise seo', 'cloud_infra', 'auth', 'db_basic'],
       minTier: 'premium_plus'
     },
                         {
@@ -432,11 +445,11 @@ export const CATALOG_ITEMS = {
       name: 'GreenLeaf landscaping',
       type: 'Contractors',
       description: 'Best for landscaping companies, gardeners, and outdoor service providers showcasing their work and managing bookings.',
-      price: 499,
+      price: 1500,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://landscaping-yppi.onrender.com/',
       moduleIds: ['bookings', 'project portfolio', 'customer management', 'analytics'],
-      minTier: 'basic'
+      minTier: 'premium'
     },
                 {
       id: 'cp-11',
@@ -454,7 +467,7 @@ export const CATALOG_ITEMS = {
       name: 'Baller\'s mounts',
       type: 'Professional Services',
       description: 'Digital portraits from your favorite photographs. Custom digital art in multiple sizes - A4, A3, A2, A1, A0. Transform your memories into timeless art.',
-      price: 299,
+      price: 499,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://ballersmounts.iyonicorp.com/',
       moduleIds: ['project portifolio', 'social media intergration'],
@@ -465,18 +478,18 @@ export const CATALOG_ITEMS = {
       name: 'Rent drive',
       type: 'Automobiles',
       description: 'Car rental platform with vehicle listings, booking management, and customer profiles.',
-      price: 499,
+      price: 1499,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://rentdrive.iyonicorp.com/',
       moduleIds: ['vehicle listings', 'booking management', 'customer profiles', 'analytics'],
-      minTier: 'basic'
+      minTier: 'premium'
     },
 {
       id: 'cp-14',
       name: 'Beauty plug',
       type: 'Salons',
       description: 'Salon booking platform with service listings, product listings, appointment scheduling, and customer profiles.',
-      price: 1499,
+      price: 2499,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://beautyplug-1.onrender.com/',
       moduleIds: ['service listings', 'product listings', 'appointment scheduling', 'customer profiles', 'analytics'],
@@ -491,14 +504,14 @@ export const CATALOG_ITEMS = {
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://autokenya.onrender.com',
       moduleIds: ['vehicle listings', 'booking management', 'customer profiles', 'analytics'],
-      minTier: 'premium_plus'
+      minTier: 'enterprise'
     },
                     {
       id: 'cp-16',
       name: 'Justice law firm',
       type: 'Professional Services',
       description: 'Legal services platform with case management, client profiles, and document storage.',
-      price: 1200,
+      price: 3200,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://justicelawfirm.onrender.com',
       moduleIds: ['case management', 'client profiles', 'document storage'],
@@ -670,11 +683,11 @@ export const CATALOG_ITEMS = {
       name: 'Phone shop',
       type: 'Ecommerce',
       description: 'Mobile phone store with detailed product pages, inventory management, and customer reviews.',
-      price: 900,
+      price: 2900,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://phones.iyonicorp.com/',
       moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics'],
-      minTier: 'basic'
+      minTier: 'premium'
     },
             {
       id: 're-13',
@@ -684,7 +697,7 @@ export const CATALOG_ITEMS = {
       price: 3000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://elegantmen.iyonicorp.com/',
-      moduleIds: ['crm', 'inventory', 'cloud_infra', 'auth', 'seo_basic'],
+      moduleIds: ['crm', 'inventory', 'marketing', 'auth', 'seo_basic'],
       minTier: 'premium'
     },
             {
@@ -692,33 +705,33 @@ export const CATALOG_ITEMS = {
       name: 'Modern Bistro',
       type: 'Point of Sale',
       description: 'pos for fastfood restaurant with inventory and customer management.',
-      price: 900,
+      price: 1900,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://pos-1-qwh3.onrender.com/',
       moduleIds: ['pos', 'inventory', 'customer management', 'analytics'],
-      minTier: 'basic'
+      minTier: 'premium'
     },
                 {
       id: 're-15',
       name: 'Nightclub POS',
       type: 'Point of Sale',
       description: 'POS system tailored for nightclubs and bars, featuring inventory management, customer profiles, and sales analytics to optimize operations and enhance customer experience.',
-      price: 900,
+      price: 1900,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://pos2-night-club.onrender.com',
       moduleIds: ['pos', 'inventory', 'customer management', 'analytics'],
-      minTier: 'basic'
+      minTier: 'premium'
     },
                     {
       id: 're-16',
       name: 'Booktels',
       type: 'Event Planner',
       description: 'Comprehensive event planning platform with vendor management, guest lists, and scheduling tools.',
-      price: 2000,
+      price: 4500,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://eventplanner.iyonicorp.com',
       moduleIds: ['event management', 'vendor management', 'guest management', 'scheduling'],
-      minTier: 'premium'
+      minTier: 'premium_plus'
     },
                         {
       id: 're-17',
@@ -736,7 +749,7 @@ export const CATALOG_ITEMS = {
       name: 'Luxwatch',
       type: 'Ecommerce',
       description: 'High-end watch store with detailed product pages, inventory management, and customer reviews.',
-      price: 4000,
+      price: 6000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://luxwatch-1.onrender.com',
       moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics'],
@@ -758,7 +771,7 @@ export const CATALOG_ITEMS = {
       name: 'Modern home decor',
       type: 'Ecommerce',
       description: 'High-end home decor store with detailed product pages, inventory management, and customer dashboard.',
-      price: 1000,
+      price: 3000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://homedeco2-1.onrender.com/',
       moduleIds: ['product catalog', 'inventory', 'customer management', 'analytics', 'premium_seo'],
@@ -772,11 +785,11 @@ export const CATALOG_ITEMS = {
       id: 'gl-1',
       name: 'Paylang',
       description: 'One-click payment landing page for single products.',
-      price: 350,
+      price: 9000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://paylang.iyonicorp.com/',
       moduleIds: ['invoicing', 'security', 'refund management', 'basic analytics'],
-      minTier: 'free'
+      minTier: 'enterprise'
     }
   ],
   'Fintech Core': [
@@ -784,10 +797,10 @@ export const CATALOG_ITEMS = {
       id: 'fc-1',
       name: 'iyonicpay',
       description: 'Secure financial dashboard with transaction history.',
-      price: 15000,
+      price: 25000,
       image: 'https://i.imgur.com/6nGQFtj.png',
       url: 'https://pay.iyonicorp.com',
-      moduleIds: ['invoicing', 'security', 'global_payroll', 'high_risk_monitoring', 'faud_prevention', 'premium analytics', 'customer support', 'compliance_management'],
+      moduleIds: ['invoicing', 'security', 'global_payroll', 'high_risk_monitoring', 'faud_prevention', 'premium analytics', 'customer support', 'compliance_management', 'payment_gateway', 'refund_management', 'basic_analytics', 'advanced_reporting', 'multi_currency_support', 'recurring_payments', 'subscription_management', 'integration_with_ecommerce_platforms', 'mobile_payment_support', 'customizable_payment_forms', 'payment_link_generation', 'real_time_transaction_monitoring', 'chargeback_management', 'api_access_for_developers'],
       minTier: 'enterprise'
     }
   ],
@@ -820,5 +833,343 @@ export const CATALOG_ITEMS = {
       minTier: 'premium'
     }
   ]
+}
+
+export const formatPrice = (price) => {
+  if (!price || price === 0) return '$0'
+  if (price >= 1000000) {
+    return `$${(price / 1000000).toFixed(1)}M`
+  }
+  if (price >= 1000) {
+    return `$${Math.round(price / 1000)}K`
+  }
+  return `$${price.toLocaleString()}`
+}
+
+export const MODULE_NAME_MAP = {
+  crm: 'Client Manager',
+  auth: 'Identity Core',
+  db_basic: 'Data Starter',
+  invoicing: 'Invoicing System',
+  email_basic: 'Mail Engine',
+  collaboration: 'Team Nexus',
+  seo_basic: 'SEO Starter',
+  analytics: 'Advanced Analytics',
+  inventory: 'Inventory Pro',
+  security: 'Cyber Sentinel',
+  market_intel: 'Market Intelligence',
+  push_notifs: 'Push Engine',
+  subscription_mgmt: 'Sub-Manager',
+  ai_assistant: 'AI Strategy Assistant',
+  cloud_infra: 'Auto-Scaler',
+  fraud_prevention: 'Fraud Shield',
+  payment_gateway: 'Payment Gateway',
+  chatbots: 'Chatbot Engine',
+  enterprise_seo: 'Enterprise SEO',
+  'speed optimization': 'Speed Optimizer',
+  'product catalog': 'Product Catalog',
+  'product customization': 'Custom Products',
+  'order management': 'Order Manager',
+  'customer profiles': 'Customer Profiles',
+  'customer management': 'Customer Manager',
+  'agent profiles': 'Agent Profiles',
+  'property listings': 'Property Listings',
+  'contact forms': 'Contact Forms',
+  'menu management': 'Menu Management',
+  'ordering system': 'Ordering System',
+  'reservation management': 'Reservation Manager',
+  'staff management': 'Staff Management',
+  'ticketvalidation': 'Ticket Validation',
+  'design portifolio': 'Design Portfolio',
+  'consoltation management': 'Consultation Manager',
+  'vehicle listings': 'Vehicle Listings',
+  'project portfolio': 'Project Portfolio',
+  'travel packages': 'Travel Packages',
+  'event management': 'Event Management',
+  'vendor management': 'Vendor Manager',
+  'guest management': 'Guest Manager',
+  'scheduling': 'Scheduling',
+  'case management': 'Case Manager',
+  'document storage': 'Document Storage',
+  'ticketing': 'Ticketing',
+  'bookings': 'Booking System',
+  forms: 'Form Builder',
+  'appointment scheduling': 'Appointment Scheduler',
+  'product listings': 'Product Listings',
+  'product pages': 'Product Pages',
+  marketing: 'Marketing Suite',
+  'free basic db': 'Data Starter (Basic)',
+  'analytics': 'Analytics Dashboard'
+}
+
+export const getModuleName = (moduleId) => {
+  if (MODULE_NAME_MAP[moduleId]) return MODULE_NAME_MAP[moduleId]
+  return moduleId
+    ? moduleId.charAt(0).toUpperCase() + moduleId.slice(1).replace(/_/g, ' ')
+    : 'Unknown Module'
+}
+
+export const MEMBERSHIP_INFO = {
+  basic: { id: 'basic', name: 'Basic', color: 'blue' },
+  premium: { id: 'premium', name: 'Premium', color: 'purple' },
+  premium_plus: { id: 'premium_plus', name: 'Premium Plus', color: 'fuchsia' },
+  enterprise: { id: 'enterprise', name: 'Enterprise', color: 'indigo' },
+  partner: { id: 'partner', name: 'Alliance Partner', color: 'amber' }
+}
+
+export const OWNERSHIP_MODELS = [
+  {
+    id: 'instant',
+    title: 'Instant Purchase',
+    subtitle: 'Full Ownership & Source Code',
+    description: 'Acquire 100% rights and source code access. Complete ownership transfer with all assets included.',
+    features: ['100% Rights & Source Access', 'Immediate Delivery', 'Full Technical Documentation'],
+    priceLabel: 'One-time',
+    icon: ShoppingBag,
+    color: 'amber',
+    popular: true
+  },
+  {
+    id: 'rent-to-own',
+    title: 'Rent to Own',
+    subtitle: '12-Month Path to Equity',
+    description: 'Monthly payments with equity buildup. Own the business at the end of the term.',
+    features: ['Monthly Payments', 'own at end', '+15% Premium'],
+    priceLabel: '12-Month Term',
+    icon: RefreshCw,
+    color: 'purple'
+  },
+  {
+    id: 'subscription',
+    title: 'Subscription',
+    subtitle: 'Member-Exclusive Access',
+    description: 'Low entry point with full module access. Flexible tier-based subscription for ongoing use.',
+    features: ['Low entry, full module access', 'Tier Based', 'Flexible Cancellation'],
+    priceLabel: 'Tier Based',
+    icon: Wallet,
+    color: 'emerald'
+  }
+]
+
+export const BUSINESS_MEMBERSHIP_TIERS = [
+  {
+    id: 'basic',
+    name: 'Essential',
+    subtitle: 'Core Infrastructure',
+    tierLabel: 'Basic Membership',
+    description: 'Perfect for small businesses starting their digital journey with essential core features.',
+    price: 12,
+    badge: 'Basic Membership',
+    popular: false,
+    features: [
+      '2 Infrastructure Nodes (2 Businesses)',
+      '4 Modules for the 2 businesses upgrade',
+      'Free Maintenance for the 2 businesses',
+      'Custom Domain Integration',
+      'SEO Starter Pack',
+      'Mail Engine Access',
+      'API Gateway Access',
+      'Basic Support Tier'
+    ]
+  },
+  {
+    id: 'premium',
+    name: 'Professional Stack',
+    subtitle: 'Premium Membership',
+    tierLabel: 'Most Popular',
+    description: 'Total digital transformation for businesses ready to scale with advanced analytics.',
+    price: 25,
+    badge: 'Premium Membership',
+    popular: true,
+    features: [
+      'Everything in Essential',
+      '1 Additional Infrastructure Node (3 Total)',
+      'Advanced Business Analytics',
+      '1 Dedicated Account Manager',
+      '8 Modules for all businesses',
+      'All Payment Solution Services',
+      'Market Intelligence Access',
+      'Workflow Automation Core'
+    ]
+  },
+  {
+    id: 'premium_plus',
+    name: 'Total Power',
+    subtitle: 'Enterprise Ecosystem',
+    tierLabel: 'Premium Plus',
+    description: 'The complete tech ecosystem. Unlimited modules and 24/7 VIP engineering support.',
+    price: 60,
+    badge: 'Premium Plus',
+    popular: false,
+    features: [
+      'Everything in Professional',
+      '1 Additional Infrastructure Node (4 Total)',
+      'Unlimited Modules for all businesses',
+      'AI-Powered Business Intelligence for all businesses',
+      '24/7 VIP Engineering Support',
+      '1 Basic Mobile App Inclusion',
+      'Advanced Analytics for all businesses'
+    ]
+  },
+  {
+    id: 'enterprise',
+    name: 'Maximum Scale',
+    subtitle: 'Unlimited Infrastructure',
+    tierLabel: 'Enterprise Tier',
+    description: 'Maximum scalability with dedicated infrastructure and full whitelabel business platform.',
+    price: 130,
+    badge: 'Enterprise Tier',
+    popular: false,
+    features: [
+      'Everything in Total Power',
+      '3 Additional Infrastructure Nodes (7 Total)',
+      'Dedicated Infrastructure',
+      'Custom SLA & Legal Support',
+      'Whitelabel Business Platform',
+      'Direct API Access',
+      'Unlimited Scalability',
+      'Unlimited AI and Automation Services for all businesses'
+    ]
+  },
+  {
+    id: 'partner',
+    name: 'Strategic Partner',
+    subtitle: 'E-commerce Alliance',
+    tierLabel: 'Alliance Partner',
+    description: 'Strategic partnership for high-volume e-commerce with zero upfront development costs.',
+    price: null,
+    priceLabel: '7% fee',
+    badge: 'Revenue Share Model',
+    popular: false,
+    partner: true,
+    features: [
+      'Unlimited Ecommerce Modules',
+      'Limited Ecommerce Businesses',
+      'Shared Revenue Model (7% Commission)',
+      'Dedicated Partner Support',
+      'Automated Scaling',
+      'Zero Upfront Development'
+    ]
+  }
+]
+
+export const BRAND_CONTENT = {
+  name: 'Iyoni Corp',
+  tagline: 'Digital Businesses & Technology',
+  coreMessage: 'Own a Business. Build a Business. Grow a Business.',
+  heroDescription: 'Iyoni Corp creates digital businesses and technology products for entrepreneurs building the next generation of online businesses.',
+  supportingMessage: 'We create digital businesses and technology products that help entrepreneurs build, operate, and grow online.'
+}
+
+export const THREE_PATHS = [
+  {
+    id: 'buy',
+    title: 'Buy a Business',
+    description: 'Acquire a ready-made digital business created by Iyoni Corp.',
+    cta: 'Explore Businesses',
+    href: '#businesses',
+    isSecondary: false
+  },
+  {
+    id: 'build',
+    title: 'Build a Business',
+    description: 'Launch and operate your business with IyonicWeb.',
+    cta: 'Explore IyonicWeb',
+    href: 'https://web.iyonicorp.com',
+    isSecondary: false
+  },
+  {
+    id: 'work',
+    title: 'Work With Iyoni',
+    description: 'Need a custom technology solution? Work directly with Iyoni Corp.',
+    cta: 'Contact Iyoni Corp',
+    href: '#contact',
+    isSecondary: true
+  }
+]
+
+export const HOW_IYONI_BUILDS = [
+  { title: 'IDEA', description: 'We identify market opportunities and validate business concepts.' },
+  { title: 'BUILD', description: 'We develop and launch digital businesses on the Iyonic platform.' },
+  { title: 'LAUNCH', description: 'We deploy and optimize each business for operational performance.' },
+  { title: 'GROW', description: 'We scale businesses with data-driven growth and automation.' },
+  { title: 'OWN / OPERATE / SELL', description: 'Businesses are available for acquisition, partnership, or investment.' }
+]
+
+export const HOW_IYONI_BUILDS_DESCRIPTION = 'Iyoni Corp creates digital businesses and technology products that help entrepreneurs build, operate, and grow online.'
+
+export const TECH_ECOSYSTEM = [
+  {
+    name: 'IyonicWeb',
+    description: 'Business Platform',
+    href: 'https://web.iyonicorp.com'
+  },
+  {
+    name: 'IyonicPay',
+    description: 'Payments',
+    href: 'https://pay.iyonicorp.com'
+  },
+  {
+    name: 'IyonicBots',
+    description: 'AI & Automation',
+    href: 'https://iyonicbots.iyonicorp.com'
+  }
+]
+
+export const IYONICBOTS_CAPABILITIES = [
+  {
+    id: 'conversations',
+    title: 'Customer Conversations',
+    description: 'AI-powered chatbots that engage visitors and answer questions in real time.',
+    exists: true
+  },
+  {
+    id: 'product-questions',
+    title: 'Product Questions',
+    description: 'Assistants trained on your product docs and catalogs to answer buyer queries.',
+    exists: true
+  },
+  {
+    id: 'lead-generation',
+    title: 'Lead Generation',
+    description: 'AI-powered lead capture and qualification workflows are planned for upcoming releases.',
+    exists: false
+  },
+  {
+    id: 'support',
+    title: 'Customer Support',
+    description: 'Automated support ticket handling and response routing via AI agents.',
+    exists: true
+  },
+  {
+    id: 'automation',
+    title: 'Business Automation',
+    description: 'Workflow automation for bookings, inventory, and daily operations.',
+    exists: true
+  }
+]
+
+export const EXCLUDED_BUSINESS_IDS = ['iyonicweb-cp19', 'iyonicpay-fc1', 'custom-ai-az1', 'paylang-gl1']
+export const EXCLUDED_BUSINESS_NAMES = ['Iyonicweb', 'iyonicpay', 'Custom AI Assistant', 'Paylang']
+export const EXCLUDED_BUSINESS_URLS = ['web.iyonicorp.com', 'pay.iyonicorp.com', 'iyonicbots.iyonicorp.com', 'paylang.iyonicorp.com']
+
+export const HOME_NAV_ITEMS = [
+  { label: 'Businesses', href: '#businesses' },
+  { label: 'IyonicWeb', href: '#iyonicweb' },
+  { label: 'IyonicPay', href: '#iyonicpay' },
+  { label: 'IyonicBots', href: '#iyonicbots' },
+  { label: 'Work With Iyoni', href: '#contact' }
+]
+
+export const ALL_BUSINESSES = Object.values(CATALOG_ITEMS).flat().filter(
+  (item) => !EXCLUDED_BUSINESS_NAMES.includes(item.name)
+)
+
+export const findBusinessById = (id) => {
+  return ALL_BUSINESSES.find((item) => item.id === id) || null
+}
+
+export const findBusinessByName = (name) => {
+  return ALL_BUSINESSES.find((item) => item.name === name) || null
 }
 

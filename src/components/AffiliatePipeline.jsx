@@ -13,7 +13,7 @@ const AffiliatePipeline = ({ leads, onUpdate, onAddNote }) => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'interested': return 'bg-emerald-50 text-emerald-600 border-emerald-100';
-      case 'contacted': return 'bg-blue-50 text-blue-600 border-blue-100';
+      case 'contacted': return 'bg-neutral-800/30 text-amber-400 border-neutral-700';
       case 'not_contacted': return 'bg-slate-50 text-slate-600 border-slate-100';
       case 'not_interested': return 'bg-rose-50 text-rose-600 border-rose-100';
       case 'converted': return 'bg-purple-50 text-purple-600 border-purple-100';
@@ -23,17 +23,17 @@ const AffiliatePipeline = ({ leads, onUpdate, onAddNote }) => {
 
   return (
     <div className="space-y-8">
-      <div className="bg-blue-600 rounded-[3rem] p-10 text-white relative overflow-hidden mb-12">
+      <div className="bg-amber-400 rounded-[3rem] p-10 text-neutral-950 relative overflow-hidden mb-12">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[80px] rounded-full -mr-32 -mt-32" />
         <div className="relative z-10">
           <h2 className="text-3xl font-black mb-4 italic uppercase">Strategic Outreach</h2>
-          <p className="text-blue-100 text-sm font-medium max-w-xl leading-relaxed">
+          <p className="text-neutral-300 text-sm font-medium max-w-xl leading-relaxed">
             Track and engage with businesses in the pipeline. Your mission is to convert these prospects by offering our infrastructure solutions.
           </p>
         </div>
       </div>
 
-      <div className="bg-white rounded-[2.5rem] border border-neutral-100 shadow-sm overflow-hidden">
+      <div className="bg-neutral-900 rounded-[2.5rem] border border-neutral-800 shadow-sm overflow-hidden">
         {leads.length === 0 ? (
           <div className="p-24 text-center">
             <Rocket className="w-16 h-16 text-neutral-100 mx-auto mb-6" />
@@ -45,7 +45,7 @@ const AffiliatePipeline = ({ leads, onUpdate, onAddNote }) => {
               <div key={lead.id} className="p-6 lg:p-10 hover:bg-neutral-50/50 transition-colors group">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
                   <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 bg-blue-50 rounded-2xl border border-blue-100 flex items-center justify-center text-blue-600 font-black text-2xl uppercase shadow-sm">
+                    <div className="w-16 h-16 bg-neutral-800/50 rounded-2xl border border-neutral-700 flex items-center justify-center text-amber-400 font-black text-2xl uppercase shadow-sm">
                       {lead.business_name?.charAt(0) || 'B'}
                     </div>
                     <div>
@@ -57,7 +57,7 @@ const AffiliatePipeline = ({ leads, onUpdate, onAddNote }) => {
                           {lead.status?.replace('_', ' ')}
                         </span>
                         <span className="flex items-center gap-2 text-neutral-400 text-[10px] font-black uppercase tracking-widest">
-                          <Globe size={14} className="text-blue-500" /> {lead.business_type}
+                          <Globe size={14} className="text-amber-400" /> {lead.business_type}
                         </span>
                       </div>
                     </div>
@@ -66,7 +66,7 @@ const AffiliatePipeline = ({ leads, onUpdate, onAddNote }) => {
                   <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
                     <div className="flex items-center gap-2 p-1 bg-neutral-100 rounded-xl">
                       {[
-                        { status: 'contacted', icon: Clock, label: 'Contacted', color: 'text-blue-600' },
+                        { status: 'contacted', icon: Clock, label: 'Contacted', color: 'text-amber-400' },
                         { status: 'interested', icon: CheckCircle, label: 'Interested', color: 'text-emerald-600' },
                         { status: 'not_interested', icon: XCircle, label: 'Not Int.', color: 'text-rose-600' }
                       ].map((btn) => (
@@ -87,7 +87,7 @@ const AffiliatePipeline = ({ leads, onUpdate, onAddNote }) => {
                     
                     <button
                       onClick={() => setExpandedId(expandedId === lead.id ? null : lead.id)}
-                      className="p-4 bg-neutral-900 text-white rounded-xl shadow-lg shadow-neutral-900/20 active:scale-95 transition-all"
+                      className="p-4 bg-neutral-900 text-neutral-950 rounded-xl shadow-lg shadow-neutral-900/20 active:scale-95 transition-all"
                     >
                       {expandedId === lead.id ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
@@ -109,21 +109,21 @@ const AffiliatePipeline = ({ leads, onUpdate, onAddNote }) => {
                             <div className="grid gap-4">
                               <div className="p-6 bg-neutral-50 rounded-2xl border border-neutral-100 flex items-center justify-between">
                                 <div className="flex items-center gap-4">
-                                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-sm">
+                                  <div className="w-10 h-10 bg-neutral-800 rounded-xl flex items-center justify-center text-amber-400 shadow-sm">
                                     <Phone size={18} />
                                   </div>
                                   <span className="text-sm font-bold text-neutral-900">{lead.contact_info || 'No contact info'}</span>
                                 </div>
-                                <button className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline">Copy</button>
+                                <button className="text-[10px] font-black text-amber-400 uppercase tracking-widest hover:underline">Copy</button>
                               </div>
                               <div className="p-6 bg-neutral-50 rounded-2xl border border-neutral-100 flex items-center justify-between">
                                 <div className="flex items-center gap-4">
-                                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-indigo-600 shadow-sm">
+                                  <div className="w-10 h-10 bg-neutral-800 rounded-xl flex items-center justify-center text-amber-400 shadow-sm">
                                     <MessageSquare size={18} />
                                   </div>
                                   <span className="text-sm font-bold text-neutral-900">{lead.social_media || 'No social link'}</span>
                                 </div>
-                                <button className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline">Visit</button>
+                                <button className="text-[10px] font-black text-amber-400 uppercase tracking-widest hover:underline">Visit</button>
                               </div>
                             </div>
                           </div>
@@ -134,7 +134,7 @@ const AffiliatePipeline = ({ leads, onUpdate, onAddNote }) => {
                                 <AlertCircle size={14} /> Mission Tip
                               </h4>
                               <p className="text-xs font-bold text-amber-900 leading-relaxed">
-                                Always reference their {lead.business_type} business and mention how a website could increase their visibility by 300%.
+                                Always reference their {lead.business_type} business and mention how a proper online presence could increase their visibility by 300%.
                               </p>
                             </div>
                           </div>
@@ -150,10 +150,10 @@ const AffiliatePipeline = ({ leads, onUpdate, onAddNote }) => {
                               </div>
                             ) : (
                               lead.notes.map((note, idx) => (
-                                <div key={idx} className="p-6 bg-white rounded-2xl border border-neutral-100 shadow-sm">
+                                <div key={idx} className="p-6 bg-neutral-800/30 rounded-2xl border border-neutral-700 shadow-sm">
                                   <p className="text-sm font-medium text-neutral-700 mb-3">{note.text}</p>
                                   <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-neutral-400">
-                                    <span className="text-blue-600">{note.author}</span>
+                                    <span className="text-amber-400">{note.author}</span>
                                     <span>{new Date(note.date).toLocaleDateString()}</span>
                                   </div>
                                 </div>
@@ -166,7 +166,7 @@ const AffiliatePipeline = ({ leads, onUpdate, onAddNote }) => {
                               placeholder="Update dossier with new intel..."
                               value={newNote}
                               onChange={(e) => setNewNote(e.target.value)}
-                              className="flex-1 px-6 py-4 bg-neutral-50 border border-neutral-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-blue-500/5 transition-all"
+                              className="flex-1 px-6 py-4 bg-neutral-50 border border-neutral-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-amber-400/5 transition-all"
                             />
                             <button
                               onClick={() => {
@@ -175,7 +175,7 @@ const AffiliatePipeline = ({ leads, onUpdate, onAddNote }) => {
                                   setNewNote('');
                                 }
                               }}
-                              className="px-8 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-500/20 hover:bg-blue-700 active:scale-95 transition-all"
+                              className="px-8 bg-amber-400 text-neutral-950 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-amber-400/20 hover:bg-amber-300 active:scale-95 transition-all"
                             >
                               Log
                             </button>

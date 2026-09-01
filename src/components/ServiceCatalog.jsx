@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Eye, ShoppingCart, Star, Shield, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
@@ -23,17 +23,17 @@ const CoolPopup = ({ isOpen, onClose, title, message, type = 'info' }) => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-sm bg-white rounded-[32px] p-8 shadow-2xl overflow-hidden"
+            className="relative w-full max-w-sm bg-neutral-900 rounded-[32px] p-8 shadow-2xl overflow-hidden"
           >
             <div className={`absolute top-0 left-0 w-full h-2 ${
-              type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-rose-500' : 'bg-blue-600'
+              type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-rose-500' : 'bg-amber-400'
             }`} />
             
             <div className="flex flex-col items-center text-center">
               <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
                 type === 'success' ? 'bg-emerald-50 text-emerald-500' : 
                 type === 'error' ? 'bg-rose-50  text-rose-500' : 
-                'bg-blue-50 text-blue-600'
+                'bg-neutral-800/50 text-amber-400'
               }`}>
                 {type === 'success' ? <CheckCircle2 size={32} /> : 
                  type === 'error' ? <AlertCircle size={32} /> : 
@@ -49,7 +49,7 @@ const CoolPopup = ({ isOpen, onClose, title, message, type = 'info' }) => {
               
               <button
                 onClick={onClose}
-                className="w-full py-4 bg-neutral-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-colors shadow-lg active:scale-95"
+                className="w-full py-4 bg-neutral-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-amber-400 transition-colors shadow-lg active:scale-95"
               >
                 Dismiss
               </button>
@@ -234,7 +234,7 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
             service = {
               ...baseService,
               title: plan.name,
-              color: plan.color === 'blue' ? 'bg-blue-600' : 'bg-neutral-900'
+              color: plan.color === 'blue' ? 'bg-amber-400' : 'bg-neutral-900'
             }
             break
           }
@@ -257,7 +257,7 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
   if (!service) return null
 
   return (
-    <div className="min-h-screen bg-white pt-32 pb-24">
+    <div className="min-h-screen bg-neutral-950 pt-32 pb-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Navigation */}
         <motion.button
@@ -277,7 +277,7 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
               animate={{ opacity: 1, y: 0 }}
               className="text-4xl md:text-5xl font-black text-neutral-900 mb-4"
             >
-              {service.title} <span className="text-blue-600">Catalog</span>
+              {service.title} <span className="text-amber-400">Catalog</span>
             </motion.h1>
             <p className="text-neutral-500 text-lg max-w-2xl font-medium">
               Select a base design to begin your journey. Every design is fully customizable to your brand's unique identity.
@@ -288,7 +288,7 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
             <button
               onClick={() => setCurrency('USD')}
               className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all uppercase tracking-widest ${
-                currency === 'USD' ? 'bg-white text-blue-600 shadow-sm' : 'text-neutral-400 hover:text-neutral-600'
+                currency === 'USD' ? 'bg-neutral-900 text-neutral-200 shadow-sm' : 'text-neutral-400 hover:text-neutral-600'
               }`}
             >
               USD
@@ -296,7 +296,7 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
             <button
               onClick={() => setCurrency('KES')}
               className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all uppercase tracking-widest ${
-                currency === 'KES' ? 'bg-white text-blue-600 shadow-sm' : 'text-neutral-400 hover:text-neutral-600'
+                currency === 'KES' ? 'bg-neutral-900 text-neutral-200 shadow-sm' : 'text-neutral-400 hover:text-neutral-600'
               }`}
             >
               KES
@@ -315,7 +315,7 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 onClick={() => handlePreview(item)}
-                className="group bg-white rounded-[40px] overflow-hidden border border-neutral-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer"
+                className="group bg-neutral-900 rounded-[40px] overflow-hidden border border-neutral-800 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer"
               >
                 {/* Image Container */}
                 <div className="relative overflow-hidden bg-neutral-100 flex items-center justify-center aspect-[4/3]">
@@ -343,7 +343,7 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                   
                   {item.url && (
                     <div className="absolute top-4 right-4 flex items-center gap-2">
-                      <div className="px-3 py-1 bg-blue-600 text-white text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg flex items-center gap-1.5">
+                      <div className="px-3 py-1 bg-amber-500 text-neutral-950 text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
                         Live System
                       </div>
@@ -356,7 +356,7 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                         e.stopPropagation();
                         handlePreview(item);
                       }}
-                      className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-neutral-900 hover:bg-blue-600 hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-500"
+                      className="w-14 h-14 bg-neutral-800 rounded-2xl flex items-center justify-center text-neutral-400 hover:bg-amber-400 hover:text-neutral-950 transition-all transform translate-y-4 group-hover:translate-y-0 duration-500"
                     >
                       <Eye size={24} />
                     </button>
@@ -377,7 +377,7 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                       {formatPrice(item.price)}
                     </div>
                     <div className="flex items-center justify-between mt-1">
-                      <div className="text-[9px] font-bold text-blue-600 uppercase tracking-widest">
+                      <div className="text-[9px] font-bold text-amber-400 uppercase tracking-widest">
                         Or {getMonthlyPrice(item.price)} (Rent to Own)
                       </div>
                       {item.minTier && item.minTier !== 'free' && (
@@ -418,7 +418,7 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                       className={`flex-1 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 ${
                         isSelecting || !currentUser?.membership_tier || (item.minTier && item.minTier !== 'free' && !checkAccess(currentUser?.membership_tier, item.minTier))
                           ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
-                          : 'bg-neutral-900 text-white hover:bg-blue-600 shadow-neutral-900/10'
+                          : 'bg-neutral-900 text-white hover:bg-amber-400 shadow-neutral-900/10'
                       }`}
                     >
                       {isSelecting ? (
@@ -445,7 +445,7 @@ const ServiceCatalog = ({ serviceId, onBack, onPreview, onAddToWishlist, wishlis
                         e.stopPropagation();
                         handlePreview(item);
                       }}
-                      className="w-14 h-14 border border-neutral-100 rounded-2xl flex items-center justify-center text-neutral-400 hover:border-blue-600 hover:text-blue-600 transition-all group/info"
+                      className="w-14 h-14 border border-neutral-100 rounded-2xl flex items-center justify-center text-neutral-400 hover:border-amber-400 hover:text-amber-400 transition-all group/info"
                     >
                       <Eye size={20} className="group-hover/info:scale-110 transition-transform" />
                     </button>

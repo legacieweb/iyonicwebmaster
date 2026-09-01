@@ -13,13 +13,13 @@ html {
 }
 
 body {
-  background-color: #fafafa;
-  color: #171717;
+  background-color: #0a0a0f;
+  color: #e5e5e5;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 @layer base {
@@ -30,83 +30,83 @@ body {
   h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
     letter-spacing: -0.02em;
-    line-height: 1.2;
-    color: #171717;
+    line-height: 1.1;
+    color: #f3f3f5;
   }
   
   p {
-    line-height: 1.6;
+    line-height: 1.7;
     font-weight: 400;
-    color: #525252;
+    color: #a1a1aa;
   }
 }
 
 @layer components {
-  /* Minimalist Card */
+  /* Corporate Card */
   .card-minimal {
-    @apply bg-white border border-neutral-200 rounded-sm transition-all duration-300;
+    @apply bg-neutral-900/50 border border-neutral-800 rounded-[24px] transition-all duration-300;
   }
   
   .card-minimal:hover {
-    @apply border-neutral-300;
+    @apply border-neutral-700;
   }
 
-  /* Minimalist Section */
+  /* Corporate Section */
   .section-minimal {
     @apply px-6 py-20 md:py-24 lg:py-28;
   }
 
   /* Typography */
   .text-display-minimal {
-    @apply text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight;
+    @apply text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter;
   }
 
   .text-heading-minimal {
-    @apply text-3xl sm:text-4xl font-medium tracking-tight;
+    @apply text-3xl sm:text-4xl font-black tracking-tight;
   }
 
   .text-subheading-minimal {
-    @apply text-xl sm:text-2xl font-normal;
+    @apply text-xl sm:text-2xl font-medium;
   }
 
   .text-body-minimal {
-    @apply text-base text-neutral-600 leading-relaxed;
+    @apply text-base text-neutral-400 leading-relaxed;
   }
 
   .text-label-minimal {
-    @apply text-xs font-medium uppercase tracking-widest text-neutral-500;
+    @apply text-xs font-black uppercase tracking-widest text-neutral-500;
   }
 
-  /* Minimalist Buttons */
+  /* Corporate Buttons */
   .btn-minimal-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 bg-neutral-900 text-white rounded-sm font-normal text-sm hover:bg-neutral-800 transition-colors duration-200;
+    @apply inline-flex items-center justify-center px-8 py-4 bg-amber-400 text-neutral-950 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-amber-300 transition-all duration-200 shadow-xl shadow-amber-400/20;
   }
 
   .btn-minimal-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 bg-white border border-neutral-200 text-neutral-900 rounded-sm font-normal text-sm hover:border-neutral-300 transition-colors duration-200;
+    @apply inline-flex items-center justify-center px-8 py-4 border-2 border-neutral-700 text-neutral-200 rounded-2xl font-black text-xs uppercase tracking-widest hover:border-amber-400/50 hover:bg-neutral-800 transition-all duration-200;
   }
 
   .btn-minimal-ghost {
-    @apply inline-flex items-center justify-center px-5 py-2.5 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-sm font-normal text-sm transition-colors duration-200;
+    @apply inline-flex items-center justify-center px-5 py-2.5 text-neutral-400 hover:text-amber-400 hover:bg-neutral-800 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-200;
   }
 
-  /* Input */
+  /* Corporate Input */
   .input-minimal {
-    @apply w-full px-4 py-3 bg-white border border-neutral-200 rounded-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all duration-200;
+    @apply w-full px-4 py-3 bg-neutral-900/50 border border-neutral-700 rounded-2xl text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all duration-200;
   }
 
   /* Container */
   .container-minimal {
-    @apply max-w-6xl mx-auto;
+    @apply max-w-7xl mx-auto;
   }
 
-  /* Glassmorphism */
+  /* Glassmorphism - Corporate */
   .glass-card {
-    @apply bg-white/40 backdrop-blur-xl border border-white/20 shadow-xl;
+    @apply bg-neutral-900/30 backdrop-blur-xl border border-neutral-800 shadow-xl;
   }
 
   .glass-button {
-    @apply bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all duration-300;
+    @apply bg-neutral-900/30 backdrop-blur-md border border-neutral-700 hover:bg-neutral-800/50 transition-all duration-300;
   }
 
   /* Animated Gradient Background */
@@ -121,19 +121,19 @@ body {
     100% { background-position: 0% 50%; }
   }
 
-  /* Mesh Gradient */
+  /* Mesh Gradient - Corporate Deep */
   .mesh-gradient {
-    background-color: #fafafa;
+    background-color: #0a0a0f;
     background-image: 
-      radial-gradient(at 0% 0%, hsla(220, 100%, 95%, 1) 0px, transparent 50%),
-      radial-gradient(at 50% 0%, hsla(280, 100%, 95%, 1) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(220, 100%, 95%, 1) 0px, transparent 50%),
-      radial-gradient(at 50% 50%, hsla(0, 0%, 100%, 1) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, hsla(220, 100%, 15%, 1) 0px, transparent 50%),
+      radial-gradient(at 50% 0%, hsla(280, 100%, 15%, 1) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(220, 100%, 15%, 1) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, hsla(0, 0%, 8%, 1) 0px, transparent 50%);
   }
 
   /* Divider */
   .divider-minimal {
-    @apply h-px bg-neutral-200;
+    @apply h-px bg-neutral-800;
   }
 }
 
@@ -148,41 +148,29 @@ body {
   scrollbar-width: none;  /* Firefox */
 }
 
-/* Scrollbar - Minimal */
+/* Subtlle scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #fafafa;
+  background: #0a0a0f;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d4;
+  background: #27272a;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a3a3a3;
+  background: #3f3f46;
 }
 
 /* Selection */
-@selection {
-  background-color: rgba(0, 0, 0, 0.08);
-  color: #171717;
+::selection {
+  background-color: rgba(251, 191, 36, 0.3);
+  color: #f9fafb;
 }
-
-/* Minimal Animations - Disabled for performance */
-/* 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-.animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
-.animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
-.stagger-1 { animation-delay: 0.1s; }
-.stagger-2 { animation-delay: 0.2s; }
-.stagger-3 { animation-delay: 0.3s; }
-.stagger-4 { animation-delay: 0.4s; }
-*/
 
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
@@ -195,7 +183,7 @@ body {
 
 /* Focus States */
 .focus-visible-minimal {
-  outline: 2px solid #171717;
+  outline: 2px solid #f59e0b;
   outline-offset: 2px;
 }
 
@@ -214,6 +202,6 @@ body {
 
 /* Subtle dot pattern for texture */
 .dot-pattern-minimal {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(161, 161, 170, 0.08) 1px, transparent 1px);
   background-size: 24px 24px;
 }

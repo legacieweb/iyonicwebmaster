@@ -33,20 +33,22 @@ const Contact = () => {
   }
 
   return (
-    <section id="contact" className="py-24 bg-white overflow-hidden">
+    <section id="contact" className="py-24 bg-neutral-950 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-20">
           <div>
-            <span className="inline-block text-sm font-bold text-blue-600 tracking-wider uppercase mb-4">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neutral-900/50 border border-neutral-800 text-[10px] font-black text-neutral-400 uppercase tracking-wider mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
               {CONTACT_CONTENT.subtitle}
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-8 leading-tight">
-              {CONTACT_CONTENT.title.split(' ').slice(0, -2).join(' ')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                {CONTACT_CONTENT.title.split(' ').slice(-2, -1)}
-              </span> {CONTACT_CONTENT.title.split(' ').slice(-1)}
+            <h2 className="text-4xl md:text-5xl font-medium text-neutral-100 tracking-tight leading-[1.05] mb-8">
+              {CONTACT_CONTENT.title.split(' ').slice(0, -1).join(' ')}{' '}
+              <span className="relative inline-block text-amber-400">
+                {CONTACT_CONTENT.title.split(' ').slice(-1)}
+                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-amber-400/40 rounded-full" />
+              </span>
             </h2>
-            <p className="text-lg text-neutral-500 mb-12 leading-relaxed max-w-lg">
+            <p className="text-lg text-neutral-400 mb-12 leading-relaxed max-w-lg">
               {CONTACT_CONTENT.description}
             </p>
 
@@ -55,12 +57,12 @@ const Contact = () => {
                 const Icon = info.icon
                 return (
                   <div key={i} className="flex items-center gap-6 group">
-                    <div className={`w-14 h-14 rounded-2xl ${info.bg} ${info.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                    <div className={`w-14 h-14 rounded-2xl ${info.bg} ${info.color} flex items-center justify-center group-hover:scale-110 transition-transform border border-neutral-700`}>
                       <Icon size={24} />
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-neutral-400 uppercase tracking-widest mb-1">{info.label}</div>
-                      <div className="text-xl font-bold text-neutral-900">{info.value}</div>
+                      <div className="text-sm font-black text-neutral-500 uppercase tracking-widest mb-1">{info.label}</div>
+                      <div className="text-xl font-black text-neutral-200">{info.value}</div>
                     </div>
                   </div>
                 )
@@ -69,71 +71,71 @@ const Contact = () => {
           </div>
 
           <div className="relative">
-            <div className="bg-neutral-50 p-8 md:p-12 rounded-[40px] border border-neutral-100">
+            <div className="bg-neutral-900/50 p-8 md:p-12 rounded-[40px] border border-neutral-800">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-neutral-900 px-1">Full Name</label>
+                    <label className="text-sm font-black text-neutral-400 px-1">Full Name</label>
                     <input
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-6 py-4 bg-white border border-neutral-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/5 focus:border-blue-600 transition-all"
+                      className="w-full px-6 py-4 bg-neutral-950 border border-neutral-700 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-400/5 focus:border-amber-400 transition-all text-neutral-200 placeholder-neutral-500"
                       placeholder="John Doe"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-neutral-900 px-1">Email Address</label>
+                    <label className="text-sm font-black text-neutral-400 px-1">Email Address</label>
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-6 py-4 bg-white border border-neutral-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/5 focus:border-blue-600 transition-all"
+                      className="w-full px-6 py-4 bg-neutral-950 border border-neutral-700 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-400/5 focus:border-amber-400 transition-all text-neutral-200 placeholder-neutral-500"
                       placeholder="john@example.com"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-neutral-900 px-1">Your Message</label>
+                  <label className="text-sm font-black text-neutral-400 px-1">Your Message</label>
                   <textarea
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
                     required
                     rows="4"
-                    className="w-full px-6 py-4 bg-white border border-neutral-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/5 focus:border-blue-600 transition-all resize-none"
-                    placeholder="Tell us about your project..."
+                    className="w-full px-6 py-4 bg-neutral-950 border border-neutral-700 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-400/5 focus:border-amber-400 transition-all text-neutral-200 placeholder-neutral-500 resize-none"
+                    placeholder="Describe your acquisition interest, target sector, or investment parameters..."
                   />
                 </div>
 
                 {submitStatus && (
                   <div
                     className={`p-4 rounded-2xl flex items-center gap-3 ${
-                      submitStatus.type === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+                      submitStatus.type === 'success' ? 'bg-amber-50/10 text-amber-400 border border-amber-400/20' : 'bg-rose-50/10 text-rose-400 border border-rose-400/20'
                     }`}
                   >
                     {submitStatus.type === 'success' ? <CheckCircle size={20} /> : <AlertCircle size={20} />}
-                    <span className="text-sm font-bold">{submitStatus.message}</span>
+                    <span className="text-sm font-black">{submitStatus.message}</span>
                   </div>
                 )}
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-5 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50 group shadow-lg shadow-blue-500/20"
+                  className="w-full py-5 bg-amber-400 text-neutral-950 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-amber-300 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50 group shadow-xl shadow-amber-400/20"
                 >
-                  {loading ? 'Sending...' : 'Send Message'}
+                  {loading ? 'Sending...' : 'Request Acquisition Brief'}
                   {!loading && <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
                 </button>
               </form>
             </div>
             
-            <div className="absolute -z-10 -bottom-10 -right-10 w-64 h-64 bg-blue-50 rounded-full blur-3xl opacity-50" />
+            <div className="absolute -z-10 -bottom-10 -right-10 w-64 h-64 bg-amber-400/5 rounded-full blur-3xl opacity-50" />
           </div>
         </div>
       </div>

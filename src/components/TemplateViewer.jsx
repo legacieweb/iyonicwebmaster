@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+﻿import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ChevronLeft, Monitor, Tablet, Smartphone, 
@@ -141,7 +141,7 @@ const TemplateViewer = ({ template, onBack }) => {
               {template.name}
             </h1>
             <div className="flex items-center gap-2 mt-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
               <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Architecture Node</span>
             </div>
           </div>
@@ -160,7 +160,7 @@ const TemplateViewer = ({ template, onBack }) => {
                 onClick={() => setDeviceMode(device.mode)}
                 className={`px-5 py-2 rounded-2xl transition-all flex items-center gap-3 ${
                   deviceMode === device.mode 
-                    ? 'bg-white text-blue-600 shadow-sm border border-slate-100' 
+                    ? 'bg-white text-amber-400 shadow-sm border border-slate-100' 
                     : 'text-slate-400 hover:text-slate-600'
                 }`}
                 title={device.label}
@@ -178,7 +178,7 @@ const TemplateViewer = ({ template, onBack }) => {
             className={`px-6 py-3.5 md:px-10 md:py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all shadow-xl flex items-center gap-3 group overflow-hidden relative ${
               !isAuthenticated || !currentUser?.membership_tier || currentUser?.subscription_status !== 'active' || !hasAccess
                 ? 'bg-slate-100 text-slate-400 border border-slate-200'
-                : 'bg-slate-900 text-white hover:bg-blue-600 shadow-slate-900/10'
+                : 'bg-slate-900 text-white hover:bg-amber-400 shadow-slate-900/10'
             }`}
           >
             <span className="relative z-10 hidden sm:inline">
@@ -189,7 +189,7 @@ const TemplateViewer = ({ template, onBack }) => {
             </span>
             {!isAuthenticated || !currentUser?.membership_tier || currentUser?.subscription_status !== 'active' ? <Lock size={16} className="relative z-10" /> : hasAccess ? <ArrowRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" /> : <Shield size={16} className="relative z-10" />}
             {isAuthenticated && currentUser?.membership_tier && currentUser?.subscription_status === 'active' && hasAccess && (
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-neutral-700 opacity-0 group-hover:opacity-100 transition-opacity" />
             )}
           </button>
         </div>
@@ -243,3 +243,4 @@ const TemplateViewer = ({ template, onBack }) => {
 }
 
 export default TemplateViewer
+

@@ -8,7 +8,7 @@ const CaseStudies = ({ onBack }) => {
       description: "How we increased user retention by 45% for a leading finance platform.",
       category: "UX/UI Design",
       image: "https://images.unsplash.com/photo-1551288049-bbdac8a28a80?auto=format&fit=crop&q=80&w=1200",
-      color: "bg-blue-600"
+      color: "bg-amber-400"
     },
     {
       title: "SaaS Platform Scalability",
@@ -36,7 +36,7 @@ const CaseStudies = ({ onBack }) => {
               animate={{ opacity: 1, x: 0 }}
               className="text-7xl md:text-9xl font-black text-neutral-950 tracking-tighter mb-12"
             >
-              Proven Results<span className="text-blue-600">.</span>
+              Proven Results<span className="text-amber-400">.</span>
             </motion.h1>
             <p className="text-2xl text-neutral-500 font-medium leading-relaxed">
               We don't just build software. We solve complex business challenges with creative engineering and strategic design.
@@ -68,7 +68,7 @@ const CaseStudies = ({ onBack }) => {
               </div>
               
               <div className="flex flex-col">
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 mb-8 block">
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-amber-400 mb-8 block">
                   {study.category}
                 </span>
                 <h2 className="text-4xl md:text-6xl font-black text-neutral-950 mb-8 tracking-tighter leading-tight">
@@ -79,7 +79,7 @@ const CaseStudies = ({ onBack }) => {
                 </p>
                 
                 <div className="flex items-center gap-6 group/btn">
-                  <button className="px-10 py-5 bg-neutral-950 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-all flex items-center gap-4 shadow-xl">
+                  <button className="px-10 py-5 bg-neutral-950 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-amber-400 transition-all flex items-center gap-4 shadow-xl">
                     View Case Study <ArrowUpRight size={18} />
                   </button>
                   <button className="p-5 border border-neutral-200 rounded-2xl hover:border-neutral-950 transition-colors">

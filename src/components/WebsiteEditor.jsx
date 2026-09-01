@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+﻿import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Palette, Type, Image as ImageIcon, Save, Loader, AlertCircle } from 'lucide-react'
 import { updateProject } from '../utils/api'
@@ -44,7 +44,7 @@ const WebsiteEditor = ({ website, onBack }) => {
             type="text"
             value={activeBlock.title || ''}
             onChange={(e) => updateBlockContent(activeBlockId, 'title', e.target.value)}
-            className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+            className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:border-amber-400 focus:outline-none"
           />
         </div>
 
@@ -55,7 +55,7 @@ const WebsiteEditor = ({ website, onBack }) => {
               value={activeBlock.subtitle || ''}
               onChange={(e) => updateBlockContent(activeBlockId, 'subtitle', e.target.value)}
               rows="2"
-              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:border-cyan-500 focus:outline-none resize-none"
+              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:border-amber-400 focus:outline-none resize-none"
             />
           </div>
         )}
@@ -74,7 +74,7 @@ const WebsiteEditor = ({ website, onBack }) => {
                 type="text"
                 value={activeBlock.bgColor}
                 onChange={(e) => updateBlockContent(activeBlockId, 'bgColor', e.target.value)}
-                className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white font-mono text-sm focus:border-cyan-500 focus:outline-none"
+                className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white font-mono text-sm focus:border-amber-400 focus:outline-none"
               />
             </div>
           </div>
@@ -94,7 +94,7 @@ const WebsiteEditor = ({ website, onBack }) => {
                     newItems[idx] = e.target.value
                     updateBlockContent(activeBlockId, 'items', newItems)
                   }}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:border-amber-400 focus:outline-none"
                   placeholder={`Item ${idx + 1}`}
                 />
               ))}
@@ -109,7 +109,7 @@ const WebsiteEditor = ({ website, onBack }) => {
               type="text"
               value={activeBlock.buttonText}
               onChange={(e) => updateBlockContent(activeBlockId, 'buttonText', e.target.value)}
-              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:border-amber-400 focus:outline-none"
             />
           </div>
         )}
@@ -202,7 +202,7 @@ const WebsiteEditor = ({ website, onBack }) => {
             <motion.button
               onClick={onBack}
               whileHover={{ x: -5 }}
-              className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-cyan-400 transition-all active:scale-95"
+              className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-amber-400 transition-all active:scale-95"
               title="Go Back"
             >
               <ArrowLeft size={18} />
@@ -214,11 +214,11 @@ const WebsiteEditor = ({ website, onBack }) => {
                   type="text"
                   value={editedTitle}
                   onChange={(e) => setEditedTitle(e.target.value)}
-                  className="text-sm md:text-xl font-black bg-transparent text-white border-b border-transparent hover:border-cyan-500/50 focus:border-cyan-500 outline-none transition-all uppercase italic tracking-tighter truncate w-full"
+                  className="text-sm md:text-xl font-black bg-transparent text-white border-b border-transparent hover:border-amber-400/50 focus:border-amber-400 outline-none transition-all uppercase italic tracking-tighter truncate w-full"
                   placeholder="Project Title"
                 />
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                   <span className="text-[8px] md:text-[10px] font-bold text-neutral-500 uppercase tracking-widest truncate">Live Editor Protocol</span>
                 </div>
               </div>
@@ -243,7 +243,7 @@ const WebsiteEditor = ({ website, onBack }) => {
                 disabled={isSaving}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2 px-4 py-2 md:px-8 md:py-3.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-full md:rounded-xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl shadow-cyan-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+                className="flex items-center gap-2 px-4 py-2 md:px-8 md:py-3.5 bg-gradient-to-r from-amber-400 to-neutral-800 text-white rounded-full md:rounded-xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl shadow-amber-400/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
               >
                 {isSaving ? (
                   <>
@@ -298,7 +298,7 @@ const WebsiteEditor = ({ website, onBack }) => {
                     whileHover={{ scale: 1.02 }}
                     className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-all ${
                       activeBlockId === block.id
-                        ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white'
+                        ? 'bg-gradient-to-r from-amber-400 to-neutral-800 text-white'
                         : 'bg-white/5 text-gray-400 hover:bg-white/10'
                     }`}
                   >
@@ -332,7 +332,7 @@ const WebsiteEditor = ({ website, onBack }) => {
                   placeholder="/* Add custom styles */
 .hero { border-radius: 20px; }"
                   rows="6"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white font-mono text-xs focus:border-cyan-500 focus:outline-none resize-none"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white font-mono text-xs focus:border-amber-400 focus:outline-none resize-none"
                 />
               </div>
             </div>
@@ -344,3 +344,4 @@ const WebsiteEditor = ({ website, onBack }) => {
 }
 
 export default WebsiteEditor
+

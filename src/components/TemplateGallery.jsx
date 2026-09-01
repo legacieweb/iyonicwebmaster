@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Search, Star, Users, Zap } from 'lucide-react'
 
@@ -164,7 +164,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
               placeholder="Search templates..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
+              className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 transition-colors"
             />
           </div>
 
@@ -177,7 +177,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
                 whileTap={{ scale: 0.95 }}
                 className={`px-4 py-2 rounded-lg font-medium capitalize transition-all ${
                   selectedCategory === cat
-                    ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white'
+                    ? 'bg-gradient-to-r from-amber-400 to-neutral-800 text-white'
                     : 'bg-white/5 text-gray-400 hover:bg-white/10'
                 }`}
               >
@@ -195,7 +195,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
-              className="glass-dark rounded-2xl overflow-hidden hover:border-cyan-400/50 border border-white/10 transition-all group cursor-pointer"
+              className="glass-dark rounded-2xl overflow-hidden hover:border-amber-400/50 border border-white/10 transition-all group cursor-pointer"
             >
               {/* Template Preview */}
               <div className="h-48 relative overflow-hidden bg-white/5 flex items-center justify-center">
@@ -215,8 +215,8 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
                 
                 {template.url && (
                   <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
-                    <div className="px-3 py-1 bg-cyan-600/90 backdrop-blur-sm text-white text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 bg-cyan-300 rounded-full animate-pulse" />
+                    <div className="px-3 py-1 bg-amber-400/90 backdrop-blur-sm text-white text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-pulse" />
                       Live Architecture
                     </div>
                   </div>
@@ -242,9 +242,9 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
                   <h3 className="text-xl font-bold">{template.name}</h3>
                   {template.minTier && (
                     <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded ${
-                      template.minTier === 'basic' ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' :
+                      template.minTier === 'basic' ? 'bg-amber-400/20 text-amber-400 border border-amber-400/30' :
                       template.minTier === 'premium' ? 'bg-purple-600/20 text-purple-400 border border-purple-500/30' :
-                      template.minTier === 'premium_plus' ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30' :
+                      template.minTier === 'premium_plus' ? 'bg-amber-400/20 text-amber-400 border border-neutral-600/30' :
                       'bg-rose-600/20 text-rose-400 border border-rose-500/30'
                     }`}>
                       {template.minTier.replace('_', ' ')}
@@ -258,7 +258,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
                   {template.features.slice(0, 2).map((feature, i) => (
                     <span
                       key={i}
-                      className="text-xs bg-cyan-600/20 text-cyan-400 px-2 py-1 rounded border border-cyan-500/30"
+                      className="text-xs bg-amber-400/20 text-amber-400 px-2 py-1 rounded border border-amber-400/30"
                     >
                       {feature}
                     </span>
@@ -282,7 +282,7 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => onSelectTemplate?.(template.id)}
-                  className="w-full mt-4 bg-gradient-to-r from-cyan-600 to-blue-600 py-2 rounded-lg font-semibold hover:shadow-glow transition-all"
+                  className="w-full mt-4 bg-gradient-to-r from-amber-400 to-neutral-800 py-2 rounded-lg font-semibold hover:shadow-glow transition-all"
                 >
                   Preview & Use
                 </motion.button>
@@ -308,3 +308,4 @@ const TemplateGallery = ({ onBack, onSelectTemplate }) => {
 }
 
 export default TemplateGallery
+

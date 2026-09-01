@@ -7,7 +7,7 @@ const Stats = () => {
       value: '200+',
       label: 'Global Clients',
       icon: Users,
-      color: 'text-blue-500'
+      color: 'text-amber-400'
     },
     {
       value: '350+',
@@ -83,7 +83,7 @@ const Stats = () => {
             { label: 'Conversion Boost', value: '45%' }
           ].map((item, i) => (
             <div key={i} className="flex items-center gap-3">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+              <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
               <span className="text-neutral-500 text-sm font-medium uppercase tracking-wider">{item.label}:</span>
               <span className="text-neutral-950 font-bold">{item.value}</span>
             </div>

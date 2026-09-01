@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+﻿import { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { useLocation } from 'react-router-dom'
 import { ArrowLeft, Code2, Loader, AlertCircle, Eye, Sparkles, Star, Users, Search, Layout, ArrowRight } from 'lucide-react'
@@ -93,8 +93,8 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
   }, [templates, searchTerm, selectedCategory])
 
   const templateGradients = [
-    'from-blue-600 to-indigo-600',
-    'from-indigo-600 to-purple-600',
+    'from-amber-400 to-neutral-700',
+    'from-neutral-700 to-purple-600',
     'from-purple-600 to-pink-600',
     'from-emerald-600 to-teal-600',
     'from-orange-600 to-amber-600',
@@ -108,7 +108,7 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
         <motion.div 
           animate={{ rotate: 360 }} 
           transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          className="w-16 h-16 border-4 border-slate-100 border-t-blue-600 rounded-full"
+          className="w-16 h-16 border-4 border-slate-100 border-t-amber-400 rounded-full"
         />
         <p className="mt-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] animate-pulse">Scanning Grid...</p>
       </div>
@@ -116,7 +116,7 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-500/30">
+    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-amber-400/30">
       {/* Dynamic Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.03),transparent_50%)]" />
@@ -125,7 +125,7 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
       <div className="max-w-7xl mx-auto px-6 md:px-8 py-12 relative z-10">
         <motion.button
           onClick={() => onBack('landing')}
-          className="flex items-center gap-3 px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-500 hover:text-blue-600 transition-all shadow-sm mb-12 group"
+          className="flex items-center gap-3 px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-500 hover:text-amber-400 transition-all shadow-sm mb-12 group"
           whileHover={{ x: -5 }}
         >
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
@@ -140,13 +140,13 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
               animate={{ opacity: 1, y: 0 }} 
               className="space-y-6"
             >
-              <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-50 rounded-full border border-blue-100">
-                <Sparkles className="w-4 h-4 text-blue-600" />
-                <span className="text-[8px] font-black text-blue-600 uppercase tracking-[0.2em]">Premium Design Repository</span>
+              <div className="inline-flex items-center gap-3 px-4 py-2 bg-neutral-800/30 rounded-full border border-neutral-700">
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                <span className="text-[8px] font-black text-amber-400 uppercase tracking-[0.2em]">Premium Design Repository</span>
               </div>
               <h1 className="text-5xl md:text-7xl font-black text-neutral-950 uppercase italic tracking-tighter leading-[0.9]">
                 Choose Your <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Digital Standard</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-neutral-700">Digital Standard</span>
               </h1>
               <p className="text-slate-500 text-lg md:text-xl max-w-2xl font-medium leading-relaxed">
                 Experience the next generation of web architecture. Fully customizable, performance-optimized, and secure by design.
@@ -156,11 +156,11 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
           
           <div className="lg:col-span-4">
             <div className="bg-neutral-950 p-8 rounded-[2.5rem] border border-neutral-800 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/10 rounded-full blur-3xl" />
               <div className="relative z-10">
                 <div className="flex items-center gap-2 mb-4">
                   {[1, 2, 3, 4, 5].map((i) => (
-                    <Star key={i} size={10} className="text-blue-400 fill-blue-400" />
+                    <Star key={i} size={10} className="text-amber-400 fill-amber-400" />
                   ))}
                 </div>
                 <p className="text-white font-black italic uppercase tracking-tight text-lg mb-2">Enterprise Ready</p>
@@ -178,7 +178,7 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
           className="mb-16 space-y-8 bg-white p-8 sm:p-10 rounded-[3rem] border border-slate-100 shadow-sm"
         >
           <div className="relative group">
-            <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+            <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none text-slate-400 group-focus-within:text-amber-400 transition-colors">
               <Search size={20} />
             </div>
             <input
@@ -186,7 +186,7 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
               placeholder="Query the repository (e.g., Corporate, Portfolio, E-commerce...)"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-16 pr-8 py-6 bg-slate-50 border border-slate-200 rounded-2xl text-neutral-950 font-bold placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+              className="w-full pl-16 pr-8 py-6 bg-slate-50 border border-slate-200 rounded-2xl text-neutral-950 font-bold placeholder-slate-400 focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all outline-none"
             />
           </div>
 
@@ -230,7 +230,7 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
                 transition={{ delay: index * 0.05 }}
                 className="group h-full"
               >
-                <div className="bg-white rounded-[3rem] border border-slate-100 overflow-hidden hover:border-blue-100 transition-all h-full flex flex-col hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] duration-500">
+                <div className="bg-white rounded-[3rem] border border-slate-100 overflow-hidden hover:border-neutral-700 transition-all h-full flex flex-col hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] duration-500">
                   {/* Visual Node */}
                   <div className="h-64 relative overflow-hidden bg-slate-100 flex items-center justify-center">
                     {/* Background Logo Placeholder */}
@@ -247,8 +247,8 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
                     
                     {template.url && (
                       <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
-                        <div className="px-3 py-1 bg-blue-600/90 backdrop-blur-sm text-white text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 bg-blue-300 rounded-full animate-pulse" />
+                        <div className="px-3 py-1 bg-amber-400/90 backdrop-blur-sm text-white text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-pulse" />
                           Deployed Node
                         </div>
                       </div>
@@ -281,7 +281,7 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
                   {/* Intelligence Area */}
                   <div className="p-8 sm:p-10 flex-1 flex flex-col">
                     <div className="flex justify-between items-start mb-6">
-                      <span className="px-3 py-1 bg-blue-50 text-blue-600 text-[8px] font-black uppercase tracking-[0.2em] rounded-md border border-blue-100">
+                      <span className="px-3 py-1 bg-neutral-800/30 text-amber-400 text-[8px] font-black uppercase tracking-[0.2em] rounded-md border border-neutral-700">
                         {template.category || 'Architecture'}
                       </span>
                       <div className="flex items-center gap-1">
@@ -289,7 +289,7 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
                       </div>
                     </div>
 
-                    <h3 className="text-2xl font-black text-neutral-950 uppercase italic tracking-tight mb-3 group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-2xl font-black text-neutral-950 uppercase italic tracking-tight mb-3 group-hover:text-amber-400 transition-colors">
                       {template.name}
                     </h3>
                     
@@ -331,3 +331,4 @@ const DeployedTemplates = ({ onBack, onSelectTemplate }) => {
 }
 
 export default DeployedTemplates
+

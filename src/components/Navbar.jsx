@@ -16,10 +16,14 @@ const Navbar = ({ onLoginClick }) => {
   const location = useLocation()
 
   const navItems = [
-    { label: 'Blueprints', href: '/#catalog' },
-    { label: 'Process', href: '/#how-it-works' },
-    { label: 'Pricing', href: '/#pricing' },
-    { label: 'Partnership', href: '/#partnership' },
+    { label: 'Businesses', href: '/#businesses' },
+    { label: 'IyonicWeb', href: '/#iyonicweb' },
+    { label: 'IyonicPay', href: '/#iyonicpay' },
+    { label: 'IyonicBots', href: '/#iyonicbots' },
+  ]
+
+  const secondaryLinks = [
+    { label: 'Work With Iyoni', href: '/#contact' },
     ...(currentUser?.is_affiliate ? [{ label: 'Affiliate', href: '/affiliate' }] : []),
   ]
 
@@ -76,7 +80,7 @@ const Navbar = ({ onLoginClick }) => {
     <nav 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
         scrolled 
-          ? 'bg-white/70 backdrop-blur-2xl border-b border-white/20 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.04)]' 
+          ? 'bg-neutral-950/80 backdrop-blur-2xl border-b border-neutral-800 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)]' 
           : 'bg-transparent py-8'
       }`}
     >
@@ -90,11 +94,13 @@ const Navbar = ({ onLoginClick }) => {
             className="flex items-center gap-4 group"
             onClick={(e) => handleNavigate('/', e)}
           >
-            <img src="https://i.imgur.com/6nGQFtj.png" alt="Iyonicorp Logo" className="w-10 h-10 object-contain" />
+            <img src="new logo.PNG" alt="Iyoni Corp Logo" className="w-10 h-10 object-contain" />
+            <span className="text-neutral-200 font-black text-xl hidden sm:inline group-hover:text-amber-400 transition-colors">Iyoni Corp</span>
           </motion.a>
 
           {/* Styled Navigation Items */}
-          <div className="hidden lg:flex items-center bg-neutral-100/50 p-1.5 rounded-full border border-neutral-200/50 backdrop-blur-md">
+          <div className="hidden lg:flex items-center bg-neutral-900/30 p-1.5 rounded-full border border-neutral-800 backdrop-blur-md">
+           
             {navItems.map((item, i) => (
               <motion.a
                 initial={{ opacity: 0, y: -10 }}
@@ -103,13 +109,26 @@ const Navbar = ({ onLoginClick }) => {
                 key={item.label}
                 href={item.href || item.path}
                 onClick={(e) => handleNavigate(item.href || item.path, e)}
-                className="px-6 py-2 text-xs font-black text-neutral-500 hover:text-neutral-950 transition-all relative group uppercase tracking-widest"
+                className="px-6 py-2 text-xs font-black text-neutral-400 hover:text-amber-400 transition-all relative group uppercase tracking-widest"
               >
-                <span className="relative z-10">{item.label}</span>
+                <span className="relative z-10 border-b-2 border-transparent group-hover:border-amber-400/40 transition-colors duration-200">{item.label}</span>
                 <motion.span 
-                  className="absolute inset-0 bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute inset-0 bg-neutral-800 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
                   layoutId="navHover"
                 />
+              </motion.a>
+            ))}
+            {secondaryLinks.map((item, i) => (
+              <motion.a
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: (navItems.length + i) * 0.1 }}
+                key={item.label}
+                href={item.href}
+                onClick={(e) => handleNavigate(item.href, e)}
+                className="px-4 py-2 text-xs font-medium text-neutral-500 hover:text-neutral-300 transition-all"
+              >
+                {item.label}
               </motion.a>
             ))}
           </div>
@@ -118,22 +137,22 @@ const Navbar = ({ onLoginClick }) => {
           <div className="hidden lg:flex items-center gap-4">
             {isAuthenticated ? (
               <div className="relative" ref={dropdownRef}>
-                <motion.button
+            <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2 bg-white p-1.5 pr-4 rounded-full border border-neutral-100 shadow-sm hover:border-blue-500/30 transition-all"
+                  className="flex items-center gap-2 bg-neutral-800 p-1.5 pr-4 rounded-full border border-neutral-700 shadow-sm hover:border-amber-400/30 transition-all"
                 >
-                  <div className="w-9 h-9 bg-neutral-950 rounded-full flex items-center justify-center text-white text-[11px] font-black shadow-lg">
+                  <div className="w-9 h-9 bg-neutral-800 rounded-full flex items-center justify-center text-amber-400 text-[11px] font-black shadow-lg">
                     {currentUser?.name?.charAt(0) || currentUser?.email?.charAt(0) || <User size={16} />}
                   </div>
                   <div className="flex flex-col items-start">
-                    <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest leading-none mb-1">Account</span>
+                    <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest leading-none mb-1">Investor</span>
                     <div className="flex items-center gap-1">
-                      <span className="text-[11px] font-black text-neutral-900 uppercase tracking-tight truncate max-w-[80px]">
+                      <span className="text-[11px] font-black text-neutral-200 uppercase tracking-tight truncate max-w-[80px]">
                         {currentUser?.name?.split(' ')[0] || currentUser?.email?.split('@')[0]}
                       </span>
-                      <ChevronDown size={12} className={`text-neutral-400 transition-transform duration-300 ${userDropdownOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown size={12} className={`text-neutral-500 transition-transform duration-300 ${userDropdownOpen ? 'rotate-180' : ''}`} />
                     </div>
                   </div>
                 </motion.button>
@@ -144,35 +163,35 @@ const Navbar = ({ onLoginClick }) => {
                       initial={{ opacity: 0, y: 10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className="absolute right-0 mt-3 w-56 bg-white rounded-3xl border border-neutral-100 shadow-2xl p-2 z-[60]"
+                      className="absolute right-0 mt-3 w-56 bg-neutral-950 border border-neutral-800 rounded-3xl shadow-2xl p-2 z-[60]"
                     >
-                      <button
-                        onClick={() => {
-                          setUserDropdownOpen(false)
-                          handleNavigate('/dashboard')
-                        }}
-                        className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-xs font-black text-neutral-600 hover:text-blue-600 hover:bg-blue-50 transition-all uppercase tracking-widest"
-                      >
-                        <LayoutDashboard size={16} />
-                        Dashboard
-                      </button>
-                      {currentUser?.is_affiliate && (
-                        <button
+                <button
                           onClick={() => {
                             setUserDropdownOpen(false)
-                            handleNavigate('/affiliate')
+                            handleNavigate('/dashboard')
                           }}
-                          className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-xs font-black text-neutral-600 hover:text-blue-600 hover:bg-blue-50 transition-all uppercase tracking-widest"
+                          className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-xs font-black text-neutral-400 hover:text-amber-400 hover:bg-amber-50/5 transition-all uppercase tracking-widest"
                         >
-                          <Users size={16} />
-                          Affiliate Portal
+                          <LayoutDashboard size={16} />
+                          Dashboard
                         </button>
-                      )}
-                      <div className="h-px bg-neutral-50 my-1 mx-2" />
-                      <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-xs font-black text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-all uppercase tracking-widest"
-                      >
+                       {currentUser?.is_affiliate && (
+                         <button
+                           onClick={() => {
+                             setUserDropdownOpen(false)
+                             handleNavigate('/affiliate')
+                           }}
+                           className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-xs font-black text-neutral-400 hover:text-amber-400 hover:bg-amber-50/5 transition-all uppercase tracking-widest"
+                         >
+                           <Users size={16} />
+                           Affiliate Portal
+                         </button>
+                       )}
+                       <div className="h-px bg-neutral-800 my-1 mx-2" />
+                       <button
+                         onClick={handleLogout}
+                         className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-xs font-black text-neutral-400 hover:text-rose-400 hover:bg-rose-50/5 transition-all uppercase tracking-widest"
+                       >
                         <LogOut size={16} />
                         Logout
                       </button>
@@ -184,15 +203,15 @@ const Navbar = ({ onLoginClick }) => {
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => onLoginClick('login')}
-                  className="text-xs font-black text-neutral-500 hover:text-neutral-900 transition-all uppercase tracking-widest px-4 py-2"
+                  className="text-xs font-medium text-neutral-400 hover:text-neutral-200 transition-all uppercase tracking-widest px-4 py-2"
                 >
-                  Sign In
+                  Login
                 </button>
                 <button
                   onClick={() => onLoginClick('signup')}
-                  className="px-8 py-3.5 bg-blue-600 text-white rounded-2xl text-xs font-black hover:bg-blue-700 hover:-translate-y-1 active:translate-y-0 transition-all shadow-[0_10px_20px_rgba(37,99,235,0.2)] flex items-center gap-3 group uppercase tracking-widest"
+                  className="px-8 py-3.5 bg-amber-400 text-neutral-950 rounded-2xl text-xs font-black hover:bg-amber-300 hover:-translate-y-1 active:translate-y-0 transition-all shadow-[0_10px_20px_rgba(245,158,11,0.25)] flex items-center gap-3 group uppercase tracking-widest"
                 >
-                  Sign Up
+                  Get Started
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
@@ -201,7 +220,7 @@ const Navbar = ({ onLoginClick }) => {
 
           {/* Mobile Trigger */}
           <button
-            className="lg:hidden w-12 h-12 flex items-center justify-center rounded-2xl bg-neutral-50 text-neutral-900 border border-neutral-100"
+            className="lg:hidden w-12 h-12 flex items-center justify-center rounded-2xl bg-neutral-800 text-neutral-200 border border-neutral-700"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X size={20} /> : <MenuIcon size={20} />}
@@ -216,34 +235,45 @@ const Navbar = ({ onLoginClick }) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="lg:hidden fixed inset-x-4 top-24 bg-white rounded-[32px] border border-neutral-100 shadow-2xl overflow-hidden p-8 z-50"
+            className="lg:hidden fixed inset-x-4 top-24 bg-neutral-950 rounded-[32px] border border-neutral-800 shadow-2xl overflow-hidden p-8 z-50"
           >
             <div className="space-y-6">
-              {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href || item.path}
-                  className="block text-2xl font-black text-neutral-900 hover:text-blue-600 transition-colors tracking-tight"
-                  onClick={(e) => handleNavigate(item.href || item.path, e)}
-                >
-                  {item.label}
-                </a>
-              ))}
+               {navItems.map((item) => (
+                 <a
+                   key={item.label}
+                   href={item.href || item.path}
+                   className="block text-2xl font-black text-neutral-200 hover:text-amber-400 transition-colors tracking-tight"
+                   onClick={(e) => handleNavigate(item.href || item.path, e)}
+                 >
+                   {item.label}
+                 </a>
+               ))}
 
-              <div className="pt-8 border-t border-neutral-50 flex flex-col gap-4">
+               {secondaryLinks.map((item) => (
+                 <a
+                   key={item.label}
+                   href={item.href}
+                   className="block text-lg font-medium text-neutral-400 hover:text-neutral-200 transition-colors tracking-tight"
+                   onClick={(e) => handleNavigate(item.href, e)}
+                 >
+                   {item.label}
+                 </a>
+               ))}
+
+              <div className="pt-8 border-t border-neutral-800 flex flex-col gap-4">
                 {isAuthenticated ? (
                   <>
-                    <button
-                      onClick={() => handleNavigate('/dashboard')}
-                      className="w-full py-5 bg-neutral-50 text-neutral-900 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3"
-                    >
-                      <LayoutDashboard size={18} />
-                      Dashboard
-                    </button>
+                      <button
+                        onClick={() => handleNavigate('/dashboard')}
+                        className="w-full py-5 bg-neutral-800 text-neutral-200 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3"
+                      >
+                        <LayoutDashboard size={18} />
+                        Dashboard
+                      </button>
                     {currentUser?.is_affiliate && (
                       <button
                         onClick={() => handleNavigate('/affiliate')}
-                        className="w-full py-5 bg-blue-50 text-blue-600 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3"
+                        className="w-full py-5 bg-amber-50/10 text-amber-400 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3"
                       >
                         <Users size={18} />
                         Affiliate Portal
@@ -251,7 +281,7 @@ const Navbar = ({ onLoginClick }) => {
                     )}
                     <button
                       onClick={handleLogout}
-                      className="w-full py-5 bg-rose-50 text-rose-600 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3"
+                      className="w-full py-5 bg-rose-50/10 text-rose-400 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3"
                     >
                       <LogOut size={18} />
                       Logout
@@ -259,17 +289,17 @@ const Navbar = ({ onLoginClick }) => {
                   </>
                 ) : (
                   <>
-                    <button
+                     <button
                       onClick={() => { onLoginClick('login'); setIsOpen(false); }}
-                      className="w-full py-5 bg-neutral-50 text-neutral-900 rounded-2xl font-black uppercase tracking-widest text-sm"
+                      className="w-full py-5 bg-neutral-800 text-neutral-200 rounded-2xl font-black uppercase tracking-widest text-sm"
                     >
-                      Sign In
+                      Login
                     </button>
                     <button
                       onClick={() => { onLoginClick('signup'); setIsOpen(false); }}
-                      className="w-full py-5 bg-neutral-950 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl"
+                      className="w-full py-5 bg-amber-400 text-neutral-950 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl"
                     >
-                      Sign Up
+                      Get Started
                     </button>
                   </>
                 )}

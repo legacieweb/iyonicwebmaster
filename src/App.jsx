@@ -9,6 +9,7 @@ import { useAuth } from './contexts/AuthContext'
 
 // Pages
 import LandingPage from './pages/LandingPage'
+import BusinessesPage from './pages/BusinessesPage'
 import DashboardPage from './pages/DashboardPage'
 import AdminPage from './pages/AdminPage'
 import AffiliatePage from './pages/AffiliatePage'
@@ -20,6 +21,7 @@ import ShopRightDetails from './components/ShopRightDetails'
 import ServiceDetail from './components/ServiceDetail'
 import ServiceCatalog from './components/ServiceCatalog'
 import DesignPreview from './components/DesignPreview'
+import BusinessDetail from './components/BusinessDetail'
 import WebsiteEditor from './components/WebsiteEditor'
 import WebBuilder from './components/WebBuilder'
 import Store from './components/Store'
@@ -152,10 +154,12 @@ function AppContent({ isAuthModalOpen, authModalMode, toggleAuthModal, closeAuth
           <Route path="/privacy-policy" element={<PrivacyPolicy onBack={() => {}} />} />
           <Route path="/terms-of-service" element={<TermsOfService onBack={() => {}} />} />
           <Route path="/cookie-policy" element={<CookiePolicy onBack={() => {}} />} />
-          <Route path="/careers" element={<Careers onBack={() => {}} />} />
-          
-          {/* Dynamic Routes */}
-          <Route path="/services/:serviceId" element={<ServiceDetailWrapper />} />
+           <Route path="/careers" element={<Careers onBack={() => {}} />} />
+            <Route path="/businesses" element={<BusinessesPage />} />
+           
+           {/* Dynamic Routes */}
+           <Route path="/business/:businessId" element={<BusinessDetail onBack={() => {}} />} />
+           <Route path="/services/:serviceId" element={<ServiceDetailWrapper />} />
           <Route path="/catalog/:serviceId" element={<ServiceCatalogWrapper />} />
           <Route path="/catalog" element={<ServiceCatalogWrapper />} />
         </Route>
@@ -184,8 +188,8 @@ const ServiceDetailWrapper = () => {
   const { serviceId } = useParams()
   const navigate = useNavigate()
   
-  // Web Development is now the homepage
-  if (serviceId === 'web-development') return <Navigate to="/" replace />
+  // Corporate Holdings is now the homepage
+  if (serviceId === 'corporate-holdings') return <Navigate to="/" replace />
   
   const service = SERVICES.find(s => s.id === serviceId)
   if (!service) return <Navigate to="/" replace />

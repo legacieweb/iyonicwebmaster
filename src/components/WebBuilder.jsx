@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Plus, Trash2, Copy, Eye, Save, Settings, GripVertical, CheckCircle } from 'lucide-react'
 import { saveProject } from '../utils/api'
@@ -41,12 +41,12 @@ const WebBuilder = ({ onBack, templateId, themeData }) => {
   }
 
   const blockTypes = [
-    { type: 'hero', label: 'Hero Section', icon: '🎨' },
-    { type: 'features', label: 'Features', icon: '⭐' },
-    { type: 'cta', label: 'Call to Action', icon: '🎯' },
-    { type: 'gallery', label: 'Gallery', icon: '🖼️' },
-    { type: 'testimonials', label: 'Testimonials', icon: '💬' },
-    { type: 'contact', label: 'Contact Form', icon: '📧' },
+    { type: 'hero', label: 'Hero Section', icon: 'ðŸŽ¨' },
+    { type: 'features', label: 'Features', icon: 'â­' },
+    { type: 'cta', label: 'Call to Action', icon: 'ðŸŽ¯' },
+    { type: 'gallery', label: 'Gallery', icon: 'ðŸ–¼ï¸' },
+    { type: 'testimonials', label: 'Testimonials', icon: 'ðŸ’¬' },
+    { type: 'contact', label: 'Contact Form', icon: 'ðŸ“§' },
   ]
 
   const selectedBlock = blocks.find(b => b.id === selectedBlockId)
@@ -200,7 +200,7 @@ const WebBuilder = ({ onBack, templateId, themeData }) => {
           </div>
           <button 
             onClick={() => setPreview(false)} 
-            className="px-6 py-2.5 bg-white/5 hover:bg-white/10 text-cyan-400 rounded-full border border-white/10 font-black text-[10px] uppercase tracking-widest transition-all active:scale-95"
+            className="px-6 py-2.5 bg-white/5 hover:bg-white/10 text-amber-400 rounded-full border border-white/10 font-black text-[10px] uppercase tracking-widest transition-all active:scale-95"
           >
             Exit Preview System
           </button>
@@ -222,7 +222,7 @@ const WebBuilder = ({ onBack, templateId, themeData }) => {
           <motion.button
             onClick={() => onBack?.('landing')}
             whileHover={{ x: -5 }}
-            className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-cyan-400 transition-all active:scale-95"
+            className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-amber-400 transition-all active:scale-95"
             title="Go Back"
           >
             <ArrowLeft size={18} />
@@ -234,11 +234,11 @@ const WebBuilder = ({ onBack, templateId, themeData }) => {
                 type="text"
                 value={projectTitle}
                 onChange={(e) => setProjectTitle(e.target.value)}
-                className="text-sm md:text-xl font-black bg-transparent text-white border-b border-transparent hover:border-cyan-500/50 focus:border-cyan-500 outline-none transition-all uppercase italic tracking-tighter truncate w-full"
+                className="text-sm md:text-xl font-black bg-transparent text-white border-b border-transparent hover:border-amber-400/50 focus:border-amber-400 outline-none transition-all uppercase italic tracking-tighter truncate w-full"
                 placeholder="Project Title"
               />
               <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                 <span className="text-[8px] md:text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Master Builder Protocol</span>
               </div>
             </div>
@@ -279,7 +279,7 @@ const WebBuilder = ({ onBack, templateId, themeData }) => {
             whileTap={{ scale: 0.98 }}
             disabled={isSaving}
             onClick={handleSaveProject}
-            className="flex items-center gap-2 px-4 py-2 md:px-8 md:py-3.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-full md:rounded-xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl shadow-cyan-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="flex items-center gap-2 px-4 py-2 md:px-8 md:py-3.5 bg-gradient-to-r from-amber-400 to-neutral-800 text-white rounded-full md:rounded-xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl shadow-amber-400/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             {isSaving ? (
               <>
@@ -332,7 +332,7 @@ const WebBuilder = ({ onBack, templateId, themeData }) => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     className={`border-b border-white/10 cursor-pointer transition-colors ${
-                      selectedBlockId === block.id ? 'bg-cyan-600/10 border-l-4 border-l-cyan-400' : 'hover:bg-white/5'
+                      selectedBlockId === block.id ? 'bg-amber-400/10 border-l-4 border-l-amber-400' : 'hover:bg-white/5'
                     }`}
                     onClick={() => setSelectedBlockId(block.id)}
                   >
@@ -359,7 +359,7 @@ const WebBuilder = ({ onBack, templateId, themeData }) => {
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     onClick={() => duplicateBlock(selectedBlock.id)}
-                    className="p-2 hover:bg-white/10 rounded text-cyan-400"
+                    className="p-2 hover:bg-white/10 rounded text-amber-400"
                   >
                     <Copy size={18} />
                   </motion.button>
@@ -463,14 +463,14 @@ const WebBuilder = ({ onBack, templateId, themeData }) => {
                     onClick={() => moveBlock(selectedBlock.id, 'up')}
                     className="flex-1 bg-white/10 hover:bg-white/20 px-3 py-2 rounded text-sm font-medium transition-colors"
                   >
-                    ↑ Move Up
+                    â†‘ Move Up
                   </motion.button>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     onClick={() => moveBlock(selectedBlock.id, 'down')}
                     className="flex-1 bg-white/10 hover:bg-white/20 px-3 py-2 rounded text-sm font-medium transition-colors"
                   >
-                    ↓ Move Down
+                    â†“ Move Down
                   </motion.button>
                 </div>
               </div>
@@ -483,3 +483,4 @@ const WebBuilder = ({ onBack, templateId, themeData }) => {
 }
 
 export default WebBuilder
+

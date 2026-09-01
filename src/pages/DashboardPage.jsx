@@ -34,7 +34,7 @@ const DashboardPage = () => {
   }
 
   const handleSelectTemplate = (serviceId) => {
-    navigate(`/services/${serviceId || 'web-development'}`)
+    navigate(`/services/${serviceId || 'corporate-holdings'}`)
   }
 
   if (isLoading || !isAuthenticated || isAdmin) return null

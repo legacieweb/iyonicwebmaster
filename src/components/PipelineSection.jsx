@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, Trash2, Edit2, MessageSquare, Globe, Users, 
@@ -30,7 +30,7 @@ const PipelineSection = ({ leads, onAdd, onUpdate, onDelete, onAddNote, processi
   const getStatusColor = (status) => {
     switch (status) {
       case 'interested': return 'bg-emerald-50 text-emerald-600 border-emerald-100';
-      case 'contacted': return 'bg-blue-50 text-blue-600 border-blue-100';
+      case 'contacted': return 'bg-neutral-800/30 text-amber-400 border-neutral-700';
       case 'not_contacted': return 'bg-slate-50 text-slate-600 border-slate-100';
       case 'not_interested': return 'bg-rose-50 text-rose-600 border-rose-100';
       case 'converted': return 'bg-purple-50 text-purple-600 border-purple-100';
@@ -42,14 +42,14 @@ const PipelineSection = ({ leads, onAdd, onUpdate, onDelete, onAddNote, processi
     <div className="space-y-8 pb-20">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] mb-3">Prospecting Engine</p>
+          <p className="text-[10px] font-black text-amber-400 uppercase tracking-[0.3em] mb-3">Prospecting Engine</p>
           <h2 className="text-4xl sm:text-5xl font-black text-neutral-950 uppercase italic tracking-tighter leading-none">
-            Lead <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Pipeline</span>
+            Lead <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-neutral-700">Pipeline</span>
           </h2>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center gap-2 px-6 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-95"
+          className="flex items-center gap-2 px-6 py-4 bg-amber-500 text-neutral-950 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-amber-400/20 hover:bg-amber-300 transition-all active:scale-95"
         >
           {showAddForm ? <X size={16} /> : <Plus size={16} />}
           {showAddForm ? 'Cancel Operation' : 'Add New Prospect'}
@@ -73,7 +73,7 @@ const PipelineSection = ({ leads, onAdd, onUpdate, onDelete, onAddNote, processi
                   placeholder="e.g. Blue Horizon Bakery"
                   value={formData.business_name}
                   onChange={(e) => setFormData({ ...formData, business_name: e.target.value })}
-                  className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                 />
               </div>
               <div className="space-y-2">
@@ -84,7 +84,7 @@ const PipelineSection = ({ leads, onAdd, onUpdate, onDelete, onAddNote, processi
                   placeholder="e.g. Artisan Bread, Pastries"
                   value={formData.business_type}
                   onChange={(e) => setFormData({ ...formData, business_type: e.target.value })}
-                  className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                 />
               </div>
               <div className="space-y-2">
@@ -94,7 +94,7 @@ const PipelineSection = ({ leads, onAdd, onUpdate, onDelete, onAddNote, processi
                   placeholder="Instagram, Facebook links"
                   value={formData.social_media}
                   onChange={(e) => setFormData({ ...formData, social_media: e.target.value })}
-                  className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                 />
               </div>
               <div className="space-y-2">
@@ -104,7 +104,7 @@ const PipelineSection = ({ leads, onAdd, onUpdate, onDelete, onAddNote, processi
                   placeholder="Phone or Email"
                   value={formData.contact_info}
                   onChange={(e) => setFormData({ ...formData, contact_info: e.target.value })}
-                  className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                 />
               </div>
               <div className="md:col-span-2 flex justify-end">
@@ -132,7 +132,7 @@ const PipelineSection = ({ leads, onAdd, onUpdate, onDelete, onAddNote, processi
               <div key={lead.id} className="p-6 sm:p-8 hover:bg-slate-50/50 transition-colors group">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                   <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 bg-blue-50 rounded-2xl border border-blue-100 flex items-center justify-center text-blue-600 font-black text-xl uppercase">
+                    <div className="w-14 h-14 bg-neutral-800/30 border border-neutral-700 flex items-center justify-center text-amber-400 font-black text-xl uppercase">
                       {lead.business_name?.charAt(0) || 'B'}
                     </div>
                     <div>
@@ -150,7 +150,7 @@ const PipelineSection = ({ leads, onAdd, onUpdate, onDelete, onAddNote, processi
                   <div className="flex items-center gap-3 w-full sm:w-auto">
                     <button
                       onClick={() => setExpandedId(expandedId === lead.id ? null : lead.id)}
-                      className="flex-1 sm:flex-none p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-blue-600 transition-all flex items-center justify-center gap-2"
+                      className="flex-1 sm:flex-none p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-amber-400 transition-all flex items-center justify-center gap-2"
                     >
                       <span className="text-[10px] font-black uppercase tracking-widest">Follow Up / Details</span>
                       {expandedId === lead.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -190,7 +190,7 @@ const PipelineSection = ({ leads, onAdd, onUpdate, onDelete, onAddNote, processi
                                 <select
                                   value={lead.status}
                                   onChange={(e) => onUpdate(lead.id, { status: e.target.value })}
-                                  className="bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-[10px] font-black uppercase tracking-widest outline-none focus:ring-2 focus:ring-blue-500"
+                                  className="bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-[10px] font-black uppercase tracking-widest outline-none focus:ring-2 focus:ring-amber-400"
                                 >
                                   <option value="not_contacted">Not Contacted</option>
                                   <option value="contacted">Contacted</option>
@@ -227,7 +227,7 @@ const PipelineSection = ({ leads, onAdd, onUpdate, onDelete, onAddNote, processi
                                 placeholder="Add entry to mission log..."
                                 value={newNote}
                                 onChange={(e) => setNewNote(e.target.value)}
-                                className="flex-1 px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                className="flex-1 px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                               />
                               <button
                                 onClick={() => {
@@ -236,7 +236,7 @@ const PipelineSection = ({ leads, onAdd, onUpdate, onDelete, onAddNote, processi
                                     setNewNote('');
                                   }
                                 }}
-                                className="p-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all active:scale-95"
+                                className="p-3 bg-amber-500 text-neutral-950 rounded-xl hover:bg-amber-300 transition-all active:scale-95"
                               >
                                 <Save size={18} />
                               </button>

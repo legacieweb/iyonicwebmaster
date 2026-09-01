@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ShoppingCart, Heart, Search, Filter, Star } from 'lucide-react'
 
@@ -15,7 +15,7 @@ const Store = ({ onBack }) => {
       category: 'templates',
       price: 49,
       rating: 4.8,
-      image: 'bg-gradient-to-br from-cyan-600 to-blue-600',
+      image: 'bg-gradient-to-br from-amber-400 to-neutral-800',
       description: '50+ Premium website templates for all industries',
     },
     {
@@ -51,7 +51,7 @@ const Store = ({ onBack }) => {
       category: 'addons',
       price: 39.99,
       rating: 4.9,
-      image: 'bg-gradient-to-br from-indigo-600 to-purple-600',
+      image: 'bg-gradient-to-br from-neutral-700 to-purple-600',
       description: 'Full e-commerce functionality for your store',
     },
     {
@@ -162,7 +162,7 @@ const Store = ({ onBack }) => {
                             onClick={() => removeFromCart(item.id)}
                             className="text-red-400 hover:text-red-300 text-xs"
                           >
-                            ✕
+                            âœ•
                           </motion.button>
                         </div>
                       ))}
@@ -266,3 +266,4 @@ const Store = ({ onBack }) => {
 }
 
 export default Store
+

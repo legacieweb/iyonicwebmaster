@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Eye, Loader, AlertCircle, Code2, ArrowRight } from 'lucide-react'
 import { fetchTemplates } from '../utils/api'
@@ -36,7 +36,7 @@ const FeaturedTemplates = ({ onBrowseTemplates }) => {
       <section className="section-padding">
         <div className="max-w-7xl mx-auto flex justify-center">
           <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity }}>
-            <Loader className="w-8 h-8 text-cyan-400" />
+            <Loader className="w-8 h-8 text-amber-400" />
           </motion.div>
         </div>
       </section>
@@ -48,8 +48,8 @@ const FeaturedTemplates = ({ onBrowseTemplates }) => {
   }
 
   return (
-    <section className="py-24 bg-white overflow-hidden relative">
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-50/50 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2" />
+    <section className="py-24 bg-neutral-950 overflow-hidden relative">
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-neutral-800/50 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div
@@ -58,13 +58,13 @@ const FeaturedTemplates = ({ onBrowseTemplates }) => {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-[10px] font-black mb-6 tracking-[0.2em] uppercase">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-neutral-800/50 border border-neutral-700 rounded-full text-amber-400 text-[10px] font-black mb-6 tracking-[0.2em] uppercase">
             <Code2 size={14} />
             The Showcase
           </div>
           <h2 className="text-4xl md:text-6xl font-black text-neutral-950 mb-8 leading-[0.9] tracking-tighter uppercase italic">
             Featured <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Digital Blueprints.</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-neutral-700">Digital Blueprints.</span>
           </h2>
           <p className="text-neutral-500 text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed">
             High-performance frameworks designed for scale, precision, and absolute conversion.
@@ -97,8 +97,8 @@ const FeaturedTemplates = ({ onBrowseTemplates }) => {
                 {/* Tags */}
                 <div className="absolute top-6 left-6 flex flex-wrap gap-2 z-10">
                   {template.url && (
-                    <div className="px-4 py-2 bg-white/90 backdrop-blur-md text-neutral-900 text-[9px] font-black uppercase tracking-widest rounded-2xl shadow-xl flex items-center gap-2 border border-white/20">
-                      <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />
+                    <div className="px-4 py-2 bg-neutral-800/90 backdrop-blur-md text-neutral-200 text-[9px] font-black uppercase tracking-widest rounded-2xl shadow-xl flex items-center gap-2 border border-neutral-700/20">
+                      <span className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse" />
                       Live Build
                     </div>
                   )}
@@ -111,7 +111,7 @@ const FeaturedTemplates = ({ onBrowseTemplates }) => {
                 <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
                   <motion.button
                     onClick={() => onBrowseTemplates?.(template)}
-                    className="w-full py-5 bg-white text-neutral-950 rounded-[20px] font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-3 shadow-2xl hover:bg-blue-600 hover:text-white transition-all duration-300"
+                    className="w-full py-5 bg-neutral-950 text-neutral-200 rounded-[20px] font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-3 shadow-2xl hover:bg-amber-400 hover:text-neutral-950 transition-all duration-300"
                   >
                     Explore Engine
                     <ArrowRight size={16} />
@@ -123,19 +123,19 @@ const FeaturedTemplates = ({ onBrowseTemplates }) => {
               <div className="mt-8 px-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex flex-col gap-1">
-                    <h3 className="text-xl font-bold text-neutral-950 tracking-tight group-hover:text-blue-600 transition-colors">{template.name}</h3>
+                    <h3 className="text-xl font-bold text-neutral-950 tracking-tight group-hover:text-amber-400 transition-colors">{template.name}</h3>
                     {template.minTier && (
                       <span className={`w-fit text-[9px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded-full ${
-                        template.minTier === 'basic' ? 'bg-blue-50 text-blue-600 border border-blue-100' :
+                        template.minTier === 'basic' ? 'bg-neutral-800/50 text-amber-400 border border-neutral-700' :
                         template.minTier === 'premium' ? 'bg-purple-50 text-purple-600 border border-purple-100' :
-                        template.minTier === 'premium_plus' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' :
+                        template.minTier === 'premium_plus' ? 'bg-neutral-800/30 text-amber-400 border border-neutral-700' :
                         'bg-rose-50 text-rose-600 border border-rose-100'
                       }`}>
                         {template.minTier.replace('_', ' ')}
                       </span>
                     )}
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-neutral-50 border border-neutral-100 flex items-center justify-center text-neutral-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-all">
+                  <div className="w-8 h-8 rounded-full bg-neutral-800/50 border border-neutral-700 flex items-center justify-center text-neutral-400 group-hover:bg-neutral-800 group-hover:text-amber-400 transition-all">
                     <Eye size={16} />
                   </div>
                 </div>
@@ -155,10 +155,10 @@ const FeaturedTemplates = ({ onBrowseTemplates }) => {
         >
           <button
             onClick={onBrowseTemplates}
-            className="px-12 py-6 bg-neutral-950 text-white rounded-[32px] font-black text-xs uppercase tracking-[0.3em] flex items-center gap-4 hover:bg-blue-600 transition-all duration-500 shadow-2xl group"
+            className="px-12 py-6 bg-neutral-950 text-white rounded-[32px] font-black text-xs uppercase tracking-[0.3em] flex items-center gap-4 hover:bg-amber-400 transition-all duration-500 shadow-2xl group"
           >
             Browse Full Marketplace
-            <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
+            <div className="w-8 h-8 bg-neutral-700/20 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
               <ArrowRight size={16} />
             </div>
           </button>

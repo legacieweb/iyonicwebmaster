@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ArrowLeft, Check, Star, Zap, Shield, Sparkles, Globe, Cpu, Info, CheckCircle2, AlertCircle
@@ -26,14 +26,14 @@ const CoolPopup = ({ isOpen, onClose, title, message, type = 'info' }) => {
             className="relative w-full max-w-sm bg-white rounded-[32px] p-8 shadow-2xl overflow-hidden"
           >
             <div className={`absolute top-0 left-0 w-full h-2 ${
-              type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-rose-500' : 'bg-blue-600'
+              type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-rose-500' : 'bg-amber-400'
             }`} />
             
             <div className="flex flex-col items-center text-center">
               <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
                 type === 'success' ? 'bg-emerald-50 text-emerald-500' : 
                 type === 'error' ? 'bg-rose-50  text-rose-500' : 
-                'bg-blue-50 text-blue-600'
+                'bg-neutral-800/30 text-amber-400'
               }`}>
                 {type === 'success' ? <CheckCircle2 size={32} /> : 
                  type === 'error' ? <AlertCircle size={32} /> : 
@@ -49,7 +49,7 @@ const CoolPopup = ({ isOpen, onClose, title, message, type = 'info' }) => {
               
               <button
                 onClick={onClose}
-                className="w-full py-4 bg-neutral-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-colors shadow-lg active:scale-95"
+                className="w-full py-4 bg-neutral-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-amber-400 transition-colors shadow-lg active:scale-95"
               >
                 Dismiss
               </button>
@@ -132,8 +132,8 @@ const ServiceDetail = ({ service, onBack, pricingPlans, onViewCatalog }) => {
                     const module = MODULES.find(m => m.id === moduleId)
                     return (
                       <div key={index} className="flex items-center gap-3 p-4 bg-neutral-50 rounded-2xl border border-neutral-100">
-                        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Check size={14} className="text-blue-600" />
+                        <div className="w-6 h-6 rounded-full bg-neutral-500 flex items-center justify-center flex-shrink-0">
+                          <Check size={14} className="text-amber-400" />
                         </div>
                         <span className="font-bold text-neutral-700 text-sm">{module ? module.name : moduleId}</span>
                       </div>
@@ -144,22 +144,22 @@ const ServiceDetail = ({ service, onBack, pricingPlans, onViewCatalog }) => {
 
               {/* Sample Content Area */}
               <div className="p-10 bg-neutral-950 rounded-[48px] text-white relative overflow-hidden shadow-2xl group">
-                <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/30 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 group-hover:bg-blue-600/40 transition-colors duration-700" />
-                <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-600/20 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
+                <div className="absolute top-0 right-0 w-80 h-80 bg-amber-400/30 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 group-hover:bg-amber-400/40 transition-colors duration-700" />
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-400/20 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
                 
                 <div className="relative z-10">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600/10 border border-blue-600/20 rounded-full text-blue-400 text-[10px] font-black mb-8 tracking-[0.2em] uppercase">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-400/10 border border-amber-400/20 rounded-full text-amber-400 text-[10px] font-black mb-8 tracking-[0.2em] uppercase">
                     <Sparkles size={14} className="animate-pulse" />
                     Premium Experience
                   </div>
                   
                   <h3 className="text-3xl font-black mb-6 leading-tight">
                     Beyond standard <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">expectations.</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-neutral-400">expectations.</span>
                   </h3>
                   
                   <p className="text-neutral-400 leading-relaxed mb-10 text-lg font-medium">
-                    Our {service.title} methodology is rooted in deep technical excellence and architectural precision. We don't just build—we engineer for the future.
+                    Our {service.title} methodology is rooted in deep technical excellence and architectural precision. We don't just buildâ€”we engineer for the future.
                   </p>
                   
                   <div className="grid grid-cols-2 gap-6">
@@ -204,7 +204,7 @@ const ServiceDetail = ({ service, onBack, pricingPlans, onViewCatalog }) => {
                   <button
                     onClick={() => setCurrency('USD')}
                     className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all uppercase tracking-widest ${
-                      currency === 'USD' ? 'bg-blue-600 text-white shadow-sm' : 'text-neutral-400 hover:text-neutral-600'
+                      currency === 'USD' ? 'bg-amber-500 text-neutral-950 shadow-sm' : 'text-neutral-400 hover:text-neutral-600'
                     }`}
                   >
                     USD
@@ -212,7 +212,7 @@ const ServiceDetail = ({ service, onBack, pricingPlans, onViewCatalog }) => {
                   <button
                     onClick={() => setCurrency('KES')}
                     className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all uppercase tracking-widest ${
-                      currency === 'KES' ? 'bg-blue-600 text-white shadow-sm' : 'text-neutral-400 hover:text-neutral-600'
+                      currency === 'KES' ? 'bg-amber-500 text-neutral-950 shadow-sm' : 'text-neutral-400 hover:text-neutral-600'
                     }`}
                   >
                     KES
@@ -225,24 +225,24 @@ const ServiceDetail = ({ service, onBack, pricingPlans, onViewCatalog }) => {
                   <div 
                     key={index}
                     className={`relative p-8 rounded-[32px] border transition-all duration-300 hover:shadow-xl group bg-white overflow-hidden ${
-                      plan.popular ? 'border-transparent ring-4 ring-blue-50' : 'border-neutral-200 hover:border-blue-200'
+                      plan.popular ? 'border-transparent ring-4 ring-neutral-800/30' : 'border-neutral-200 hover:border-neutral-600'
                     } ${plan.design?.shadow || ''}`}
                   >
                     {/* Design Background Pattern */}
                     <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700 ${plan.design?.pattern || ''}`} />
                     
                     {/* Design Gradient Bar */}
-                    <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${plan.design?.gradient || 'from-blue-600 to-indigo-600'}`} />
+                    <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${plan.design?.gradient || 'from-amber-400 to-neutral-700'}`} />
 
                     {plan.tag && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1 z-20 shadow-lg">
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-neutral-950 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1 z-20 shadow-lg">
                         <Star size={10} fill="currentColor" />
                         {plan.tag}
                       </div>
                     )}
                     
                     {plan.popular && !plan.tag && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1 z-20 shadow-lg">
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-neutral-950 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1 z-20 shadow-lg">
                         <Star size={10} fill="currentColor" />
                         Most Popular
                       </div>
@@ -253,10 +253,10 @@ const ServiceDetail = ({ service, onBack, pricingPlans, onViewCatalog }) => {
                         <div className="flex flex-col">
                           <h4 className="font-black text-neutral-900 text-lg uppercase tracking-tight">{plan.name}</h4>
                           {plan.category && (
-                            <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">{plan.category}</span>
+                            <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest">{plan.category}</span>
                           )}
                         </div>
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${plan.popular ? 'bg-blue-600 text-white shadow-lg' : 'bg-neutral-100 text-neutral-400 group-hover:bg-blue-600 group-hover:text-white'}`}>
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${plan.popular ? 'bg-amber-500 text-neutral-950 shadow-lg' : 'bg-neutral-100 text-neutral-400 group-hover:bg-amber-400 group-hover:text-white'}`}>
                           <Zap size={20} />
                         </div>
                       </div>
@@ -265,7 +265,7 @@ const ServiceDetail = ({ service, onBack, pricingPlans, onViewCatalog }) => {
                           <span className="text-3xl font-black text-neutral-900">{formatPriceRange(plan.price, plan.maxPrice)}</span>
                           {plan.period && <span className="text-neutral-400 text-sm font-bold">{plan.period}</span>}
                         </div>
-                        <div className="text-[10px] font-bold text-blue-600 uppercase tracking-widest mt-1">
+                        <div className="text-[10px] font-bold text-amber-400 uppercase tracking-widest mt-1">
                           Or {getMonthlyPrice(plan.price)} for 12 months
                         </div>
                       </div>
@@ -276,8 +276,8 @@ const ServiceDetail = ({ service, onBack, pricingPlans, onViewCatalog }) => {
                         const module = MODULES.find(m => m.id === moduleId)
                         return (
                           <div key={i} className="flex items-center gap-3 text-sm text-neutral-600 font-bold">
-                            <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 bg-opacity-10 ${plan.color === 'blue' ? 'bg-blue-600' : 'bg-neutral-900'}`}>
-                              <Check size={12} className={plan.color === 'blue' ? 'text-blue-600' : 'text-neutral-900'} />
+                            <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 bg-opacity-10 ${plan.color === 'blue' ? 'bg-amber-400' : 'bg-neutral-900'}`}>
+                              <Check size={12} className={plan.color === 'blue' ? 'text-amber-400' : 'text-neutral-900'} />
                             </div>
                             {module ? module.name : moduleId}
                           </div>
@@ -293,8 +293,8 @@ const ServiceDetail = ({ service, onBack, pricingPlans, onViewCatalog }) => {
                 ))}
               </div>
 
-              <div className="mt-8 p-6 bg-blue-600/5 rounded-[32px] border border-blue-600/10 flex items-center gap-4">
-                <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg">
+              <div className="mt-8 p-6 bg-amber-400/5 rounded-[32px] border border-amber-400/10 flex items-center gap-4">
+                <div className="w-12 h-12 bg-amber-400 rounded-2xl flex items-center justify-center text-white shadow-lg">
                   <Shield size={24} />
                 </div>
                 <div>
@@ -312,3 +312,4 @@ const ServiceDetail = ({ service, onBack, pricingPlans, onViewCatalog }) => {
 }
 
 export default ServiceDetail
+
