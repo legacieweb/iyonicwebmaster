@@ -200,7 +200,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-12">
               <div className="lg:col-span-4">
             <div className="flex items-center gap-4 mb-6 cursor-pointer" onClick={() => navigate('/') }>
-              <img src="new logo.PNG" alt="Iyoni Corp logo" className="w-12 h-12" />
+              <img src="corplogo.PNG" alt="Iyoni Corp logo" className="w-12 h-12" />
               <div>
                 <div className="text-lg font-black text-neutral-200">Iyoni Corp</div>
                 <div className="text-xs text-neutral-500 uppercase tracking-wide">Digital Businesses &amp; Technology</div>

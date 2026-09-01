@@ -94,7 +94,7 @@ const Navbar = ({ onLoginClick }) => {
             className="flex items-center gap-4 group"
             onClick={(e) => handleNavigate('/', e)}
           >
-            <img src="new logo.PNG" alt="Iyoni Corp Logo" className="w-10 h-10 object-contain" />
+            <img src="corplogo.PNG" alt="Iyoni Corp Logo" className="w-10 h-10 object-contain" />
             <span className="text-neutral-200 font-black text-xl hidden sm:inline group-hover:text-amber-400 transition-colors">Iyoni Corp</span>
           </motion.a>
 
