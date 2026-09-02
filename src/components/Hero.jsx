@@ -76,29 +76,47 @@ const Hero = ({ onExploreBusinesses, onExploreIyonicWeb }) => {
               {BRAND_CONTENT.heroDescription}
             </motion.p>
 
-            <motion.div
-              variants={item}
-              className="flex flex-col sm:flex-row items-start gap-4 pt-4"
-            >
-              <button
-                onClick={onExploreBusinesses}
-                className="group w-full sm:w-auto px-10 py-4 bg-amber-400 text-neutral-950 rounded-2xl font-black text-xs uppercase tracking-wider transition-all duration-200 hover:bg-amber-300 hover:shadow-[0_20px_50px_rgba(245,158,11,0.3)] flex items-center justify-center gap-3"
-              >
-                Explore Businesses
-                <ArrowRight
-                  size={18}
-                  className="transition-transform group-hover:translate-x-1"
-                />
-              </button>
+             <motion.div
+               variants={item}
+               className="flex flex-col sm:flex-row items-start gap-4 pt-4"
+             >
+               <button
+                 onClick={onExploreBusinesses}
+                 className="group w-full sm:w-auto px-10 py-4 bg-amber-400 text-neutral-950 rounded-2xl font-black text-xs uppercase tracking-wider transition-all duration-200 hover:bg-amber-300 hover:shadow-[0_20px_50px_rgba(245,158,11,0.3)] flex items-center justify-center gap-3"
+               >
+                 Explore Businesses
+                 <ArrowRight
+                   size={18}
+                   className="transition-transform group-hover:translate-x-1"
+                 />
+               </button>
 
-              <button
-                onClick={handleSecondaryClick}
-                className="w-full sm:w-auto px-6 py-4 text-neutral-300 font-medium text-sm rounded-2xl border border-neutral-800 hover:border-neutral-700 hover:text-neutral-100 transition-all duration-200 flex items-center gap-2"
-              >
-                Explore IyonicWeb
-              </button>
-            </motion.div>
-          </motion.div>
+               <button
+                 onClick={handleSecondaryClick}
+                 className="w-full sm:w-auto px-6 py-4 text-neutral-300 font-medium text-sm rounded-2xl border border-neutral-800 hover:border-neutral-700 hover:text-neutral-100 transition-all duration-200 flex items-center gap-2"
+               >
+                 Explore IyonicWeb
+               </button>
+             </motion.div>
+
+             <motion.div
+               variants={item}
+               className="flex items-center gap-2 pt-1"
+             >
+               <a
+                 href="#iyonicweb"
+                 onClick={(e) => {
+                   e.preventDefault()
+                   const el = document.getElementById('iyonicweb')
+                   if (el) el.scrollIntoView({ behavior: 'smooth' })
+                 }}
+                 className="text-sm text-neutral-500 hover:text-amber-400 transition-colors"
+               >
+                 Explore Iyoni Technology
+               </a>
+               <ArrowRight size={14} className="text-neutral-600" />
+             </motion.div>
+           </motion.div>
 
           <motion.div variants={item} className="lg:col-span-6 lg:col-start-7">
             <div className="relative">

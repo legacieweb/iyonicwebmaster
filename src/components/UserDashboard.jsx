@@ -14,7 +14,7 @@ import { SERVICES, PRICING_DATA } from '../utils/constants'
 import { MEMBERSHIP_TIERS, MODULES, checkAccess, getUnlockedToolsForTier } from '../utils/membership'
 import { PaystackButton } from 'react-paystack'
 
-const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = 'projects', initialServiceId = null }) => {
+const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = 'projects', initialServiceId = null, acquiredBusiness = null }) => {
   const { currentUser, logout, refreshUser } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
@@ -28,6 +28,7 @@ const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = '
   })
   const [loading, setLoading] = useState(!projects.length && !orders.length)
   const [activeTab, setActiveTab] = useState(location.state?.tab || initialTab)
+  const [newAcquisition, setNewAcquisition] = useState(acquiredBusiness)
   
   useEffect(() => {
     if (location.state?.tab) {
@@ -1489,9 +1490,49 @@ const UserDashboard = ({ onBack, onSelectTemplate, onEditProject, initialTab = '
                     <button className="flex items-center gap-3 px-8 py-4 bg-neutral-900 border border-neutral-800 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-neutral-950 hover:text-amber-400 transition-all shadow-sm group">
                       <CreditCard size={18} className="text-amber-400 group-hover:scale-110 transition-transform" /> Manage Methods
                     </button>
-                  </div>
+                   </div>
 
-                  {orders.length === 0 ? (
+                   {newAcquisition && (
+                     <motion.div
+                       initial={{ opacity: 0, y: -20 }}
+                       animate={{ opacity: 1, y: 0 }}
+                       exit={{ opacity: 0, y: -20 }}
+                       className="bg-neutral-900 rounded-[2rem] border border-amber-400/30 p-6 md:p-8 relative overflow-hidden"
+                     >
+                       <div className="absolute top-0 right-0 w-48 h-48 bg-amber-400/5 rounded-full blur-[80px]" />
+                       <div className="relative z-10 flex items-start gap-6">
+                         <div className="w-14 h-14 rounded-2xl bg-amber-400/10 flex items-center justify-center text-amber-400 border border-neutral-800 flex-shrink-0">
+                           <CheckCircle2 size={24} />
+                         </div>
+                         <div className="flex-1">
+                           <div className="flex items-center gap-2 mb-2">
+                             <Sparkles size={14} className="text-amber-400" />
+                             <span className="text-xs font-black text-amber-400 uppercase tracking-widest">
+                               Acquisition Initiated
+                             </span>
+                           </div>
+                           <h3 className="text-xl font-black text-neutral-200 mb-1">
+                             {newAcquisition.name}
+                           </h3>
+                           <p className="text-sm text-neutral-400 font-medium leading-relaxed mb-4">
+                             Your acquisition request has been submitted. Valuation:{' '}
+                             <span className="text-neutral-200 font-black">
+                               {formatPrice(newAcquisition.price)}
+                             </span>
+                             . Our team will follow up shortly.
+                           </p>
+                           <button
+                             onClick={() => setNewAcquisition(null)}
+                             className="text-xs font-black text-neutral-500 hover:text-neutral-300 transition-colors"
+                           >
+                             Dismiss
+                           </button>
+                       </div>
+                     </div>
+                   </motion.div>
+                   )}
+
+                   {orders.length === 0 ? (
                   <div className="py-32 bg-neutral-900 rounded-[4rem] border border-neutral-800 flex flex-col items-center text-center px-10 relative overflow-hidden shadow-sm">
                     <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-amber-500/5 to-transparent" />
                     <CreditCard size={80} className="text-neutral-700 mb-8" />

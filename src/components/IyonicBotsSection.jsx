@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Bot, MessageSquare, TrendingUp, LifeBuoy, Zap, Clock } from 'lucide-react'
+import { ArrowRight, Bot, MessageSquare, TrendingUp, LifeBuoy, Zap, Phone } from 'lucide-react'
 import { IYONICBOTS_CAPABILITIES } from '../utils/constants'
 
 const iconMap = {
   conversations: MessageSquare,
   'product-questions': MessageSquare,
   'lead-generation': TrendingUp,
+  voice: Phone,
   support: LifeBuoy,
   automation: Zap
 }
@@ -22,7 +23,7 @@ const IyonicBotsSection = () => {
               viewport={{ once: true }}
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium text-neutral-100 tracking-tight leading-[1.05] mb-6"
             >
-              Your Business, Powered by AI
+               AI That Helps Your Business
             </motion.h2>
 
             <motion.p

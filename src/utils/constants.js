@@ -51,43 +51,38 @@ export const HOW_IT_WORKS_STEPS = [
 
 export const WHY_CHOOSE_US_CONTENT = {
   subtitle: 'Why Iyoni Corp',
-  title: "Precision, Proven, Portfolio",
-  description: 'Iyoni Corp delivers institutional-grade acquisition opportunities with fully operational assets. Our portfolio companies are engineered for scale, profitability, and immediate return on investment.'
+  title: 'Build. Own. Grow.',
+  description: 'Iyoni Corp creates digital businesses and technology products that help entrepreneurs build, operate, and grow online businesses.'
 }
 
 export const WHY_CHOOSE_US_FEATURES = [
   {
-    icon: Shield,
-    title: 'Rigorous Due Diligence',
-    description: 'Every holding undergoes comprehensive financial, legal, and technical audit before presentation.',
+    icon: Lightbulb,
+    title: 'BUILD',
+    description: 'We create businesses and technology products from the ground up — code, infrastructure, and go-to-market systems included.',
     color: 'blue'
   },
   {
-    icon: TrendingUp,
-    title: 'Revenue-Generating',
-    description: 'All portfolio companies are fully operational with proven revenue streams and growth metrics.',
+    icon: Wallet,
+    title: 'OWN',
+    description: 'We build digital assets designed to be owned and operated. Every business is delivered with full source access and transferable IP.',
     color: 'purple'
   },
   {
-    icon: BarChart3,
-    title: 'Transparent Valuation',
-    description: 'Clear, market-anchored business valuations presented as straightforward acquisition prices.',
+    icon: Globe,
+    title: 'CONNECT',
+    description: 'We connect commerce, payments, and AI into one ecosystem so each business is never isolated from the tools it needs.',
     color: 'indigo'
   },
   {
-    icon: Wallet,
-    title: 'Turnkey Ownership',
-    description: 'Seamless transfer of full operational control, assets, and intellectual property upon acquisition.',
+    icon: TrendingUp,
+    title: 'GROW',
+    description: 'We focus on business infrastructure that helps companies move forward — analytics, automation, and scalable operations.',
     color: 'emerald'
   }
 ]
 
-export const WHY_CHOOSE_US_METRICS = [
-  { label: 'Portfolio Assets', value: '70+' },
-  { label: 'Avg. Revenue Multiple', value: '3.2x' },
-  { label: 'Investor ROI', value: '180%' },
-  { label: 'Acquisition Success', value: '100%' },
-]
+export const WHY_CHOOSE_US_METRICS = []
 
 export const PARTNERSHIP_CONTENT = {
   subtitle: 'Investor Relations',
@@ -130,9 +125,9 @@ export const SHOPRIGHT_FEATURES = [
 ]
 
 export const CONTACT_CONTENT = {
-  subtitle: 'Investor Relations',
-  title: "Let's discuss your next acquisition",
-  description: "Have acquisition criteria? Our investor relations team will review your requirements and present qualified portfolio opportunities."
+  subtitle: 'Work With Iyoni',
+  title: "Let's build something together",
+  description: "Launching a business, partnering on technology, or acquiring a digital asset? Share your goals and we'll connect you with the right team."
 }
 
 export const CONTACT_INFO = [
@@ -899,7 +894,6 @@ export const MODULE_NAME_MAP = {
   'product pages': 'Product Pages',
   marketing: 'Marketing Suite',
   'free basic db': 'Data Starter (Basic)',
-  'analytics': 'Analytics Dashboard'
 }
 
 export const getModuleName = (moduleId) => {
@@ -1119,32 +1113,38 @@ export const TECH_ECOSYSTEM = [
 export const IYONICBOTS_CAPABILITIES = [
   {
     id: 'conversations',
-    title: 'Customer Conversations',
-    description: 'AI-powered chatbots that engage visitors and answer questions in real time.',
+    title: 'AI Conversations',
+    description: 'Business-grade GPT assistants trained on your docs, products, and customer data. Available as chatbots on every Iyonic business.',
     exists: true
   },
   {
     id: 'product-questions',
     title: 'Product Questions',
-    description: 'Assistants trained on your product docs and catalogs to answer buyer queries.',
+    description: 'Assistants that answer buyer queries from your product catalogs and documentation in real time.',
     exists: true
   },
   {
     id: 'lead-generation',
-    title: 'Lead Generation',
-    description: 'AI-powered lead capture and qualification workflows are planned for upcoming releases.',
-    exists: false
+    title: 'AI Sales Bots',
+    description: 'AI sales assistants that engage visitors, capture leads, and guide them toward conversion.',
+    exists: true
+  },
+  {
+    id: 'voice',
+    title: 'AI Voice Assistants',
+    description: 'Voice-powered AI assistants for phone-based customer interaction and support.',
+    exists: true
   },
   {
     id: 'support',
     title: 'Customer Support',
-    description: 'Automated support ticket handling and response routing via AI agents.',
+    description: 'Automated support ticket handling and response routing across the Iyonic platform.',
     exists: true
   },
   {
     id: 'automation',
     title: 'Business Automation',
-    description: 'Workflow automation for bookings, inventory, and daily operations.',
+    description: 'Workflow automation for bookings, inventory, orders, and daily business operations.',
     exists: true
   }
 ]
@@ -1171,5 +1171,127 @@ export const findBusinessById = (id) => {
 
 export const findBusinessByName = (name) => {
   return ALL_BUSINESSES.find((item) => item.name === name) || null
+}
+
+export const BUSINESS_CLASSIFICATIONS = [
+  'Website Asset',
+  'Ready-to-Launch Business',
+  'Operating Business',
+  'Digital Product',
+  'Software Business',
+  'Coming Soon'
+]
+
+export const BUSINESS_STATUSES = ['Available', 'Operating', 'Coming Soon', 'Sold']
+
+export const getBusinessStatus = (item) => {
+  if (!item) return 'Coming Soon'
+  if (item.status) return item.status
+  return item.price && item.price > 0 ? 'Available' : 'Coming Soon'
+}
+
+export const getBusinessClassification = (item) => {
+  if (!item) return 'Digital Product'
+  if (item.classification) return item.classification
+  if (EXCLUDED_BUSINESS_IDS.includes(item.id)) return 'Software Business'
+  if (!item.price || item.price <= 0) return 'Coming Soon'
+  return 'Ready-to-Launch Business'
+}
+
+const CATEGORY_TYPE_MAP = {
+  'Ecommerce': 'E-commerce',
+  'Beauty shops': 'E-commerce',
+  'Point of Sale': 'E-commerce',
+  'Automobiles': 'Consumer',
+  'Salons': 'Services',
+  'Real Estate & Property Management': 'Services',
+  'Hotels & Restaurants': 'Services',
+  'Event Planner': 'Services',
+  'Professional Services': 'Services',
+  'Freelance': 'Services',
+  'Appointment Scheduling': 'Services',
+  'Consulting': 'Services',
+  'Blogs': 'Media',
+  'Ebooks': 'Media',
+  'Streaming': 'Media',
+  'Social Platforms': 'Consumer',
+  'Saas': 'SaaS',
+  'AI & Automation': 'SaaS',
+  'Portfolio': 'Other',
+  'Wellness': 'Services',
+  'Spa': 'Services',
+  'Food & Beverage': 'Consumer',
+  'Travel & Tourism': 'Consumer',
+  'Tours & Travels': 'Consumer',
+  'Events': 'Services',
+  'Hospitality': 'Services',
+  'Health & Fitness': 'Services'
+}
+
+export const getBusinessCategory = (item) => {
+  if (!item) return 'Other'
+  if (item.category) return item.category
+  if (EXCLUDED_BUSINESS_IDS.includes(item.id)) return 'Technology'
+  return CATEGORY_TYPE_MAP[item.type] || 'Other'
+}
+
+export const BUSINESS_CATEGORIES = [
+  'All Businesses',
+  ...Array.from(new Set(ALL_BUSINESSES.map((b) => getBusinessCategory(b)))).sort()
+]
+
+export const BUSINESS_STATUS_FILTERS = [
+  'All Businesses',
+  ...Array.from(new Set(ALL_BUSINESSES.map((b) => getBusinessStatus(b)))).sort()
+]
+
+export const getBusinessFilters = () => {
+  const categories = Array.from(new Set(ALL_BUSINESSES.map((b) => getBusinessCategory(b)))).sort()
+  const statuses = Array.from(new Set(ALL_BUSINESSES.map((b) => getBusinessStatus(b)))).sort()
+  return ['All Businesses', ...categories, ...statuses]
+}
+
+export const IYONICWEB_PRODUCT = {
+  name: 'IyonicWeb',
+  tagline: 'Business Platform',
+  description: 'IyonicWeb is a business platform designed to help entrepreneurs launch and operate online businesses from one place.',
+  features: [
+    'Multi-tenant commerce & storefronts',
+    'Order & customer management',
+    'Product catalog & inventory',
+    'IyonicPay checkout integration',
+    'IyonicBots AI & automation',
+    'Analytics & SEO'
+  ],
+  externalHref: 'https://web.iyoniccorp.com'
+}
+
+export const IYONICPAY_PRODUCT = {
+  name: 'IyonicPay',
+  tagline: 'Payments',
+  description: 'IyonicPay is Iyoni Corp\'s payment technology, designed to connect business transactions with the Iyonic ecosystem.',
+  features: [
+    'Checkout & invoicing',
+    'Subscription billing',
+    'Encrypted processing',
+    'Ecosystem Integration (IyonicWeb + IyonicBots)'
+  ],
+  externalHref: 'https://pay.iyonicorp.com'
+}
+
+export const IYONICBOTS_PRODUCT = {
+  name: 'IyonicBots',
+  tagline: 'AI & Automation',
+  description: 'IyonicBots brings AI-powered customer interaction and business automation into the Iyonic ecosystem.',
+  features: [
+    'AI Conversations',
+    'Product Questions',
+    'AI Sales Bots',
+    'AI Voice Assistants',
+    'Customer Support',
+    'Business Automation',
+    'API access'
+  ],
+  externalHref: 'https://iyonicbots.iyonicorp.com'
 }
 

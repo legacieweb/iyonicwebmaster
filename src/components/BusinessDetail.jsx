@@ -42,6 +42,7 @@ import {
   OWNERSHIP_MODELS,
   BUSINESS_MEMBERSHIP_TIERS
 } from '../utils/constants'
+import { saveOrder } from '../utils/api'
 
 const MODULE_ICONS = {
   crm: Users,
@@ -191,7 +192,7 @@ const BusinessDetail = ({ business: propBusiness, onBack: propOnBack }) => {
   const { businessId } = useParams()
   const location = useLocation()
   const navigate = useNavigate()
-  const { isAuthenticated, toggleAuthModal } = useAuth()
+  const { isAuthenticated, toggleAuthModal, currentUser } = useAuth()
 
   const [business, setBusiness] = useState(propBusiness || location.state?.business || null)
   const [modalOpen, setModalOpen] = useState(false)
@@ -210,11 +211,31 @@ const BusinessDetail = ({ business: propBusiness, onBack: propOnBack }) => {
     console.log(`Acquisition request for ${business.name}: ${email} as ${type}`)
   }
 
-  const handleAcquire = () => {
-    if (isAuthenticated) {
-      navigate('/dashboard')
-    } else {
+  const handleAcquire = async () => {
+    if (!isAuthenticated) {
       toggleAuthModal('login')
+      return
+    }
+
+    try {
+      const orderData = {
+        order_number: `ACQ-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
+        service_id: business.id,
+        service_name: business.name,
+        plan_name: `Business Acquisition - ${businessTier.name}`,
+        amount: business.price,
+        status: 'pending',
+        userId: currentUser?.id
+      }
+
+      await saveOrder(orderData)
+
+      navigate('/dashboard', {
+        state: { tab: 'orders', acquiredBusiness: business }
+      })
+    } catch (err) {
+      console.error('Acquisition failed:', err)
+      alert('Failed to initialize acquisition. Please try again or contact support.')
     }
   }
 

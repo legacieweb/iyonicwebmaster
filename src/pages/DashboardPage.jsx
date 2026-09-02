@@ -10,6 +10,7 @@ const DashboardPage = () => {
   
   const dashboardTab = location.state?.tab || 'overview'
   const dashboardServiceId = location.state?.serviceId || null
+  const acquiredBusiness = location.state?.acquiredBusiness || null
 
   useEffect(() => {
     if (!isLoading) {
@@ -43,6 +44,7 @@ const DashboardPage = () => {
     <UserDashboard 
       initialTab={dashboardTab}
       initialServiceId={dashboardServiceId}
+      acquiredBusiness={acquiredBusiness}
       onBack={handleBack}
       onSelectTemplate={handleSelectTemplate}
       onEditProject={handleEditProject}

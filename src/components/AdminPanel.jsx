@@ -2,9 +2,9 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ArrowLeft, Trash2, Edit2, AlertCircle, Loader, ChevronDown, ChevronUp, 
-  BarChart3, Code2, Settings, Users, RefreshCw, Zap, Shield, Plus, Box, Globe, Sparkles,
-  ShieldOff, UserCheck, CreditCard, Timer, ToggleLeft, ToggleRight, Ban, ShieldCheck, Activity,
-  Cpu, Rocket, Layout, Database, HeartHandshake, FileText, Menu as MenuIcon, X, Mail
+  BarChart3, Users, RefreshCw, Shield, Box, Globe, Sparkles,
+  UserCheck, CreditCard, Ban, ShieldCheck, Activity,
+  Rocket, Layout, Database, HeartHandshake, FileText, Menu as MenuIcon, X, Mail
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { 
@@ -18,6 +18,19 @@ import {
 import { MEMBERSHIP_TIERS } from '../utils/membership'
 import { CATALOG_ITEMS } from '../utils/constants'
 import PipelineSection from './PipelineSection'
+
+const SIDEBAR_ITEMS = [
+  { id: 'analytics', label: 'Overview', icon: BarChart3 },
+  { id: 'partnership', label: 'Partnership', icon: HeartHandshake },
+  { id: 'users', label: 'Users', icon: Users },
+  { id: 'marketing', label: 'Marketing', icon: Activity },
+  { id: 'leads', label: 'Leads', icon: Sparkles },
+  { id: 'templates', label: 'Assets', icon: Database },
+  { id: 'affiliates', label: 'Affiliates', icon: HeartHandshake },
+  { id: 'withdrawals', label: 'Withdrawals', icon: CreditCard },
+  { id: 'pipeline', label: 'Pipeline', icon: Rocket },
+  { id: 'projects', label: 'Projects', icon: Box },
+]
 
 const AdminPanel = ({ onBack }) => {
   const { currentUser, isAdmin } = useAuth()
@@ -53,7 +66,7 @@ const AdminPanel = ({ onBack }) => {
         
         // Fetch sequentially or in smaller chunks if Neon is cold to avoid ETIMEDOUT/ECONNRESET
         const leadsData = await fetchLeads().catch(err => { if (err.response?.status === 401) return []; throw err; })
-        const projectsData = await fetchAllProjects().catch(err => { if (err.response?.status === 401) return []; throw err; })
+        const projectsData = await fetchAllProjects().catch(err => { if (err.response?.status === 404 || err.response?.status === 401) return []; throw err; })
         const usersData = await fetchAllUsers().catch(err => { if (err.response?.status === 404 || err.response?.status === 401) return []; throw err; })
         const ordersData = await fetchUserOrders().catch(err => { if (err.response?.status === 401) return []; return []; })
         const partnershipData = await fetchPartnershipRequests().catch(err => { if (err.response?.status === 401) return []; return []; })
@@ -400,18 +413,17 @@ const AdminPanel = ({ onBack }) => {
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-neutral-950 pt-20 flex items-center justify-center">
-        <div className="bg-neutral-900 p-12 rounded-[3rem] border border-neutral-800 max-w-md text-center shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-2 bg-rose-500" />
+        <div className="bg-neutral-900 p-12 rounded-2xl border border-neutral-800 max-w-md text-center shadow-xl">
           <AlertCircle className="w-16 h-16 text-rose-500 mx-auto mb-6" />
-          <h1 className="text-3xl font-black mb-4 uppercase italic tracking-tight">Access Denied</h1>
-          <p className="text-neutral-500 mb-10 font-medium">You do not have the required clearance level to access the central control hub.</p>
+          <h1 className="text-3xl font-semibold text-neutral-200 mb-4">Access Denied</h1>
+          <p className="text-neutral-500 mb-10 font-medium">You do not have the required privileges to access the admin panel.</p>
           <motion.button
             onClick={() => onBack(false)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="w-full py-4 bg-amber-500 text-neutral-950 rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-amber-400/20 hover:bg-amber-300 transition-all"
+            className="w-full py-4 bg-amber-400 text-neutral-950 rounded-xl font-medium text-xs uppercase tracking-widest hover:bg-amber-300 transition-all shadow-lg shadow-amber-400/20"
           >
-            Return to Surface
+            Return to Dashboard
           </motion.button>
         </div>
       </div>
@@ -419,7 +431,7 @@ const AdminPanel = ({ onBack }) => {
   }
 
   return (
-    <div className="h-screen bg-neutral-950 text-neutral-200 flex flex-col font-sans selection:bg-amber-400/30 overflow-hidden">
+    <div className="h-screen bg-neutral-950 text-neutral-300 flex flex-col font-sans selection:bg-amber-400/30 overflow-hidden">
       {/* Background Orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-amber-400/5 rounded-full blur-[120px]" />
@@ -440,10 +452,9 @@ const AdminPanel = ({ onBack }) => {
             </motion.button>
             
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-neutral-700 rounded-xl flex items-center justify-center text-neutral-100 font-black italic shadow-lg shadow-amber-400/20">A</div>
+              <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-neutral-700 rounded-xl flex items-center justify-center text-neutral-100 font-semibold shadow-lg shadow-amber-400/20">A</div>
               <div className="flex flex-col">
-                <span className="font-black text-lg text-neutral-200 tracking-tighter leading-none uppercase italic">Admin</span>
-                <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest mt-1">Control Center</span>
+                <span className="font-semibold text-lg text-neutral-200">Admin Panel</span>
               </div>
             </div>
           </div>
@@ -451,10 +462,10 @@ const AdminPanel = ({ onBack }) => {
           <div className="flex items-center gap-6">
             <div className="hidden md:flex items-center gap-4 pr-6 border-r border-neutral-800">
               <div className="text-right">
-                <div className="text-[10px] font-black text-neutral-400 uppercase tracking-widest leading-none mb-1">Admin Session</div>
-                <div className="text-sm font-bold text-neutral-200">{currentUser?.email || 'Administrator'}</div>
+                <div className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest leading-none mb-1">Admin Session</div>
+                <div className="text-sm font-semibold text-neutral-200">{currentUser?.email || 'Administrator'}</div>
               </div>
-              <div className="w-11 h-11 bg-gradient-to-br from-amber-400 to-neutral-700 rounded-xl flex items-center justify-center text-neutral-100 font-black border border-neutral-300/20 shadow-sm overflow-hidden uppercase">
+              <div className="w-11 h-11 bg-neutral-800 rounded-xl flex items-center justify-center text-neutral-200 font-semibold border border-neutral-700/20 shadow-sm overflow-hidden uppercase">
                 {currentUser?.email?.charAt(0) || 'A'}
               </div>
             </div>
@@ -491,26 +502,14 @@ const AdminPanel = ({ onBack }) => {
                 className="fixed top-0 left-0 bottom-0 w-80 bg-neutral-900 z-50 lg:hidden flex flex-col p-6 shadow-2xl border-r border-neutral-800"
               >
                 <div className="flex items-center gap-3 mb-10 px-2">
-                  <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-neutral-700 rounded-xl flex items-center justify-center text-neutral-100 font-black italic">A</div>
+                  <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-neutral-700 rounded-xl flex items-center justify-center text-neutral-100 font-semibold">A</div>
                   <div className="flex flex-col">
-                    <span className="font-black text-lg text-neutral-200 tracking-tighter leading-none uppercase italic">Admin</span>
-                    <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest mt-1">Control Center</span>
+                    <span className="font-semibold text-lg text-neutral-200">Admin Panel</span>
                   </div>
                 </div>
 
-                <div className="space-y-2 flex-1">
-                  {[
-                    { id: 'analytics', label: 'Overview', icon: BarChart3 },
-                    { id: 'partnership', label: 'Alliance Hub', icon: HeartHandshake },
-                    { id: 'users', label: 'User Hub', icon: Users },
-                    { id: 'marketing', label: 'Marketing Hub', icon: Activity },
-                    { id: 'leads', label: 'Lead Engine', icon: Sparkles },
-                    { id: 'templates', label: 'Asset Matrix', icon: Database },
-                    { id: 'affiliates', label: 'Affiliates', icon: HeartHandshake },
-                    { id: 'withdrawals', label: 'Treasury Hub', icon: CreditCard },
-                    { id: 'pipeline', label: 'Lead Pipeline', icon: Rocket },
-                    { id: 'projects', label: 'Project Matrix', icon: Box },
-                  ].map((item) => {
+                <nav className="space-y-1.5 flex-1">
+                  {SIDEBAR_ITEMS.map((item) => {
                     const Icon = item.icon
                     const isActive = activeTab === item.id
                     return (
@@ -520,30 +519,33 @@ const AdminPanel = ({ onBack }) => {
                           setActiveTab(item.id)
                           setIsMobileMenuOpen(false)
                         }}
-                        className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl font-bold text-[11px] uppercase tracking-widest transition-all duration-300 relative ${
-                          isActive 
-                            ? 'text-amber-300 bg-neutral-800/50/50' 
-                            : 'text-neutral-500 hover:text-neutral-200 hover:bg-neutral-800'
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                          isActive
+                            ? 'bg-neutral-800/40 text-neutral-200'
+                            : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/30'
                         }`}
                       >
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                          isActive ? 'bg-amber-500 text-neutral-950 shadow-md' : 'bg-neutral-800 text-neutral-400'
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                          isActive ? 'bg-amber-400/15 text-amber-400' : 'text-neutral-400'
                         }`}>
-                          <Icon size={16} />
+                          <Icon size={17} />
                         </div>
-                        <span>{item.label}</span>
+                        <span className="text-xs font-medium">{item.label}</span>
+                        {isActive && (
+                          <div className="ml-auto w-1.5 h-1.5 rounded-full bg-amber-400" />
+                        )}
                       </button>
                     )
                   })}
-                </div>
+                </nav>
 
-                <div className="mt-auto pt-6 border-t border-neutral-700">
+                <div className="pt-6 border-t border-neutral-800">
                   <div className="flex items-center gap-3 mb-4 px-2">
-                    <div className="w-10 h-10 bg-neutral-800 rounded-xl flex items-center justify-center text-neutral-200 font-bold uppercase">
+                    <div className="w-11 h-11 bg-neutral-800 rounded-xl flex items-center justify-center text-neutral-200 font-semibold uppercase">
                       {currentUser?.email?.charAt(0) || 'A'}
                     </div>
                     <div className="flex flex-col overflow-hidden">
-                      <span className="text-xs font-bold text-neutral-200 truncate">{currentUser?.email || 'Admin'}</span>
+                      <span className="text-xs font-semibold text-neutral-200 truncate">{currentUser?.email || 'Admin'}</span>
                       <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-widest">Active Session</span>
                     </div>
                   </div>
@@ -554,62 +556,43 @@ const AdminPanel = ({ onBack }) => {
         </AnimatePresence>
 
         {/* Sidebar */}
-        <aside className="w-72 p-6 hidden lg:flex flex-col flex-shrink-0 h-full border-r border-neutral-700 bg-neutral-900/50 backdrop-blur-sm">
-          <div className="space-y-2 flex-1">
-            {[
-              { id: 'analytics', label: 'Overview', icon: BarChart3 },
-              { id: 'partnership', label: 'Alliance Hub', icon: HeartHandshake },
-              { id: 'users', label: 'User Hub', icon: Users },
-              { id: 'marketing', label: 'Marketing Hub', icon: Activity },
-              { id: 'leads', label: 'Lead Engine', icon: Sparkles },
-              { id: 'templates', label: 'Asset Matrix', icon: Database },
-              { id: 'affiliates', label: 'Affiliates', icon: HeartHandshake },
-              { id: 'withdrawals', label: 'Withdrawals', icon: CreditCard },
-              { id: 'pipeline', label: 'Lead Pipeline', icon: Rocket },
-              { id: 'projects', label: 'Project Matrix', icon: Box },
-            ].map((item) => {
+        <aside className="w-72 p-6 hidden lg:flex flex-col flex-shrink-0 h-full border-r border-neutral-800 bg-neutral-950/50">
+          <nav className="space-y-1.5 flex-1">
+            {SIDEBAR_ITEMS.map((item) => {
               const Icon = item.icon
               const isActive = activeTab === item.id
               return (
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center gap-3 px-5 py-3.5 rounded-2xl font-bold text-[11px] uppercase tracking-widest transition-all duration-300 relative group ${
-                    isActive 
-                      ? 'text-amber-300' 
-                      : 'text-neutral-500 hover:text-neutral-200 hover:bg-neutral-800'
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                    isActive
+                      ? 'bg-neutral-800/40 text-neutral-200'
+                      : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/30'
                   }`}
                 >
-                  {isActive && (
-                    <motion.div 
-                      layoutId="sidebar-active"
-                      className="absolute inset-0 bg-neutral-900 border border-neutral-800 rounded-2xl shadow-sm"
-                      initial={false}
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                  <div className={`relative z-10 w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-300 ${
-                    isActive ? 'bg-amber-500 text-neutral-950 shadow-md shadow-amber-400/20' : 'bg-neutral-800 text-neutral-400 group-hover:bg-neutral-700'
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                    isActive ? 'bg-amber-400/15 text-amber-400' : 'text-neutral-400'
                   }`}>
-                    <Icon size={16} />
+                    <Icon size={17} />
                   </div>
-                  <span className="relative z-10">{item.label}</span>
+                  <span className="text-xs font-medium">{item.label}</span>
                   {isActive && (
-                    <div className="absolute right-4 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(37,99,235,0.5)]" />
+                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-amber-400" />
                   )}
                 </button>
               )
             })}
-          </div>
+          </nav>
 
           <div className="pt-6 border-t border-neutral-800">
-            <div className="bg-neutral-900 p-6 rounded-[2rem] border border-neutral-800 relative overflow-hidden group shadow-sm">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/5 rounded-full blur-3xl group-hover:bg-amber-400/10 transition-all duration-700" />
+            <div className="p-6 rounded-2xl border border-neutral-800 bg-neutral-900/60 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/5 rounded-full blur-3xl" />
               <div className="relative z-10">
-                <p className="text-[10px] font-black text-amber-400 uppercase tracking-[0.2em] mb-2">System Status</p>
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                  <span className="text-xs font-bold text-neutral-200 uppercase tracking-widest">Operational</span>
+                <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-2">System Status</p>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                  <span className="text-xs font-medium text-neutral-300">Operational</span>
                 </div>
                 <p className="text-[10px] text-neutral-500 leading-relaxed font-medium">All infrastructure nodes are healthy and performing at peak efficiency.</p>
               </div>
@@ -623,12 +606,12 @@ const AdminPanel = ({ onBack }) => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-rose-50 border border-rose-200 p-6 rounded-2xl mb-8 flex items-start gap-4 shadow-sm"
+              className="bg-rose-500/10 border border-rose-500/30 p-6 rounded-2xl mb-8 flex items-start gap-4 shadow-sm"
             >
               <AlertCircle className="w-6 h-6 text-rose-500 flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-bold text-rose-900 uppercase text-xs tracking-widest mb-1">System Alert</h3>
-                <p className="text-rose-600 text-sm font-medium">{error}</p>
+                <h3 className="font-semibold text-rose-400 text-xs uppercase tracking-widest mb-1">System Alert</h3>
+                <p className="text-rose-300 text-sm font-medium">{error}</p>
               </div>
             </motion.div>
           )}
@@ -645,7 +628,7 @@ const AdminPanel = ({ onBack }) => {
                   <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
                 </div>
               </div>
-              <p className="mt-6 text-xs font-black text-neutral-400 uppercase tracking-[0.3em] animate-pulse">Syncing Matrix...</p>
+              <p className="mt-6 text-xs font-medium text-neutral-500 uppercase tracking-[0.3em] animate-pulse">Loading...</p>
             </div>
           ) : (
             <div className="max-w-6xl mx-auto">
@@ -662,13 +645,13 @@ const AdminPanel = ({ onBack }) => {
                     <div className="space-y-10">
                       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                          <p className="text-[10px] font-black text-amber-400 uppercase tracking-[0.3em] mb-3">Enterprise Intelligence</p>
-                          <h2 className="text-4xl sm:text-5xl font-black text-neutral-950 uppercase italic tracking-tighter leading-none">
-                            Platform <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-neutral-700">Overview</span>
+                          <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Platform Overview</p>
+                          <h2 className="text-3xl sm:text-4xl font-semibold text-neutral-200">
+                            Dashboard
                           </h2>
                         </div>
                         <div className="flex items-center gap-3">
-                          <button onClick={() => window.location.reload()} className="flex items-center gap-2 px-4 py-2 bg-neutral-900 border border-neutral-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:bg-neutral-950 transition-all shadow-sm">
+                          <button onClick={() => window.location.reload()} className="flex items-center gap-2 px-4 py-2 bg-neutral-900 border border-neutral-800 rounded-xl text-[10px] font-medium text-neutral-400 hover:bg-neutral-800 transition-all shadow-sm">
                             <RefreshCw size={14} />
                             Refresh Data
                           </button>
@@ -679,11 +662,11 @@ const AdminPanel = ({ onBack }) => {
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
                         {[
                           { label: 'Total Users', value: users.length, icon: Users, color: 'text-amber-400', bg: 'bg-amber-400/10' },
-                          { label: 'Alliance Req', value: partnershipRequests.filter(r => r.status === 'pending').length, icon: HeartHandshake, color: 'text-emerald-600', bg: 'bg-emerald-600/10' },
+                          { label: 'Pending Partnerships', value: partnershipRequests.filter(r => r.status === 'pending').length, icon: HeartHandshake, color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
                           { label: 'Total Leads', value: leads.length, icon: Sparkles, color: 'text-amber-400', bg: 'bg-amber-400/10' },
-                          { label: 'Infrastructure', value: projects.length, icon: Box, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+                          { label: 'Projects', value: projects.length, icon: Box, color: 'text-neutral-300', bg: 'bg-neutral-400/10' },
                           { 
-                            label: 'Assets Worth', 
+                            label: 'Total Asset Value', 
                             value: `$${(
                               projects.reduce((sum, p) => sum + (Number(p.price) || 0), 0) + 
                               Object.values(CATALOG_ITEMS).flat().reduce((sum, item) => sum + (Number(item.price) || 0), 0)
@@ -696,38 +679,40 @@ const AdminPanel = ({ onBack }) => {
                           <motion.div
                             key={i}
                             whileHover={{ y: -5 }}
-                            className="bg-neutral-900 p-6 rounded-[2rem] border border-neutral-700 shadow-sm shadow-slate-200/50 group transition-all"
+                            className="p-6 rounded-2xl bg-neutral-900/60 border border-neutral-800 flex items-start gap-4"
                           >
-                            <div className={`w-12 h-12 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 group-hover:rotate-3`}>
+                            <div className={`w-12 h-12 ${stat.bg} ${stat.color} rounded-xl flex items-center justify-center mb-0 flex-shrink-0`}>
                               <stat.icon size={24} />
                             </div>
-                            <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-1">{stat.label}</p>
-                            <p className="text-3xl font-black text-neutral-950 tracking-tighter italic">{stat.value}</p>
+                            <div>
+                              <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-1">{stat.label}</p>
+                              <p className="text-3xl font-semibold text-neutral-200 leading-none">{stat.value}</p>
+                            </div>
                           </motion.div>
                         ))}
                       </div>
 
                       {/* Summary Section */}
                       <div className="grid lg:grid-cols-3 gap-8">
-                        <div className="lg:col-span-2 bg-neutral-900 p-8 rounded-[2.5rem] border border-neutral-700 shadow-sm shadow-slate-200/50">
+                        <div className="lg:col-span-2 bg-neutral-900/60 p-8 rounded-2xl border border-neutral-800">
                           <div className="flex items-center justify-between mb-8">
-                            <h3 className="text-xl font-black text-neutral-950 uppercase italic tracking-tight">Recent Inquiries</h3>
-                            <button onClick={() => setActiveTab('leads')} className="text-[10px] font-black text-amber-400 uppercase tracking-widest hover:underline">View All Leads</button>
+                            <h3 className="text-xl font-semibold text-neutral-200">Recent Leads</h3>
+                            <button onClick={() => setActiveTab('leads')} className="text-[10px] font-medium text-amber-400 uppercase tracking-widest hover:underline">View All Leads</button>
                           </div>
                           <div className="space-y-4">
                             {leads.slice(0, 5).map((lead) => (
-                              <div key={lead.id} className="flex items-center justify-between p-4 bg-neutral-950 border border-neutral-700 rounded-2xl hover:bg-neutral-900 hover:border-neutral-700 hover:shadow-md transition-all group">
+                              <div key={lead.id} className="flex items-center justify-between p-4 bg-neutral-950 border border-neutral-800 rounded-2xl hover:bg-neutral-800/40 hover:border-neutral-700 transition-all group">
                                 <div className="flex items-center gap-4">
-                                  <div className="w-10 h-10 bg-neutral-900 rounded-xl border border-neutral-800 flex items-center justify-center text-neutral-400 font-bold group-hover:bg-amber-400 group-hover:text-neutral-100 group-hover:border-amber-400 transition-all uppercase">
+                                  <div className="w-10 h-10 bg-neutral-800 rounded-xl border border-neutral-800 flex items-center justify-center text-neutral-400 font-semibold group-hover:bg-amber-400 group-hover:text-neutral-100 group-hover:border-amber-400 transition-all uppercase">
                                     {lead.name?.charAt(0) || 'L'}
                                   </div>
                                   <div>
-                                    <p className="font-bold text-neutral-950 text-sm">{lead.name || 'Anonymous'}</p>
+                                    <p className="font-semibold text-neutral-200 text-sm">{lead.name || 'Anonymous'}</p>
                                     <p className="text-neutral-500 text-[10px] font-medium tracking-wide uppercase">{lead.email}</p>
                                   </div>
                                 </div>
                                 <div className="text-right">
-                                  <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-tighter">
+                                  <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-tight">
                                     {lead.created && new Date(lead.created).toLocaleDateString()}
                                   </p>
                                 </div>
@@ -736,22 +721,21 @@ const AdminPanel = ({ onBack }) => {
                             {leads.length === 0 && (
                               <div className="py-12 text-center">
                                 <Users className="w-12 h-12 text-neutral-600 mx-auto mb-4" />
-                                <p className="text-xs font-bold text-neutral-500 uppercase tracking-widest">No Recent Signals</p>
+                                <p className="text-xs font-medium text-neutral-500 uppercase tracking-widest">No Recent Signals</p>
                               </div>
                             )}
                           </div>
                         </div>
 
-                        <div className="bg-neutral-900 p-8 rounded-[2.5rem] border border-neutral-800 flex flex-col justify-between overflow-hidden relative shadow-sm">
-                          <div className="absolute top-0 right-0 w-64 h-64 bg-amber-400/5 rounded-full blur-[100px]" />
-                          <div className="relative z-10">
-                            <h3 className="text-xl font-black text-neutral-200 uppercase italic tracking-tight mb-6">Quick Actions</h3>
+                        <div className="bg-neutral-900/60 p-8 rounded-2xl border border-neutral-800 flex flex-col justify-between">
+                          <div>
+                            <h3 className="text-xl font-semibold text-neutral-200 mb-6">Quick Actions</h3>
                             <div className="space-y-4">
-                              <button onClick={() => setActiveTab('users')} className="w-full flex items-center gap-4 p-4 bg-neutral-800/50/50 border border-neutral-700 rounded-2xl text-amber-300 hover:bg-amber-400 hover:text-neutral-100 transition-all group">
+                              <button onClick={() => setActiveTab('users')} className="w-full flex items-center gap-4 p-4 bg-neutral-800/40 border border-neutral-700 rounded-2xl text-amber-400 hover:bg-amber-400 hover:text-neutral-100 transition-all group">
                                 <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center text-amber-400 group-hover:bg-amber-400 group-hover:text-neutral-100 shadow-sm">
                                   <Users size={20} />
                                 </div>
-                                <span className="font-bold text-sm uppercase tracking-widest">Manage Users</span>
+                                <span className="font-medium">Manage Users</span>
                               </button>
                             </div>
                           </div>
@@ -762,65 +746,65 @@ const AdminPanel = ({ onBack }) => {
 
                   {/* Partnership Tab */}
                   {activeTab === 'partnership' && (
-                    <div className="space-y-16 pb-20">
+                    <div className="space-y-10 pb-20">
                       {/* Header Section */}
-                      <div className="bg-neutral-900 rounded-[3rem] p-12 md:p-16 border border-neutral-800 relative overflow-hidden shadow-sm">
+                      <div className="bg-neutral-900/60 rounded-2xl p-12 md:p-16 border border-neutral-800 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-400/5 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
                         <div className="relative z-10">
                           <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 bg-amber-400 rounded-2xl flex items-center justify-center text-neutral-100 shadow-lg shadow-amber-400/20">
+                            <div className="w-12 h-12 bg-amber-400 rounded-xl flex items-center justify-center text-neutral-100 shadow-lg shadow-amber-400/20">
                               <HeartHandshake size={24} />
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400">Alliance Protocol</span>
+                            <span className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Partnership Requests</span>
                           </div>
-                          <h2 className="text-5xl md:text-7xl font-black text-neutral-200 uppercase italic tracking-tighter leading-none mb-6">
-                            Partnership <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-neutral-700">Requests</span>
+                          <h2 className="text-4xl sm:text-5xl font-semibold text-neutral-200">
+                            Partnership Requests
                           </h2>
-                          <p className="text-neutral-500 font-medium text-lg max-w-xl">
+                          <p className="text-neutral-500 font-medium text-lg max-w-xl mt-4">
                             Review and manage alliance partner applications. Approve or reject business partnerships.
                           </p>
                         </div>
                       </div>
                       
-                      <div className="bg-neutral-900 rounded-[3rem] border border-neutral-100 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] overflow-hidden">
+                      <div className="bg-neutral-900/60 rounded-2xl border border-neutral-800 overflow-hidden">
                         {partnershipRequests.length === 0 ? (
                           <div className="p-24 text-center">
-                            <HeartHandshake className="w-20 h-20 text-neutral-200 mx-auto mb-6" />
-                            <p className="text-neutral-400 font-bold uppercase tracking-widest text-sm">Zero Alliance Applications</p>
+                            <HeartHandshake className="w-20 h-20 text-neutral-600 mx-auto mb-6" />
+                            <p className="text-neutral-400 font-medium uppercase tracking-widest text-sm">No Partnership Applications</p>
                           </div>
                         ) : (
-                          <div className="divide-y divide-neutral-100">
+                          <div className="divide-y divide-neutral-800">
                             {partnershipRequests.map((request) => (
-                              <div key={request.id} className="p-8 md:p-12 hover:bg-neutral-50/50 transition-colors group">
+                              <div key={request.id} className="p-8 md:p-12 hover:bg-neutral-800/40 transition-colors group">
                                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
                                   {/* Business Info */}
                                   <div className="flex items-center gap-8">
-                                    <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-neutral-700 text-neutral-100 rounded-[1.5rem] flex items-center justify-center font-black text-3xl uppercase shadow-lg shadow-amber-400/20">
+                                    <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-neutral-700 text-neutral-100 rounded-2xl flex items-center justify-center font-semibold text-3xl shadow-lg shadow-amber-400/20 uppercase">
                                       {request.businessName?.charAt(0) || 'B'}
                                     </div>
                                     <div>
                                       <div className="flex items-center gap-4 mb-3">
-                                        <h3 className="font-black text-neutral-950 text-2xl uppercase tracking-tight italic">{request.businessName}</h3>
-                                        <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border shadow-sm ${
+                                        <h3 className="font-semibold text-neutral-200 text-2xl tracking-tight">{request.businessName}</h3>
+                                        <span className={`px-4 py-1.5 rounded-full text-[10px] font-medium uppercase tracking-widest border ${
                                           request.status === 'approved' 
-                                            ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
+                                            ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' 
                                             : request.status === 'rejected'
-                                            ? 'bg-rose-50 text-rose-600 border-rose-100'
-                                            : 'bg-amber-50 text-amber-600 border-amber-100'
+                                            ? 'bg-rose-500/20 text-rose-400 border-rose-500/30'
+                                            : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
                                         }`}>
                                           {request.status || 'Pending'}
                                         </span>
                                       </div>
                                       <div className="flex flex-wrap items-center gap-6">
-                                        <p className="text-neutral-500 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                                        <p className="text-neutral-500 font-medium text-xs uppercase tracking-widest flex items-center gap-2">
                                           <Users size={14} className="text-neutral-400" /> {request.userName}
                                         </p>
-                                        <p className="text-neutral-500 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                                        <p className="text-neutral-500 font-medium text-xs uppercase tracking-widest flex items-center gap-2">
                                           <Layout size={14} className="text-neutral-400" /> {request.businessType}
                                         </p>
                                         {request.website && (
-                                          <a href={request.website} target="_blank" rel="noopener noreferrer" className="text-amber-400 font-bold text-xs uppercase tracking-widest hover:underline flex items-center gap-2">
-                                            <Globe size={14} /> Visit Business
+                                          <a href={request.website} target="_blank" rel="noopener noreferrer" className="text-amber-400 font-medium text-xs uppercase tracking-widest hover:underline flex items-center gap-2">
+                                            <Globe size={14} /> Visit Website
                                           </a>
                                         )}
                                       </div>
@@ -831,21 +815,21 @@ const AdminPanel = ({ onBack }) => {
                                   <div className="flex items-center gap-4">
                                     <button
                                       onClick={() => toggleExpand(`request-${request.id}`)}
-                                      className={`px-8 py-4 bg-neutral-50 border border-neutral-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-neutral-100 transition-all ${expandedItems[`request-${request.id}`] ? 'bg-neutral-200' : ''}`}
+                                      className={`px-8 py-4 bg-neutral-800/40 border border-neutral-700 rounded-xl text-[10px] font-medium uppercase tracking-widest hover:bg-neutral-700 transition-all ${expandedItems[`request-${request.id}`] ? 'bg-neutral-700' : ''}`}
                                     >
-                                      {expandedItems[`request-${request.id}`] ? 'Hide Details' : 'View Details'}
+                                      {expandedItems[`request-${request.id}`] ? 'Hide' : 'View Details'}
                                     </button>
                                     {(!request.status || request.status === 'pending') && (
                                       <>
                                         <button
                                           onClick={() => handleApprovePartnership(request)}
-                                          className="px-8 py-4 bg-emerald-600 text-neutral-100 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"
+                                          className="px-8 py-4 bg-emerald-500 text-neutral-100 rounded-xl text-[10px] font-medium uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20"
                                         >
                                           Approve
                                         </button>
                                         <button
                                           onClick={() => handleRejectPartnership(request.id)}
-                                          className="px-8 py-4 bg-rose-500 text-neutral-100 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all shadow-lg shadow-rose-500/20"
+                                          className="px-8 py-4 bg-rose-500 text-neutral-100 rounded-xl text-[10px] font-medium uppercase tracking-widest hover:bg-rose-600 transition-all shadow-lg shadow-rose-500/20"
                                         >
                                           Reject
                                         </button>
@@ -862,21 +846,21 @@ const AdminPanel = ({ onBack }) => {
                                       exit={{ opacity: 0, height: 0 }}
                                       className="overflow-hidden"
                                     >
-                                      <div className="mt-12 p-10 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 space-y-10">
+                                      <div className="mt-12 p-10 bg-neutral-950 border border-neutral-800 rounded-2xl space-y-10">
                                         {/* Business Details Grid */}
                                         <div className="grid md:grid-cols-2 gap-8">
-                                          <div className="bg-neutral-900 p-8 rounded-[2rem] border border-neutral-200">
-                                            <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-4">Operations Overview</p>
-                                            <p className="text-sm font-medium text-neutral-600 leading-relaxed">
+                                          <div className="bg-neutral-900/60 p-8 rounded-2xl border border-neutral-800">
+                                            <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-4">Overview</p>
+                                            <p className="text-sm font-medium text-neutral-300 leading-relaxed">
                                               {request.description || 'No description provided'}
                                             </p>
                                           </div>
-                                          <div className="bg-neutral-900 p-8 rounded-[2rem] border border-neutral-200">
-                                            <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-4">Verification Credentials</p>
+                                          <div className="bg-neutral-900/60 p-8 rounded-2xl border border-neutral-800">
+                                            <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-4">Verification</p>
                                             <div className="flex items-center justify-between">
                                               <div>
-                                                <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest leading-none mb-2">Tax ID / National ID</p>
-                                                <p className="text-xl font-black text-neutral-900 tracking-tighter">{request.credentials || 'Not provided'}</p>
+                                                <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest leading-none mb-2">Tax ID / National ID</p>
+                                                <p className="text-xl font-semibold text-neutral-200">{request.credentials || 'Not provided'}</p>
                                               </div>
                                               <ShieldCheck className="text-amber-400" size={40} />
                                             </div>
@@ -885,21 +869,21 @@ const AdminPanel = ({ onBack }) => {
                                         
                                         {/* Financial Overview */}
                                         <div className="grid md:grid-cols-2 gap-8">
-                                          <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 p-8 rounded-[2rem] border border-emerald-200">
-                                            <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-4">Annual Revenue</p>
-                                            <p className="text-4xl font-black text-emerald-700 tracking-tighter">
+                                          <div className="bg-emerald-500/10 p-8 rounded-2xl border border-emerald-500/30">
+                                            <p className="text-[10px] font-medium text-emerald-400 uppercase tracking-widest mb-4">Annual Revenue</p>
+                                            <p className="text-4xl font-semibold text-emerald-400">
                                               {request.revenue_currency || 'USD'} {request.annual_revenue ? parseFloat(request.annual_revenue).toLocaleString() : '0'}
                                             </p>
-                                            <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mt-2">Per Annum</p>
+                                            <p className="text-[10px] font-medium text-emerald-400 uppercase tracking-widest mt-2">Per Annum</p>
                                           </div>
-                                          <div className="bg-neutral-900 p-8 rounded-[2rem] border border-neutral-200">
-                                            <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-4">Business URL</p>
+                                          <div className="bg-neutral-900/60 p-8 rounded-2xl border border-neutral-800">
+                                            <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-4">Business URL</p>
                                             {request.website ? (
                                               <a 
                                                 href={request.website} 
                                                 target="_blank" 
                                                 rel="noopener noreferrer"
-                                                className="flex items-center gap-3 text-xl font-black text-amber-400 hover:text-amber-300 transition-colors"
+                                                className="flex items-center gap-3 text-xl font-semibold text-amber-400 hover:text-amber-300 transition-colors"
                                               >
                                                 <Globe size={24} />
                                                 {request.website}
@@ -913,12 +897,12 @@ const AdminPanel = ({ onBack }) => {
                                         {/* Uploaded Documents/Images */}
                                         {(request.registration_document_path || request.bank_statement_path || request.mobile_money_statement_path) && (
                                           <div>
-                                            <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-6">Uploaded Documents</p>
+                                            <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-6">Uploaded Documents</p>
                                             <div className="grid md:grid-cols-3 gap-6">
                                               {request.registration_document_path && (
-                                                <div className="bg-neutral-900 p-6 rounded-2xl border border-neutral-200">
-                                                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-3">Registration Document</p>
-                                                  <div className="aspect-video bg-neutral-100 rounded-xl overflow-hidden">
+                                                <div className="bg-neutral-900/60 p-6 rounded-2xl border border-neutral-800">
+                                                  <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Registration Document</p>
+                                                  <div className="aspect-video bg-neutral-800 rounded-xl overflow-hidden">
                                                     <img 
                                                       src={request.registration_document_path} 
                                                       alt="Registration Document" 
@@ -928,16 +912,16 @@ const AdminPanel = ({ onBack }) => {
                                                         e.target.nextSibling.style.display = 'flex';
                                                       }}
                                                     />
-                                                    <div className="w-full h-full hidden items-center justify-center text-neutral-400">
+                                                    <div className="w-full h-full hidden items-center justify-center text-neutral-500">
                                                       <FileText size={40} />
                                                     </div>
                                                   </div>
                                                 </div>
                                               )}
                                               {request.bank_statement_path && (
-                                                <div className="bg-neutral-900 p-6 rounded-2xl border border-neutral-200">
-                                                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-3">Bank Statement</p>
-                                                  <div className="aspect-video bg-neutral-100 rounded-xl overflow-hidden">
+                                                <div className="bg-neutral-900/60 p-6 rounded-2xl border border-neutral-800">
+                                                  <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Bank Statement</p>
+                                                  <div className="aspect-video bg-neutral-800 rounded-xl overflow-hidden">
                                                     <img 
                                                       src={request.bank_statement_path} 
                                                       alt="Bank Statement" 
@@ -947,16 +931,16 @@ const AdminPanel = ({ onBack }) => {
                                                         e.target.nextSibling.style.display = 'flex';
                                                       }}
                                                     />
-                                                    <div className="w-full h-full hidden items-center justify-center text-neutral-400">
+                                                    <div className="w-full h-full hidden items-center justify-center text-neutral-500">
                                                       <FileText size={40} />
                                                     </div>
                                                   </div>
                                                 </div>
                                               )}
                                               {request.mobile_money_statement_path && (
-                                                <div className="bg-neutral-900 p-6 rounded-2xl border border-neutral-200">
-                                                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-3">Mobile Money Statement</p>
-                                                  <div className="aspect-video bg-neutral-100 rounded-xl overflow-hidden">
+                                                <div className="bg-neutral-900/60 p-6 rounded-2xl border border-neutral-800">
+                                                  <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Mobile Money Statement</p>
+                                                  <div className="aspect-video bg-neutral-800 rounded-xl overflow-hidden">
                                                     <img 
                                                       src={request.mobile_money_statement_path} 
                                                       alt="Mobile Money Statement" 
@@ -966,7 +950,7 @@ const AdminPanel = ({ onBack }) => {
                                                         e.target.nextSibling.style.display = 'flex';
                                                       }}
                                                     />
-                                                    <div className="w-full h-full hidden items-center justify-center text-neutral-400">
+                                                    <div className="w-full h-full hidden items-center justify-center text-neutral-500">
                                                       <FileText size={40} />
                                                     </div>
                                                   </div>
@@ -989,66 +973,67 @@ const AdminPanel = ({ onBack }) => {
 
                   {/* Users Tab */}
                   {activeTab === 'users' && (
-                    <div className="space-y-16 pb-20">
+                    <div className="space-y-10 pb-20">
                       {/* Header Section */}
-                      <div className="bg-neutral-900 rounded-[3rem] p-12 md:p-16 border border-neutral-800 relative overflow-hidden shadow-sm">
+                      <div className="bg-neutral-900/60 rounded-2xl p-12 md:p-16 border border-neutral-800 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-400/5 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
                         <div className="relative z-10">
                           <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 bg-amber-400 rounded-2xl flex items-center justify-center text-neutral-100 shadow-lg shadow-amber-400/20">
+                            <div className="w-12 h-12 bg-amber-400 rounded-xl flex items-center justify-center text-neutral-100 shadow-lg shadow-amber-400/20">
                               <Users size={24} />
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400">Identity Matrix</span>
+                            <span className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest">User Management</span>
                           </div>
-                          <h2 className="text-5xl md:text-7xl font-black text-neutral-200 uppercase italic tracking-tighter leading-none mb-6">
-                            User <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-700 to-amber-400">Hub</span>
+                          <h2 className="text-4xl sm:text-5xl font-semibold text-neutral-200">
+                            Users
                           </h2>
-                          <p className="text-neutral-500 font-medium text-lg max-w-xl">
+                          <p className="text-neutral-500 font-medium text-lg max-w-xl mt-4">
                             Manage and view all registered users. Access comprehensive user details and account controls.
                           </p>
                         </div>
                       </div>
                       
-                      <div className="bg-neutral-900 rounded-[3rem] border border-neutral-700 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] overflow-hidden">
+                      <div className="bg-neutral-900/60 rounded-2xl border border-neutral-800 overflow-hidden">
                         {users.length === 0 ? (
                           <div className="p-24 text-center">
-                            <Users className="w-16 h-16 text-neutral-700 mx-auto mb-6" />
-                            <p className="text-neutral-400 font-bold uppercase tracking-widest text-xs">Zero Authenticated Nodes</p>
+                            <Users className="w-16 h-16 text-neutral-600 mx-auto mb-6" />
+                            <p className="text-neutral-400 font-medium uppercase tracking-widest text-xs">No Users Found</p>
                           </div>
                         ) : (
                           <div className="divide-y divide-neutral-800">
                             {users.map((user) => (
-                              <div key={user.id} className={`p-6 sm:p-8 hover:bg-neutral-800/50 transition-colors group ${user.suspended ? 'opacity-60 grayscale-[0.5]' : ''}`}>
+                              <div key={user.id} className={`p-6 sm:p-8 hover:bg-neutral-800/40 transition-colors group ${user.suspended ? 'opacity-60' : ''}`}>
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                                   <div className="flex items-center gap-5">
-                                    <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center text-neutral-400 font-black text-xl transition-all uppercase ${
-                                      user.suspended ? 'bg-neutral-700 border-neutral-700' : 'bg-neutral-900 border-neutral-800 group-hover:bg-amber-400 group-hover:text-neutral-100 group-hover:border-amber-400'
+                                    <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center font-semibold text-xl transition-all uppercase ${
+                                      user.suspended ? 'bg-neutral-700 border-neutral-700 text-neutral-500' : 'bg-neutral-800 border-neutral-800 text-neutral-400 group-hover:bg-amber-400 group-hover:text-neutral-100 group-hover:border-amber-400'
                                     }`}>
                                       {(user.name || user.first_name || user.email)?.charAt(0) || 'U'}
                                     </div>
                                     <div>
                                       <div className="flex items-center gap-3">
-                                        <h3 className="font-black text-neutral-950 text-lg uppercase tracking-tight">{user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email}</h3>
+                                        <h3 className="font-semibold text-neutral-200 text-lg tracking-tight">{user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email}</h3>
                                         {user.suspended && (
-                                          <span className="px-2 py-0.5 bg-rose-500 text-neutral-100 rounded-md text-[8px] font-black uppercase tracking-[0.1em]">Suspended</span>
+                                          <span className="px-2 py-0.5 bg-rose-500/20 text-rose-400 rounded-md text-[8px] font-medium uppercase tracking-[0.1em] border border-rose-500/30">Suspended</span>
                                         )}
                                       </div>
                                       <div className="flex items-center gap-3">
-                                        <p className="text-neutral-500 font-bold text-xs uppercase tracking-widest">{user.email} â€¢ ID: {String(user.id).substring(0, 8)}...</p>
-                                        <span className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-[0.1em] border ${
+                                        <p className="text-neutral-500 font-medium text-xs uppercase tracking-widest">ID: {String(user.id).substring(0, 8)}...</p>
+                                        <span className={`px-2 py-0.5 rounded-md text-[8px] font-medium uppercase tracking-[0.1em] border ${
                                           user.membership_tier === 'admin' 
-                                            ? 'bg-rose-50 text-rose-600 border-rose-100' 
+                                            ? 'bg-rose-500/20 text-rose-400 border-rose-500/30' 
                                             : 'bg-neutral-800/50 text-amber-400 border-neutral-700'
                                         }`}>
                                           {MEMBERSHIP_TIERS[user.membership_tier?.toUpperCase()]?.name || user.membership_tier || 'MEMBER'}
                                         </span>
                                       </div>
+                                      <p className="text-neutral-500 font-medium text-xs mt-1">{user.email}</p>
                                     </div>
                                   </div>
                                   <div className="flex items-center gap-3">
                                     <button
                                       onClick={() => toggleExpand(user.id)}
-                                      className={`p-3 bg-neutral-900 border border-neutral-800 rounded-xl text-neutral-400 hover:text-amber-400 hover:border-neutral-600 transition-all ${expandedItems[user.id] ? 'bg-neutral-800' : ''}`}
+                                      className={`p-3 bg-neutral-800/40 border border-neutral-700 rounded-xl text-neutral-400 hover:text-amber-400 hover:border-neutral-600 transition-all ${expandedItems[user.id] ? 'bg-neutral-700' : ''}`}
                                     >
                                       {expandedItems[user.id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                                     </button>
@@ -1057,8 +1042,8 @@ const AdminPanel = ({ onBack }) => {
                                       disabled={processing[user.id]}
                                       className={`p-3 border rounded-xl transition-all ${
                                         user.suspended 
-                                          ? 'bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-100' 
-                                          : 'bg-rose-50 border-rose-100 text-rose-600 hover:bg-rose-100'
+                                          ? 'bg-neutral-800 border-neutral-700 text-emerald-400 hover:bg-emerald-500/20'
+                                          : 'bg-neutral-800 border-neutral-700 text-rose-400 hover:bg-rose-500/20'
                                       } ${processing[user.id] ? 'opacity-50 cursor-not-allowed' : ''}`}
                                       title={user.suspended ? 'Unsuspend Account' : 'Suspend Account'}
                                     >
@@ -1066,8 +1051,8 @@ const AdminPanel = ({ onBack }) => {
                                     </button>
                                     <button
                                       onClick={() => setDeleteConfirm({ type: 'user', id: user.id })}
-                                      className="p-3 bg-neutral-900 border border-neutral-800 rounded-xl text-neutral-400 hover:text-rose-600 hover:border-rose-200 transition-all"
-                                      title="Delete Account Permanently"
+                                      className="p-3 bg-neutral-800/40 border border-neutral-700 rounded-xl text-neutral-400 hover:text-rose-400 hover:border-rose-500/30 transition-all"
+                                      title="Delete Account"
                                     >
                                       <Trash2 size={18} />
                                     </button>
@@ -1083,93 +1068,91 @@ const AdminPanel = ({ onBack }) => {
                                       className="overflow-hidden"
                                     >
                                       <div className="mt-8 space-y-8">
-                                        {/* User Profile Overview - Full Width */}
-                                        <div className="bg-gradient-to-br from-neutral-950 to-neutral-800 p-8 rounded-[2.5rem] text-neutral-100">
-                                          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                                            <div className="flex items-center gap-6">
-                                              <div className="w-20 h-20 rounded-3xl bg-neutral-900/10 flex items-center justify-center text-3xl font-black uppercase border-2 border-neutral-300/20">
-                                                {(user.name || user.first_name || user.email)?.charAt(0) || 'U'}
-                                              </div>
-                                              <div>
-                                                <h3 className="text-2xl font-black uppercase tracking-tight">{user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Unnamed User'}</h3>
-                                                <p className="text-white/60 font-bold text-sm uppercase tracking-widest">{user.email}</p>
-                                              </div>
+                                        {/* User Profile Overview */}
+                                        <div className="p-8 rounded-2xl border border-neutral-800 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                                          <div className="flex items-center gap-6">
+                                            <div className="w-20 h-20 rounded-3xl bg-neutral-800/50 flex items-center justify-center text-3xl font-semibold uppercase border-2 border-neutral-700">
+                                              {(user.name || user.first_name || user.email)?.charAt(0) || 'U'}
                                             </div>
-                                            <div className="flex items-center gap-4">
-                                              <div className={`px-4 py-2 rounded-xl text-xs font-black uppercase ${
-                                                user.subscription_status === 'active' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-neutral-600/20 text-neutral-400 border border-neutral-600/30'
-                                              }`}>
-                                                {user.subscription_status || 'inactive'}
-                                              </div>
-                                              <div className={`px-4 py-2 rounded-xl text-xs font-black uppercase ${
-                                                user.membership_tier === 'admin' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-amber-400/20 text-amber-400 border border-amber-400/30'
-                                              }`}>
-                                                {MEMBERSHIP_TIERS[user.membership_tier?.toUpperCase()]?.name || user.membership_tier || 'MEMBER'}
-                                              </div>
+                                            <div>
+                                              <h3 className="text-2xl font-semibold text-neutral-200 uppercase tracking-tight">{user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Unnamed User'}</h3>
+                                              <p className="text-neutral-400 font-medium text-sm uppercase tracking-widest">{user.email}</p>
+                                            </div>
+                                          </div>
+                                          <div className="flex items-center gap-4">
+                                            <div className={`px-4 py-2 rounded-xl text-xs font-medium uppercase border ${
+                                              user.subscription_status === 'active' ? 'bg-emerald-400/20 text-emerald-400 border-emerald-500/30' : 'bg-neutral-600/30 text-neutral-400 border-neutral-600/30'
+                                            }`}>
+                                              {user.subscription_status || 'inactive'}
+                                            </div>
+                                            <div className={`px-4 py-2 rounded-xl text-xs font-medium uppercase border ${
+                                              user.membership_tier === 'admin' ? 'bg-rose-500/20 text-rose-400 border-rose-500/30' : 'bg-amber-400/20 text-amber-400 border-amber-500/30'
+                                            }`}>
+                                              {MEMBERSHIP_TIERS[user.membership_tier?.toUpperCase()]?.name || user.membership_tier || 'MEMBER'}
                                             </div>
                                           </div>
                                         </div>
-                                        
+
                                         {/* User Details Grid */}
                                         <div className="grid lg:grid-cols-3 gap-6">
                                           {/* Personal Information */}
-                                          <div className="bg-neutral-900 p-6 rounded-[2rem] border border-neutral-800 space-y-4">
-                                            <h4 className="text-xs font-black text-neutral-200 uppercase tracking-widest flex items-center gap-2">
-                                              <Users size={16} className="text-amber-400" /> Personal Details
+                                          <div className="bg-neutral-900/60 p-6 rounded-2xl border border-neutral-800 space-y-4">
+                                            <h4 className="text-xs font-medium text-neutral-400 uppercase tracking-widest flex items-center gap-2">
+                                              <Users size={16} className="text-neutral-500" /> Personal Details
                                             </h4>
                                             <div className="space-y-3">
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Full Name</span>
-                                                <span className="text-sm font-bold text-neutral-200">{user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Not provided'}</span>
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Full Name</span>
+                                                <span className="text-sm font-semibold text-neutral-200">{user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Not provided'}</span>
                                               </div>
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">First Name</span>
-                                                <span className="text-sm font-bold text-neutral-200">{user.first_name || 'Not provided'}</span>
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">First Name</span>
+                                                <span className="text-sm font-semibold text-neutral-200">{user.first_name || 'Not provided'}</span>
                                               </div>
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Last Name</span>
-                                                <span className="text-sm font-bold text-neutral-200">{user.last_name || 'Not provided'}</span>
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Last Name</span>
+                                                <span className="text-sm font-semibold text-neutral-200">{user.last_name || 'Not provided'}</span>
                                               </div>
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Phone</span>
-                                                <span className="text-sm font-bold text-neutral-200">{user.phone_number || 'Not provided'}</span>
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Phone</span>
+                                                <span className="text-sm font-semibold text-neutral-200">{user.phone_number || 'Not provided'}</span>
                                               </div>
                                               <div className="flex justify-between items-center py-2">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">User ID</span>
-                                                <span className="text-sm font-bold text-neutral-200 font-mono">#{user.id}</span>
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">User ID</span>
+                                                <span className="text-sm font-semibold text-neutral-200 font-mono">#{user.id}</span>
                                               </div>
                                             </div>
                                           </div>
                                           
                                           {/* Account Information */}
-                                          <div className="bg-neutral-900 p-6 rounded-[2rem] border border-neutral-800 space-y-4">
-                                            <h4 className="text-xs font-black text-neutral-200 uppercase tracking-widest flex items-center gap-2">
-                                              <Shield size={16} className="text-amber-400" /> Account Authority
+                                          <div className="bg-neutral-900/60 p-6 rounded-2xl border border-neutral-800 space-y-4">
+                                            <h4 className="text-xs font-medium text-neutral-400 uppercase tracking-widest flex items-center gap-2">
+                                              <Shield size={16} className="text-neutral-500" /> Account Settings
                                             </h4>
                                             <div className="space-y-3">
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Role</span>
-                                                <span className="text-sm font-bold text-neutral-200 uppercase">{user.role || 'user'}</span>
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Role</span>
+                                                <span className="text-sm font-semibold text-neutral-200 uppercase">{user.role || 'user'}</span>
                                               </div>
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Membership</span>
-                                                <span className="text-sm font-bold text-amber-400 uppercase">{user.membership_tier ? MEMBERSHIP_TIERS[user.membership_tier?.toUpperCase()]?.name : 'No Membership'}</span>
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Membership</span>
+                                                <span className="text-sm font-semibold text-amber-400 uppercase">{user.membership_tier ? MEMBERSHIP_TIERS[user.membership_tier?.toUpperCase()]?.name : 'No Membership'}</span>
                                               </div>
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Subscription</span>
-                                                <span className={`text-sm font-bold uppercase ${user.subscription_status === 'active' ? 'text-emerald-600' : 'text-neutral-400'}`}>
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Subscription</span>
+                                                <span className={`text-sm font-semibold uppercase ${user.subscription_status === 'active' ? 'text-emerald-400' : 'text-neutral-400'}`}>
                                                   {user.subscription_status || 'inactive'}
                                                 </span>
                                               </div>
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Next Billing</span>
-                                                <span className="text-sm font-bold text-neutral-200">
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Next Billing</span>
+                                                <span className="text-sm font-semibold text-neutral-200">
                                                   {user.next_billing_date ? new Date(user.next_billing_date).toLocaleDateString() : 'N/A'}
                                                 </span>
                                               </div>
                                               <div className="flex justify-between items-center py-2">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Joined</span>
-                                                <span className="text-sm font-bold text-neutral-200">
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Joined</span>
+                                                <span className="text-sm font-semibold text-neutral-200">
                                                   {user.created_at ? new Date(user.created_at).toLocaleDateString() : 'Unknown'}
                                                 </span>
                                               </div>
@@ -1177,63 +1160,63 @@ const AdminPanel = ({ onBack }) => {
                                           </div>
                                           
                                           {/* Financial Overview */}
-                                          <div className="bg-neutral-900 p-6 rounded-[2rem] border border-neutral-800 space-y-4">
-                                            <h4 className="text-xs font-black text-neutral-200 uppercase tracking-widest flex items-center gap-2">
-                                              <CreditCard size={16} className="text-emerald-600" /> Financial Overview
+                                          <div className="bg-neutral-900/60 p-6 rounded-2xl border border-neutral-800 space-y-4">
+                                            <h4 className="text-xs font-medium text-neutral-400 uppercase tracking-widest flex items-center gap-2">
+                                              <CreditCard size={16} className="text-emerald-400" /> Financial Overview
                                             </h4>
                                             <div className="space-y-3">
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Total Orders</span>
-                                                <span className="text-sm font-bold text-neutral-200">{orders.filter(o => String(o.userId || o.userid) === String(user.id)).length}</span>
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Total Orders</span>
+                                                <span className="text-sm font-semibold text-neutral-200">{orders.filter(o => String(o.userId || o.userid) === String(user.id)).length}</span>
                                               </div>
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Total Spent</span>
-                                                <span className="text-sm font-bold text-emerald-600">
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Total Spent</span>
+                                                <span className="text-sm font-semibold text-emerald-400">
                                                   ${orders.filter(o => String(o.userId || o.userid) === String(user.id)).reduce((acc, o) => acc + (parseFloat(o.amount) || 0), 0).toLocaleString()}
                                                 </span>
                                               </div>
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Active Projects</span>
-                                                <span className="text-sm font-bold text-neutral-200">{projects.filter(p => String(p.userId || p.userid) === String(user.id)).length}</span>
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Active Projects</span>
+                                                <span className="text-sm font-semibold text-neutral-200">{projects.filter(p => String(p.userId || p.userid) === String(user.id)).length}</span>
                                               </div>
                                               <div className="flex justify-between items-center py-2 border-b border-neutral-700">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Live Sites</span>
-                                                <span className="text-sm font-bold text-emerald-600">
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Live Sites</span>
+                                                <span className="text-sm font-semibold text-emerald-400">
                                                   {projects.filter(p => String(p.userId || p.userid) === String(user.id) && p.status === 'live').length}
                                                 </span>
                                               </div>
                                               <div className="flex justify-between items-center py-2">
-                                                <span className="text-[10px] font-black text-neutral-400 uppercase">Unlocked Tools</span>
-                                                <span className="text-sm font-bold text-amber-400">{user.unlocked_tools?.length || 0}</span>
+                                                <span className="text-[10px] font-medium text-neutral-500 uppercase">Unlocked Tools</span>
+                                                <span className="text-sm font-semibold text-amber-400">{user.unlocked_tools?.length || 0}</span>
                                               </div>
                                             </div>
                                           </div>
                                         </div>
-                                        
-                                        {/* Tools & Activated Features */}
-                                        <div className="bg-neutral-950 p-8 rounded-[2.5rem] border border-neutral-700 space-y-6">
-                                          <h4 className="text-xs font-black text-neutral-200 uppercase tracking-widest flex items-center gap-2">
+
+                                        {/* Tools & Access */}
+                                        <div className="bg-neutral-950 p-8 rounded-2xl border border-neutral-800 space-y-6">
+                                          <h4 className="text-xs font-medium text-neutral-400 uppercase tracking-widest flex items-center gap-2">
                                             <Zap size={16} className="text-amber-500" /> Tools & Access
                                           </h4>
                                           <div className="grid md:grid-cols-2 gap-6">
-                                            <div className="bg-neutral-900 p-6 rounded-2xl border border-neutral-800">
-                                              <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-3">Unlocked Tools</p>
+                                            <div className="bg-neutral-900/60 p-6 rounded-xl border border-neutral-800">
+                                              <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Unlocked Tools</p>
                                               <div className="flex flex-wrap gap-2">
                                                 {user.unlocked_tools && user.unlocked_tools.length > 0 ? (
                                                   user.unlocked_tools.map((tool, idx) => (
-                                                    <span key={idx} className="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-black uppercase">{tool}</span>
+                                                    <span key={idx} className="px-3 py-1.5 bg-neutral-800 text-neutral-200 rounded-lg text-[10px] font-medium uppercase">{tool}</span>
                                                   ))
                                                 ) : (
                                                   <span className="text-neutral-400 text-sm">No tools unlocked</span>
                                                 )}
                                               </div>
                                             </div>
-                                            <div className="bg-neutral-900 p-6 rounded-2xl border border-neutral-800">
-                                              <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-3">Activated Tools</p>
+                                            <div className="bg-neutral-900/60 p-6 rounded-xl border border-neutral-800">
+                                              <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Activated Tools</p>
                                               <div className="flex flex-wrap gap-2">
                                                 {user.activated_tools && user.activated_tools.length > 0 ? (
                                                   user.activated_tools.map((tool, idx) => (
-                                                    <span key={idx} className="px-3 py-1.5 bg-neutral-800/50 text-amber-400 rounded-lg text-[10px] font-black uppercase">{tool}</span>
+                                                    <span key={idx} className="px-3 py-1.5 bg-neutral-800 text-amber-400 rounded-lg text-[10px] font-medium uppercase">{tool}</span>
                                                   ))
                                                 ) : (
                                                   <span className="text-neutral-400 text-sm">No tools activated</span>
@@ -1243,127 +1226,128 @@ const AdminPanel = ({ onBack }) => {
                                           </div>
                                         </div>
                                         
-                                        {/* User Projects & Domain Control */}
-                                        <div className="bg-neutral-950 p-8 rounded-[2.5rem] border border-neutral-700 space-y-8">
+                                        {/* User Projects */}
+                                        <div className="bg-neutral-950 p-8 rounded-2xl border border-neutral-800 space-y-6">
                                           <div className="flex items-center justify-between">
-                                            <h4 className="text-xs font-black text-neutral-200 uppercase tracking-widest flex items-center gap-2">
-                                              <Globe size={16} className="text-amber-400" /> Infrastructure & Projects
+                                            <h4 className="text-xs font-medium text-neutral-400 uppercase tracking-widest flex items-center gap-2">
+                                              <Globe size={16} className="text-neutral-500" /> Projects
                                             </h4>
-                                            <span className="text-xs font-black text-amber-400 bg-neutral-800/50 px-3 py-1 rounded-full">
+                                            <span className="text-xs font-semibold text-amber-400 bg-neutral-800/40 px-3 py-1 rounded-full">
                                               {projects.filter(p => String(p.userId || p.userid) === String(user.id)).length} Active
                                             </span>
                                           </div>
                                           
                                           <div className="space-y-6">
-                                            <div className="space-y-4">
-                                              <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-                                                {projects.filter(p => String(p.userId || p.userid) === String(user.id)).map((project) => (
-                                                  <div key={project.id} className="p-6 bg-neutral-900 rounded-[2rem] border border-neutral-800 shadow-sm space-y-6 group hover:border-neutral-600 transition-all">
-                                                    <div className="flex items-center justify-between">
-                                                      <div className="flex items-center gap-4">
-                                                        <div className="w-12 h-12 bg-neutral-950 rounded-2xl flex items-center justify-center text-neutral-400 font-black group-hover:bg-amber-400 group-hover:text-neutral-100 transition-all shadow-sm">
-                                                          {project.title?.charAt(0) || 'P'}
-                                                        </div>
-                                                        <div>
-                                                          <p className="text-sm font-black text-neutral-950 uppercase tracking-tight">{project.title || 'Untitled Node'}</p>
-                                                          <p className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">{project.template || 'Enterprise Core'}</p>
-                                                        </div>
+                                            <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+                                              {projects.filter(p => String(p.userId || p.userid) === String(user.id)).map((project) => (
+                                                <div key={project.id} className="p-6 bg-neutral-900/60 rounded-2xl border border-neutral-800 shadow-sm space-y-6 group hover:border-neutral-700 transition-all">
+                                                  <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-4">
+                                                      <div className="w-12 h-12 bg-neutral-950 rounded-2xl flex items-center justify-center text-neutral-400 font-semibold group-hover:bg-amber-400 group-hover:text-neutral-100 transition-all shadow-sm uppercase">
+                                                        {project.title?.charAt(0) || 'P'}
                                                       </div>
-                                                      <div className={`px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest border ${
-                                                        project.status === 'live' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-neutral-800 text-neutral-500 border-neutral-800'
-                                                      }`}>
-                                                        {project.status?.replace('_', ' ') || 'Offline'}
+                                                      <div>
+                                                        <p className="text-sm font-semibold text-neutral-200 uppercase tracking-tight">{project.title || 'Untitled'}</p>
+                                                        <p className="text-[10px] font-medium text-amber-400 uppercase tracking-widest">{project.template || 'Enterprise Core'}</p>
                                                       </div>
                                                     </div>
-
-                                                    <div className="grid sm:grid-cols-2 gap-4">
-                                                      <div className="space-y-2">
-                                                        <p className="text-[9px] font-black text-neutral-400 uppercase tracking-widest ml-1">Domain Endpoint</p>
-                                                        <input 
-                                                          type="text"
-                                                          placeholder="example.com"
-                                                          defaultValue={project.domain || ''}
-                                                          onBlur={(e) => {
-                                                            if (e.target.value !== project.domain) {
-                                                              handleEditProject(project.id, { domain: e.target.value });
-                                                            }
-                                                          }}
-                                                          className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-amber-400 transition-all"
-                                                        />
-                                                      </div>
-                                                      <div className="space-y-2">
-                                                        <p className="text-[9px] font-black text-neutral-400 uppercase tracking-widest ml-1">Transmission Progress</p>
-                                                        <input 
-                                                          type="text"
-                                                          placeholder="e.g. 85% Complete"
-                                                          defaultValue={project.progress_status || ''}
-                                                          onBlur={(e) => {
-                                                            if (e.target.value !== project.progress_status) {
-                                                              handleEditProject(project.id, { progress_status: e.target.value });
-                                                            }
-                                                          }}
-                                                          className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-amber-400 transition-all"
-                                                        />
-                                                      </div>
+                                                    <div className={`px-3 py-1 rounded-full text-[8px] font-medium uppercase tracking-widest border ${
+                                                      project.status === 'live' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
+                                                      project.status === 'requested_customization' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
+                                                      project.status === 'pending_payment' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
+                                                      'bg-neutral-700 text-neutral-400 border-neutral-700'
+                                                    }`}>
+                                                      {project.status?.replace('_', ' ') || 'Offline'}
                                                     </div>
+                                                  </div>
 
+                                                  <div className="grid sm:grid-cols-2 gap-4">
                                                     <div className="space-y-2">
-                                                      <p className="text-[9px] font-black text-neutral-400 uppercase tracking-widest ml-1">Central Logic Override</p>
-                                                      <select
-                                                        defaultValue={project.status || 'pending_payment'}
-                                                        onChange={(e) => handleEditProject(project.id, { status: e.target.value })}
-                                                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-[10px] font-black outline-none focus:ring-2 focus:ring-amber-400 transition-all uppercase"
-                                                      >
-                                                        <option value="pending_payment">PENDING PAYMENT</option>
-                                                        <option value="in_development">IN DEVELOPMENT</option>
-                                                        <option value="review">CLIENT REVIEW</option>
-                                                        <option value="live">LIVE PRODUCTION</option>
-                                                        <option value="suspended">SUSPENDED</option>
-                                                      </select>
-                                                    </div>
-
-                                                    <div className="space-y-2">
-                                                      <p className="text-[9px] font-black text-neutral-400 uppercase tracking-widest ml-1">Latest Modification Log</p>
-                                                      <textarea 
-                                                        rows="3"
-                                                        placeholder="Describe latest infrastructure updates..."
-                                                        defaultValue={project.latest_update || ''}
+                                                      <p className="text-[9px] font-medium text-neutral-500 uppercase tracking-widest ml-1">Domain</p>
+                                                      <input 
+                                                        type="text"
+                                                        placeholder="example.com"
+                                                        defaultValue={project.domain || ''}
                                                         onBlur={(e) => {
-                                                          if (e.target.value !== project.latest_update) {
-                                                            handleEditProject(project.id, { latest_update: e.target.value });
+                                                          if (e.target.value !== project.domain) {
+                                                            handleEditProject(project.id, { domain: e.target.value });
                                                           }
                                                         }}
-                                                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-amber-400 transition-all resize-none"
+                                                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs font-semibold text-neutral-200 outline-none focus:ring-2 focus:ring-amber-400 transition-all"
+                                                      />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                      <p className="text-[9px] font-medium text-neutral-500 uppercase tracking-widest ml-1">Progress</p>
+                                                      <input 
+                                                        type="text"
+                                                        placeholder="e.g. 85% Complete"
+                                                        defaultValue={project.progress_status || ''}
+                                                        onBlur={(e) => {
+                                                          if (e.target.value !== project.progress_status) {
+                                                            handleEditProject(project.id, { progress_status: e.target.value });
+                                                          }
+                                                        }}
+                                                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs font-semibold text-neutral-200 outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                                                       />
                                                     </div>
                                                   </div>
-                                                ))}
-                                                {projects.filter(p => String(p.userId || p.userid) === String(user.id)).length === 0 && (
-                                                  <div className="py-20 text-center bg-neutral-900 rounded-[3rem] border border-dashed border-neutral-800">
-                                                    <Box className="w-12 h-12 text-neutral-600 mx-auto mb-4" />
-                                                    <p className="text-xs font-black text-neutral-400 uppercase tracking-widest">No Active Nodes Detected</p>
+
+                                                  <div className="space-y-2">
+                                                    <p className="text-[9px] font-medium text-neutral-500 uppercase tracking-widest ml-1">Status</p>
+                                                    <select
+                                                      defaultValue={project.status || 'pending_payment'}
+                                                      onChange={(e) => handleEditProject(project.id, { status: e.target.value })}
+                                                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-[10px] font-medium outline-none focus:ring-2 focus:ring-amber-400 transition-all uppercase"
+                                                    >
+                                                      <option value="pending_payment">PENDING PAYMENT</option>
+                                                      <option value="in_development">IN DEVELOPMENT</option>
+                                                      <option value="review">CLIENT REVIEW</option>
+                                                      <option value="live">LIVE PRODUCTION</option>
+                                                      <option value="suspended">SUSPENDED</option>
+                                                    </select>
                                                   </div>
-                                                )}
-                                              </div>
+
+                                                  <div className="space-y-2">
+                                                    <p className="text-[9px] font-medium text-neutral-500 uppercase tracking-widest ml-1">Update Log</p>
+                                                    <textarea 
+                                                      rows="3"
+                                                      placeholder="Describe latest updates..."
+                                                      defaultValue={project.latest_update || ''}
+                                                      onBlur={(e) => {
+                                                        if (e.target.value !== project.latest_update) {
+                                                          handleEditProject(project.id, { latest_update: e.target.value });
+                                                        }
+                                                      }}
+                                                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs font-semibold text-neutral-200 outline-none focus:ring-2 focus:ring-amber-400 transition-all resize-none"
+                                                    />
+                                                  </div>
+                                                </div>
+                                              ))}
+                                              {projects.filter(p => String(p.userId || p.userid) === String(user.id)).length === 0 && (
+                                                <div className="py-20 text-center bg-neutral-900/60 rounded-2xl border border-neutral-800">
+                                                  <Box className="w-12 h-12 text-neutral-600 mx-auto mb-4" />
+                                                  <p className="text-xs font-medium text-neutral-500 uppercase tracking-widest">No Projects</p>
+                                                </div>
+                                              )}
                                             </div>
                                           </div>
                                         </div>
 
-                                        {/* Billing & Privilege Control */}
-                                        <div className="bg-neutral-950 p-8 rounded-[2.5rem] border border-neutral-700 space-y-8">
+                                        {/* Billing & Controls */}
+                                        <div className="bg-neutral-950 p-8 rounded-2xl border border-neutral-800 space-y-6">
                                           <div className="flex items-center justify-between">
-                                            <h4 className="text-xs font-black text-neutral-200 uppercase tracking-widest flex items-center gap-2">
-                                              <Shield size={16} className="text-amber-400" /> Account Authority
+                                            <h4 className="text-xs font-medium text-neutral-400 uppercase tracking-widest flex items-center gap-2">
+                                              <Shield size={16} className="text-neutral-500" /> Account Controls
                                             </h4>
                                             <div className="text-right flex items-center gap-4">
-                                              <div className={`px-3 py-1 rounded-full text-[8px] font-black uppercase ${
-                                                user.subscription_status === 'active' ? 'bg-emerald-100 text-emerald-600' : 'bg-neutral-700 text-neutral-500'
+                                              <div className={`px-3 py-1 rounded-full text-[8px] font-medium uppercase ${
+                                                user.subscription_status === 'active' ? 'bg-emerald-400/20 text-emerald-400 border border-emerald-500/30' : 'bg-neutral-600/30 text-neutral-400 border border-neutral-600/30'
                                               }`}>
                                                 {user.subscription_status || 'inactive'}
                                               </div>
                                               <div>
-                                                <p className="text-[8px] font-black text-neutral-400 uppercase tracking-widest leading-none">Total Investment</p>
-                                                <p className="text-sm font-black text-amber-400 italic tracking-tighter">
+                                                <p className="text-[8px] font-medium text-neutral-500 uppercase tracking-widest leading-none">Total Investment</p>
+                                                <p className="text-sm font-semibold text-amber-400">
                                                   ${orders.filter(o => String(o.userId || o.userid) === String(user.id)).reduce((acc, o) => acc + (parseFloat(o.amount) || 0), 0).toLocaleString()}
                                                 </p>
                                               </div>
@@ -1372,12 +1356,12 @@ const AdminPanel = ({ onBack }) => {
 
                                           <div className="space-y-6">
                                             <div className="grid grid-cols-2 gap-4">
-                                              <div className="p-5 bg-neutral-900 rounded-3xl border border-neutral-700 space-y-3">
-                                                <p className="text-[9px] font-black text-neutral-400 uppercase tracking-widest">Membership Tier</p>
+                                              <div className="p-5 bg-neutral-900/60 rounded-2xl border border-neutral-800 space-y-3">
+                                                <p className="text-[9px] font-medium text-neutral-500 uppercase tracking-widest">Membership Tier</p>
                                                 <select 
                                                   value={user.membership_tier || ''}
                                                   onChange={(e) => handleUpdateUser(user.id, { membership_tier: e.target.value })}
-                                                  className="w-full bg-neutral-950 border-none rounded-xl text-[10px] font-black px-3 py-2 outline-none uppercase"
+                                                  className="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 rounded-xl text-[10px] font-medium px-3 py-2 outline-none uppercase"
                                                 >
                                                   {Object.values(MEMBERSHIP_TIERS).map(tier => (
                                                     <option key={tier.id} value={tier.id}>{tier.name}</option>
@@ -1385,12 +1369,12 @@ const AdminPanel = ({ onBack }) => {
                                                   <option value="admin">ADMIN</option>
                                                 </select>
                                               </div>
-                                              <div className="p-5 bg-neutral-900 rounded-3xl border border-neutral-700 space-y-3">
-                                                <p className="text-[9px] font-black text-neutral-400 uppercase tracking-widest">Sync Status</p>
+                                              <div className="p-5 bg-neutral-900/60 rounded-2xl border border-neutral-800 space-y-3">
+                                                <p className="text-[9px] font-medium text-neutral-500 uppercase tracking-widest">Subscription</p>
                                                 <button 
                                                   onClick={() => handleUpdateUser(user.id, { subscription_status: user.subscription_status === 'active' ? 'inactive' : 'active' })}
-                                                  className={`w-full py-2 rounded-xl text-[9px] font-black uppercase transition-all ${
-                                                    user.subscription_status === 'active' ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'
+                                                  className={`w-full py-2 rounded-xl text-[9px] font-medium uppercase transition-all ${
+                                                    user.subscription_status === 'active' ? 'bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 border border-rose-500/30' : 'bg-emerald-400/20 text-emerald-400 hover:bg-emerald-400/30 border border-emerald-500/30'
                                                   }`}
                                                 >
                                                   {user.subscription_status === 'active' ? 'Deactivate' : 'Activate'}
@@ -1398,13 +1382,13 @@ const AdminPanel = ({ onBack }) => {
                                               </div>
                                             </div>
 
-                                            <div className="p-6 bg-neutral-800/30 border border-neutral-700 rounded-[2rem] text-neutral-200">
+                                            <div className="p-6 bg-neutral-900/40 border border-neutral-800 rounded-2xl text-neutral-300">
                                               <div className="flex items-center justify-between mb-4">
-                                                <span className="text-[9px] font-black uppercase tracking-widest text-amber-400">Security Pulse</span>
+                                                <span className="text-[9px] font-medium uppercase tracking-widest text-amber-400">Security</span>
                                                 <ShieldCheck size={14} className="text-amber-400" />
                                               </div>
-                                              <p className="text-[10px] font-medium text-neutral-400/80 leading-relaxed">
-                                                This identity node is currently {user.suspended ? 'DECOMMISSIONED' : 'OPERATIONAL'}. All encryption protocols are active.
+                                              <p className="text-[10px] font-medium text-neutral-500/80 leading-relaxed">
+                                                This account is currently {user.suspended ? 'suspended' : 'active'}. All security protocols are active.
                                               </p>
                                             </div>
                                           </div>
@@ -1421,48 +1405,48 @@ const AdminPanel = ({ onBack }) => {
                     </div>
                   )}
 
-                  {/* Marketing Hub Tab */}
+                  {/* Marketing Tab */}
                   {activeTab === 'marketing' && (
                     <div className="space-y-8">
                       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                          <p className="text-[10px] font-black text-amber-400 uppercase tracking-[0.3em] mb-3">Growth Engine</p>
-                          <h2 className="text-4xl sm:text-5xl font-black text-neutral-950 uppercase italic tracking-tighter leading-none">
-                            Marketing <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-neutral-700">Network</span>
+                          <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Subscribers</p>
+                          <h2 className="text-3xl sm:text-4xl font-semibold text-neutral-200">
+                            Marketing Subscribers
                           </h2>
                         </div>
                       </div>
                       
-                      <div className="bg-neutral-900 rounded-[2.5rem] border border-neutral-700 shadow-sm shadow-slate-200/50 overflow-hidden">
+                      <div className="bg-neutral-900/60 rounded-2xl border border-neutral-800 overflow-hidden">
                         {leads.filter(l => l.message === 'NEW MARKETING LIST SUBSCRIPTION').length === 0 ? (
                           <div className="p-24 text-center">
-                            <Activity className="w-16 h-16 text-neutral-700 mx-auto mb-6" />
-                            <p className="text-neutral-400 font-bold uppercase tracking-widest text-xs">Zero Subscribers Detected</p>
+                            <Activity className="w-16 h-16 text-neutral-600 mx-auto mb-6" />
+                            <p className="text-neutral-400 font-medium uppercase tracking-widest text-xs">No Subscribers Detected</p>
                           </div>
                         ) : (
                           <div className="divide-y divide-neutral-800">
                             {leads.filter(l => l.message === 'NEW MARKETING LIST SUBSCRIPTION').map((lead) => (
-                              <div key={lead.id} className="p-6 sm:p-8 hover:bg-neutral-800/50 transition-colors group">
+                              <div key={lead.id} className="p-6 sm:p-8 hover:bg-neutral-800/40 transition-colors group">
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                                   <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-neutral-800/50 rounded-2xl border border-neutral-700 flex items-center justify-center text-amber-400 font-black text-xl group-hover:bg-amber-400 group-hover:text-neutral-100 group-hover:border-amber-400 transition-all uppercase">
+                                    <div className="w-14 h-14 bg-neutral-800/50 rounded-2xl border border-neutral-700 flex items-center justify-center text-amber-400 font-semibold text-xl group-hover:bg-amber-400 group-hover:text-neutral-100 group-hover:border-amber-400 transition-all uppercase">
                                       <Mail size={24} />
                                     </div>
                                     <div>
-                                      <h3 className="font-black text-neutral-950 text-lg uppercase tracking-tight">{lead.email}</h3>
+                                      <h3 className="font-semibold text-neutral-200 text-lg tracking-tight">{lead.email}</h3>
                                       <div className="flex items-center gap-2 mt-1">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                        <p className="text-neutral-400 font-bold text-[10px] uppercase tracking-widest">Active Subscriber</p>
+                                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                                        <p className="text-neutral-400 font-medium text-[10px] uppercase tracking-widest">Active Subscriber</p>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="flex items-center gap-3">
-                                    <div className="px-4 py-2 bg-neutral-800 rounded-xl text-[10px] font-black text-neutral-400 uppercase tracking-widest">
+                                    <div className="px-4 py-2 bg-neutral-800/40 rounded-xl text-[10px] font-medium text-neutral-400 uppercase tracking-widest">
                                       {lead.created ? new Date(lead.created).toLocaleDateString() : 'Recent'}
                                     </div>
                                     <button
                                       onClick={() => setDeleteConfirm({ type: 'lead', id: lead.id })}
-                                      className="p-3 bg-neutral-900 border border-neutral-800 rounded-xl text-neutral-400 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm"
+                                      className="p-3 bg-neutral-800/40 border border-neutral-700 rounded-xl text-neutral-400 hover:text-rose-400 hover:border-rose-500/30 transition-all shadow-sm"
                                     >
                                       <Trash2 size={18} />
                                     </button>
@@ -1481,37 +1465,37 @@ const AdminPanel = ({ onBack }) => {
                     <div className="space-y-8">
                       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                          <p className="text-[10px] font-black text-rose-600 uppercase tracking-[0.3em] mb-3">Communication Hub</p>
-                          <h2 className="text-4xl sm:text-5xl font-black text-neutral-950 uppercase italic tracking-tighter leading-none">
-                            Inquiry <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-600">Management</span>
+                          <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Inquiries</p>
+                          <h2 className="text-3xl sm:text-4xl font-semibold text-neutral-200">
+                            Lead Management
                           </h2>
                         </div>
                       </div>
                       
-                      <div className="bg-neutral-900 rounded-[2.5rem] border border-neutral-700 shadow-sm shadow-slate-200/50 overflow-hidden">
+                      <div className="bg-neutral-900/60 rounded-2xl border border-neutral-800 overflow-hidden">
                         {leads.filter(l => l.message !== 'NEW MARKETING LIST SUBSCRIPTION').length === 0 ? (
                           <div className="p-24 text-center">
-                            <Users className="w-16 h-16 text-neutral-700 mx-auto mb-6" />
-                            <p className="text-neutral-400 font-bold uppercase tracking-widest text-xs">Zero Inbound Signals</p>
+                            <Users className="w-16 h-16 text-neutral-600 mx-auto mb-6" />
+                            <p className="text-neutral-400 font-medium uppercase tracking-widest text-xs">No Leads Found</p>
                           </div>
                         ) : (
                           <div className="divide-y divide-neutral-800">
                             {leads.filter(l => l.message !== 'NEW MARKETING LIST SUBSCRIPTION').map((lead) => (
-                              <div key={lead.id} className="p-6 sm:p-8 hover:bg-neutral-800/50 transition-colors group">
+                              <div key={lead.id} className="p-6 sm:p-8 hover:bg-neutral-800/40 transition-colors group">
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                                   <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-neutral-900 rounded-2xl border border-neutral-800 flex items-center justify-center text-neutral-400 font-black text-xl group-hover:bg-amber-400 group-hover:text-neutral-100 group-hover:border-amber-400 transition-all uppercase">
+                                    <div className="w-14 h-14 bg-neutral-800/50 rounded-2xl border border-neutral-700 flex items-center justify-center text-neutral-400 font-semibold text-xl group-hover:bg-amber-400 group-hover:text-neutral-100 group-hover:border-amber-400 transition-all uppercase">
                                       {lead.name?.charAt(0) || 'L'}
                                     </div>
                                     <div>
-                                      <h3 className="font-black text-neutral-950 text-lg uppercase tracking-tight">{lead.name || 'Anonymous Inquiry'}</h3>
-                                      <p className="text-neutral-500 font-bold text-xs uppercase tracking-widest">{lead.email}</p>
+                                      <h3 className="font-semibold text-neutral-200 text-lg tracking-tight">{lead.name || 'Anonymous Inquiry'}</h3>
+                                      <p className="text-neutral-500 font-medium text-xs uppercase tracking-widest">{lead.email}</p>
                                     </div>
                                   </div>
                                   <div className="flex items-center gap-3">
                                     <button
                                       onClick={() => toggleExpand(lead.id)}
-                                      className="p-3 bg-neutral-900 border border-neutral-800 rounded-xl text-neutral-400 hover:text-amber-400 hover:border-neutral-600 transition-all"
+                                      className="p-3 bg-neutral-800/40 border border-neutral-700 rounded-xl text-neutral-400 hover:text-amber-400 hover:border-neutral-600 transition-all"
                                     >
                                       {expandedItems[lead.id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                                     </button>
@@ -1520,13 +1504,13 @@ const AdminPanel = ({ onBack }) => {
                                         setEditingId(editingId === lead.id ? null : lead.id)
                                         setEditData({ [lead.id]: lead })
                                       }}
-                                      className="p-3 bg-neutral-900 border border-neutral-800 rounded-xl text-neutral-400 hover:text-amber-600 hover:border-amber-200 transition-all"
+                                      className="p-3 bg-neutral-800/40 border border-neutral-700 rounded-xl text-neutral-400 hover:text-amber-400 hover:border-amber-500/30 transition-all"
                                     >
                                       <Edit2 size={18} />
                                     </button>
                                     <button
                                       onClick={() => setDeleteConfirm({ type: 'lead', id: lead.id })}
-                                      className="p-3 bg-neutral-900 border border-neutral-800 rounded-xl text-neutral-400 hover:text-rose-600 hover:border-rose-200 transition-all"
+                                      className="p-3 bg-neutral-800/40 border border-neutral-700 rounded-xl text-neutral-400 hover:text-rose-400 hover:border-rose-500/30 transition-all"
                                     >
                                       <Trash2 size={18} />
                                     </button>
@@ -1541,14 +1525,14 @@ const AdminPanel = ({ onBack }) => {
                                       exit={{ opacity: 0, height: 0 }}
                                       className="overflow-hidden"
                                     >
-                                      <div className="mt-8 p-8 bg-neutral-950 border border-neutral-700 rounded-3xl">
-                                        <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-4">Transmission Content</p>
+                                      <div className="mt-8 p-8 bg-neutral-950 border border-neutral-800 rounded-2xl">
+                                        <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-4">Message</p>
                                         <p className="text-neutral-300 leading-relaxed font-medium">{lead.message}</p>
                                         {lead.created && (
                                           <div className="mt-6 pt-6 border-t border-neutral-800 flex items-center gap-2">
                                             <RefreshCw size={12} className="text-neutral-400" />
-                                            <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
-                                              Timestamp: {new Date(lead.created).toLocaleString()}
+                                            <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest">
+                                              {new Date(lead.created).toLocaleString()}
                                             </p>
                                           </div>
                                         )}
@@ -1563,37 +1547,37 @@ const AdminPanel = ({ onBack }) => {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="mt-8 space-y-4"
                                   >
-                                    <div className="p-8 bg-neutral-900 border border-neutral-800 rounded-3xl shadow-xl">
-                                      <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-4">Override Identity</p>
+                                    <div className="p-8 bg-neutral-900/60 border border-neutral-800 rounded-2xl">
+                                      <p className="text-[10px] font-medium text-amber-400 uppercase tracking-widest mb-4">Edit Lead</p>
                                       <input
                                         type="text"
-                                        placeholder="Identity Name"
+                                        placeholder="Name"
                                         value={editData[lead.id]?.name || ''}
                                         onChange={(e) =>
                                           setEditData({ [lead.id]: { ...editData[lead.id], name: e.target.value } })
                                         }
-                                        className="w-full px-6 py-4 bg-neutral-950 border border-neutral-800 rounded-2xl text-neutral-950 font-bold placeholder-slate-400 focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all outline-none"
+                                        className="w-full px-6 py-4 bg-neutral-950 border border-neutral-800 rounded-2xl text-neutral-200 font-semibold placeholder-neutral-500 focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all outline-none"
                                       />
                                       <div className="flex gap-4 mt-6">
                                         <button
                                           disabled={processing[lead.id]}
                                           onClick={() => handleEditLead(lead.id)}
-                                          className={`flex-1 px-8 py-4 bg-amber-500 text-neutral-950 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all ${
+                                          className={`flex-1 px-8 py-4 bg-amber-400 text-neutral-950 rounded-2xl font-medium uppercase tracking-widest text-[10px] transition-all ${
                                             processing[lead.id] ? 'opacity-50 cursor-not-allowed' : 'hover:bg-amber-300'
                                           }`}
                                         >
                                           {processing[lead.id] ? (
                                             <div className="flex items-center justify-center gap-2">
                                               <Loader size={12} className="animate-spin" />
-                                              Committing...
+                                              Saving...
                                             </div>
                                           ) : (
-                                            'Commit Changes'
+                                            'Save Changes'
                                           )}
                                         </button>
                                         <button
                                           onClick={() => setEditingId(null)}
-                                          className="px-8 py-4 bg-neutral-800 text-neutral-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-neutral-700 transition-all"
+                                          className="px-8 py-4 bg-neutral-800/40 text-neutral-400 rounded-2xl font-medium uppercase tracking-widest text-[10px] hover:bg-neutral-800 transition-all"
                                         >
                                           Cancel
                                         </button>
@@ -1614,17 +1598,17 @@ const AdminPanel = ({ onBack }) => {
                     <div className="space-y-10 pb-20">
                       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                          <p className="text-[10px] font-black text-amber-400 uppercase tracking-[0.3em] mb-3">Enterprise Asset Registry</p>
-                          <h2 className="text-4xl sm:text-5xl font-black text-neutral-950 uppercase italic tracking-tighter leading-none">
-                            Asset <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-neutral-700">Matrix</span>
+                          <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Catalog Assets</p>
+                          <h2 className="text-3xl sm:text-4xl font-semibold text-neutral-200">
+                            Asset Matrix
                           </h2>
                           <p className="text-neutral-500 font-medium text-sm mt-4 max-w-2xl">
                             Real-time valuation and registry of all catalog assets. These core nodes represent the platform's intellectual infrastructure.
                           </p>
                         </div>
-                        <div className="bg-neutral-900 px-6 py-4 rounded-2xl border border-neutral-700 shadow-sm">
-                          <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-1">Total Catalog Value</p>
-                          <p className="text-2xl font-black text-amber-400 italic">
+                        <div className="bg-neutral-900/60 px-6 py-4 rounded-2xl border border-neutral-800 shadow-sm">
+                          <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-1">Total Catalog Value</p>
+                          <p className="text-2xl font-semibold text-amber-400">
                             ${Object.values(CATALOG_ITEMS).flat().reduce((sum, item) => sum + (Number(item.price) || 0), 0).toLocaleString()}
                           </p>
                         </div>
@@ -1636,7 +1620,7 @@ const AdminPanel = ({ onBack }) => {
                             <motion.div
                               key={item.id}
                               whileHover={{ y: -8 }}
-                              className="bg-neutral-900 rounded-[2.5rem] border border-neutral-700 shadow-sm hover:shadow-xl hover:shadow-amber-400/5 transition-all overflow-hidden group flex flex-col"
+                              className="bg-neutral-900/60 rounded-2xl border border-neutral-800 shadow-sm hover:shadow-xl hover:shadow-amber-400/5 transition-all overflow-hidden group flex flex-col"
                             >
                               {/* Thumbnail Container */}
                               <div className="relative aspect-[16/10] overflow-hidden bg-neutral-800">
@@ -1647,8 +1631,8 @@ const AdminPanel = ({ onBack }) => {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                 <div className="absolute top-6 right-6">
-                                  <div className="px-4 py-2 bg-white/90 backdrop-blur-md rounded-xl shadow-lg border border-neutral-300/20">
-                                    <p className="text-[10px] font-black text-amber-400 uppercase tracking-widest">${item.price.toLocaleString()}</p>
+                                  <div className="px-4 py-2 bg-neutral-950/90 backdrop-blur-md rounded-xl shadow-lg border border-neutral-800">
+                                    <p className="text-[10px] font-semibold text-amber-400 uppercase tracking-widest">${item.price.toLocaleString()}</p>
                                   </div>
                                 </div>
                                 <div className="absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
@@ -1656,7 +1640,7 @@ const AdminPanel = ({ onBack }) => {
                                     href={item.url} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="w-full py-3 bg-amber-500 text-neutral-950 rounded-xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-amber-300 transition-colors shadow-lg shadow-amber-400/20"
+                                    className="w-full py-3 bg-amber-400 text-neutral-950 rounded-xl font-medium uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-amber-300 transition-colors shadow-lg shadow-amber-400/20"
                                   >
                                     <Globe size={14} />
                                     Launch Live Node
@@ -1667,14 +1651,14 @@ const AdminPanel = ({ onBack }) => {
                               {/* Content */}
                               <div className="p-8 flex-1 flex flex-col">
                                 <div className="flex items-center gap-2 mb-3">
-                                  <span className="px-3 py-1 bg-neutral-800 text-neutral-500 rounded-full text-[8px] font-black uppercase tracking-widest border border-neutral-800">
+                                  <span className="px-3 py-1 bg-neutral-800 text-neutral-500 rounded-full text-[8px] font-medium uppercase tracking-widest border border-neutral-800">
                                     {item.type}
                                   </span>
-                                  <span className="px-3 py-1 bg-neutral-800/50 text-amber-400 rounded-full text-[8px] font-black uppercase tracking-widest border border-neutral-700">
+                                  <span className="px-3 py-1 bg-neutral-800/50 text-amber-400 rounded-full text-[8px] font-medium uppercase tracking-widest border border-neutral-700">
                                     {category}
                                   </span>
                                 </div>
-                                <h3 className="text-xl font-black text-neutral-950 uppercase italic tracking-tight mb-3 group-hover:text-amber-400 transition-colors">
+                                <h3 className="text-xl font-semibold text-neutral-200 tracking-tight mb-3 group-hover:text-amber-400 transition-colors">
                                   {item.name}
                                 </h3>
                                 <p className="text-neutral-500 text-xs font-medium leading-relaxed mb-6 line-clamp-2">
@@ -1683,12 +1667,12 @@ const AdminPanel = ({ onBack }) => {
                                 
                                 <div className="mt-auto pt-6 border-t border-neutral-700 flex items-center justify-between">
                                   <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                    <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Asset Active</span>
+                                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                                    <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-widest">Active</span>
                                   </div>
                                   <button 
                                     onClick={() => window.open(item.url, '_blank')}
-                                    className="text-[10px] font-black text-neutral-400 uppercase tracking-widest hover:text-amber-400 transition-colors"
+                                    className="text-[10px] font-medium text-neutral-400 uppercase tracking-widest hover:text-amber-400 transition-colors"
                                   >
                                     Audit Site
                                   </button>
@@ -1706,22 +1690,22 @@ const AdminPanel = ({ onBack }) => {
                     <div className="space-y-12 pb-20">
                       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                          <p className="text-[10px] font-black text-amber-400 uppercase tracking-[0.3em] mb-3">Alliance Management Hub</p>
-                          <h2 className="text-4xl sm:text-5xl font-black text-neutral-950 uppercase italic tracking-tighter leading-none">
-                            Partner <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-neutral-700">Network</span>
+                          <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Affiliate Management</p>
+                          <h2 className="text-3xl sm:text-4xl font-semibold text-neutral-200">
+                            Affiliates
                           </h2>
                           <p className="text-neutral-500 font-medium text-sm mt-4 max-w-2xl">
                             Real-time monitoring of all alliance partners, their referral performance, and treasury allocations.
                           </p>
                         </div>
                         <div className="flex gap-4">
-                          <div className="bg-neutral-900 px-6 py-4 rounded-2xl border border-neutral-700 shadow-sm">
-                            <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-1">Total Affiliates</p>
-                            <p className="text-2xl font-black text-amber-400 italic">{affiliates.length}</p>
+                          <div className="bg-neutral-900/60 px-6 py-4 rounded-2xl border border-neutral-800 shadow-sm">
+                            <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-1">Total Affiliates</p>
+                            <p className="text-2xl font-semibold text-amber-400">{affiliates.length}</p>
                           </div>
-                          <div className="bg-neutral-900 px-6 py-4 rounded-2xl border border-neutral-700 shadow-sm">
-                            <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-1">Total Payouts Due</p>
-                            <p className="text-2xl font-black text-emerald-600 italic">
+                          <div className="bg-neutral-900/60 px-6 py-4 rounded-2xl border border-neutral-800 shadow-sm">
+                            <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-1">Payouts Due</p>
+                            <p className="text-2xl font-semibold text-emerald-400">
                               ${allEarnings.filter(e => e.status !== 'paid').reduce((sum, e) => sum + parseFloat(e.amount), 0).toFixed(2)}
                             </p>
                           </div>
@@ -1729,58 +1713,58 @@ const AdminPanel = ({ onBack }) => {
                       </div>
 
                       {/* Affiliates List */}
-                      <div className="bg-neutral-900 rounded-[2.5rem] border border-neutral-700 shadow-sm overflow-hidden">
-                        <div className="p-8 border-b border-neutral-700 flex items-center justify-between">
-                          <h3 className="text-xl font-black uppercase italic tracking-tighter text-neutral-200">Registered Partners</h3>
+                      <div className="bg-neutral-900/60 rounded-2xl border border-neutral-800 shadow-sm overflow-hidden">
+                        <div className="p-8 border-b border-neutral-800 flex items-center justify-between">
+                          <h3 className="text-xl font-semibold text-neutral-200">Registered Affiliates</h3>
                         </div>
                         {affiliates.length === 0 ? (
                           <div className="p-24 text-center">
-                            <Users className="w-16 h-16 text-neutral-700 mx-auto mb-6" />
-                            <p className="text-neutral-400 font-bold uppercase tracking-widest text-xs">No Active Partners Detected</p>
+                            <Users className="w-16 h-16 text-neutral-600 mx-auto mb-6" />
+                            <p className="text-neutral-400 font-medium uppercase tracking-widest text-xs">No Active Affiliates</p>
                           </div>
                         ) : (
                           <div className="overflow-x-auto">
                             <table className="w-full text-left">
                               <thead>
-                                <tr className="bg-neutral-950 border-b border-neutral-700">
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Identity</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Code</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Network</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Treasury</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Balance</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest text-right">Status</th>
+                                <tr className="bg-neutral-950 border-b border-neutral-800">
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Identity</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Code</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Network</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Treasury</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Balance</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest text-right">Status</th>
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-neutral-800">
                                 {affiliates.map((aff) => (
-                                  <tr key={aff.id} className="group hover:bg-neutral-800/50 transition-colors">
+                                  <tr key={aff.id} className="group hover:bg-neutral-800/40 transition-colors">
                                     <td className="px-8 py-6">
                                       <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-xl bg-neutral-800/50 text-amber-400 flex items-center justify-center font-black text-xs">
+                                        <div className="w-10 h-10 rounded-xl bg-neutral-800/50 text-amber-400 flex items-center justify-center font-semibold text-xs">
                                           {aff.name?.substring(0, 2) || '??'}
                                         </div>
                                         <div>
-                                          <div className="text-sm font-black text-neutral-200 mb-0.5">{aff.name}</div>
-                                          <div className="text-[10px] font-bold text-neutral-400">{aff.email}</div>
+                                          <div className="text-sm font-semibold text-neutral-200 mb-0.5">{aff.name}</div>
+                                          <div className="text-[10px] font-medium text-neutral-400">{aff.email}</div>
                                         </div>
                                       </div>
                                     </td>
-                                    <td className="px-8 py-6 font-mono text-xs font-black text-amber-400 tracking-widest">
+                                    <td className="px-8 py-6 font-mono text-xs font-semibold text-amber-400 tracking-widest">
                                       {aff.referral_code}
                                     </td>
                                     <td className="px-8 py-6">
-                                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-800/30 text-amber-400 text-[10px] font-black uppercase tracking-widest border border-neutral-700">
+                                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-800/30 text-amber-400 text-[10px] font-medium uppercase tracking-widest border border-neutral-700">
                                         {aff.referral_count} Clients
                                       </div>
                                     </td>
-                                    <td className="px-8 py-6 font-black text-neutral-200 italic">
+                                    <td className="px-8 py-6 font-semibold text-neutral-300">
                                       ${parseFloat(aff.total_earnings).toFixed(2)}
                                     </td>
-                                    <td className="px-8 py-6 font-black text-emerald-600 italic">
+                                    <td className="px-8 py-6 font-semibold text-emerald-400">
                                       ${parseFloat(aff.current_balance).toFixed(2)}
                                     </td>
                                     <td className="px-8 py-6 text-right">
-                                      <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest border border-emerald-100">
+                                      <span className="px-3 py-1 rounded-full bg-emerald-400/20 text-emerald-400 text-[10px] font-medium uppercase tracking-widest border border-emerald-500/30">
                                         Active
                                       </span>
                                     </td>
@@ -1793,71 +1777,71 @@ const AdminPanel = ({ onBack }) => {
                       </div>
 
                       {/* Treasury Payouts */}
-                      <div className="bg-neutral-900 rounded-[2.5rem] border border-neutral-700 shadow-sm overflow-hidden">
-                        <div className="p-8 border-b border-neutral-700 flex items-center justify-between">
-                          <h3 className="text-xl font-black uppercase italic tracking-tighter text-neutral-200">Treasury Payout Requests</h3>
+                      <div className="bg-neutral-900/60 rounded-2xl border border-neutral-800 shadow-sm overflow-hidden">
+                        <div className="p-8 border-b border-neutral-800 flex items-center justify-between">
+                          <h3 className="text-xl font-semibold text-neutral-200">Payout Requests</h3>
                         </div>
                         {allEarnings.length === 0 ? (
                           <div className="p-24 text-center">
-                            <CreditCard className="w-16 h-16 text-neutral-700 mx-auto mb-6" />
-                            <p className="text-neutral-400 font-bold uppercase tracking-widest text-xs">Treasury remains balanced</p>
+                            <CreditCard className="w-16 h-16 text-neutral-600 mx-auto mb-6" />
+                            <p className="text-neutral-400 font-medium uppercase tracking-widest text-xs">No Payout Requests</p>
                           </div>
                         ) : (
                           <div className="overflow-x-auto">
                             <table className="w-full text-left">
                               <thead>
-                                <tr className="bg-neutral-950 border-b border-neutral-700">
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Partner Identity</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Yield Type</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Revenue</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Reference</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Allocation Date</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest text-right">Yield Control</th>
+                                <tr className="bg-neutral-950 border-b border-neutral-800">
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Partner</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Yield Type</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Revenue</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Reference</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Date</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest text-right">Actions</th>
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-neutral-800">
                                 {allEarnings.map((earn) => (
-                                  <tr key={earn.id} className="group hover:bg-neutral-800/50 transition-colors">
+                                  <tr key={earn.id} className="group hover:bg-neutral-800/40 transition-colors">
                                     <td className="px-8 py-6">
                                       <div>
-                                        <div className="text-sm font-black text-neutral-200 mb-0.5">{earn.affiliate_name}</div>
-                                        <div className="text-[10px] font-bold text-neutral-400">{earn.referral_code}</div>
+                                        <div className="text-sm font-semibold text-neutral-200 mb-0.5">{earn.affiliate_name}</div>
+                                        <div className="text-[10px] font-medium text-neutral-400">{earn.referral_code}</div>
                                       </div>
                                     </td>
                                     <td className="px-8 py-6">
-                                      <div className="text-[10px] font-black text-amber-400 uppercase tracking-widest">
-                                        {earn.type === 'sale' ? '30% Acquisition' : '10% Recurring Yield'}
+                                      <div className="text-[10px] font-medium text-amber-400 uppercase tracking-widest">
+                                        {earn.type === 'sale' ? '30% Acquisition' : '10% Recurring'}
                                       </div>
                                     </td>
-                                    <td className="px-8 py-6 font-black text-emerald-600 italic">
+                                    <td className="px-8 py-6 font-semibold text-emerald-400">
                                       +${parseFloat(earn.amount).toFixed(2)}
                                     </td>
-                                    <td className="px-8 py-6 text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+                                    <td className="px-8 py-6 text-[10px] font-medium text-neutral-400 uppercase tracking-widest">
                                       {earn.order_number || 'SYSTEM'}
                                     </td>
-                                    <td className="px-8 py-6 text-sm font-bold text-neutral-500">
+                                    <td className="px-8 py-6 text-sm font-medium text-neutral-400">
                                       {new Date(earn.created_at).toLocaleDateString()}
                                     </td>
                                     <td className="px-8 py-6 text-right">
                                       {earn.status === 'paid' ? (
-                                        <span className="px-3 py-1 rounded-full bg-neutral-800 text-neutral-400 text-[10px] font-black uppercase tracking-widest border border-neutral-800">
+                                        <span className="px-3 py-1 rounded-full bg-neutral-800 text-neutral-400 text-[10px] font-medium uppercase tracking-widest border border-neutral-700">
                                           Released
                                         </span>
                                       ) : earn.status === 'pending' ? (
                                         <button 
                                           onClick={() => handleUpdateEarningStatus(earn.id, 'available')}
                                           disabled={processing[earn.id]}
-                                          className="px-6 py-2 bg-amber-600 text-neutral-100 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/20 active:scale-95 disabled:opacity-50"
+                                          className="px-6 py-2 bg-amber-400 text-neutral-950 rounded-xl font-medium uppercase tracking-widest text-[10px] hover:bg-amber-300 transition-all shadow-lg shadow-amber-400/20 active:scale-95 disabled:opacity-50 inline-flex items-center gap-2"
                                         >
-                                          {processing[earn.id] ? <RefreshCw size={12} className="animate-spin" /> : 'Authorize Yield'}
+                                          {processing[earn.id] ? <RefreshCw size={12} className="animate-spin" /> : 'Authorize'}
                                         </button>
                                       ) : (
                                         <button 
                                           onClick={() => handleUpdateEarningStatus(earn.id, 'paid')}
                                           disabled={processing[earn.id]}
-                                          className="px-6 py-2 bg-emerald-600 text-neutral-100 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 active:scale-95 disabled:opacity-50"
+                                          className="px-6 py-2 bg-emerald-400 text-neutral-950 rounded-xl font-medium uppercase tracking-widest text-[10px] hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-400/20 active:scale-95 disabled:opacity-50 inline-flex items-center gap-2"
                                         >
-                                          {processing[earn.id] ? <RefreshCw size={12} className="animate-spin" /> : 'Release Yield'}
+                                          {processing[earn.id] ? <RefreshCw size={12} className="animate-spin" /> : 'Release'}
                                         </button>
                                       )}
                                     </td>
@@ -1876,67 +1860,67 @@ const AdminPanel = ({ onBack }) => {
                     <div className="space-y-12 pb-20">
                       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                          <p className="text-[10px] font-black text-amber-400 uppercase tracking-[0.3em] mb-3">Treasury Control</p>
-                          <h2 className="text-4xl sm:text-5xl font-black text-neutral-950 uppercase italic tracking-tighter leading-none">
-                            Withdrawal <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-neutral-700">Requests</span>
+                          <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Treasury</p>
+                          <h2 className="text-3xl sm:text-4xl font-semibold text-neutral-200">
+                            Withdrawal Requests
                           </h2>
                           <p className="text-neutral-500 font-medium text-sm mt-4 max-w-2xl">
                             Process and manage all partner withdrawal requests from the treasury.
                           </p>
                         </div>
                         <div className="flex gap-4">
-                          <div className="bg-neutral-900 px-6 py-4 rounded-2xl border border-neutral-700 shadow-sm">
-                            <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-1">Pending Requests</p>
-                            <p className="text-2xl font-black text-amber-400 italic">{withdrawals.filter(w => w.status === 'pending').length}</p>
+                          <div className="bg-neutral-900/60 px-6 py-4 rounded-2xl border border-neutral-800 shadow-sm">
+                            <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-1">Pending Requests</p>
+                            <p className="text-2xl font-semibold text-amber-400">{withdrawals.filter(w => w.status === 'pending').length}</p>
                           </div>
-                          <div className="bg-neutral-900 px-6 py-4 rounded-2xl border border-neutral-700 shadow-sm">
-                            <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-1">Total Withdrawn</p>
-                            <p className="text-2xl font-black text-emerald-600 italic">
+                          <div className="bg-neutral-900/60 px-6 py-4 rounded-2xl border border-neutral-800 shadow-sm">
+                            <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-1">Total Withdrawn</p>
+                            <p className="text-2xl font-semibold text-emerald-400">
                               ${withdrawals.filter(w => w.status === 'completed' || w.status === 'approved').reduce((sum, w) => sum + parseFloat(w.amount), 0).toFixed(2)}
                             </p>
                           </div>
                         </div>
                       </div>
 
-                      <div className="bg-neutral-900 rounded-[2.5rem] border border-neutral-700 shadow-sm overflow-hidden">
-                        <div className="p-8 border-b border-neutral-700 flex items-center justify-between">
-                          <h3 className="text-xl font-black uppercase italic tracking-tighter text-neutral-200">Active Requests</h3>
+                      <div className="bg-neutral-900/60 rounded-2xl border border-neutral-800 shadow-sm overflow-hidden">
+                        <div className="p-8 border-b border-neutral-800 flex items-center justify-between">
+                          <h3 className="text-xl font-semibold text-neutral-200">Active Requests</h3>
                         </div>
                         {withdrawals.length === 0 ? (
                           <div className="p-24 text-center">
-                            <CreditCard className="w-16 h-16 text-neutral-700 mx-auto mb-6" />
-                            <p className="text-neutral-400 font-bold uppercase tracking-widest text-xs">No Withdrawal Requests</p>
+                            <CreditCard className="w-16 h-16 text-neutral-600 mx-auto mb-6" />
+                            <p className="text-neutral-400 font-medium uppercase tracking-widest text-xs">No Withdrawal Requests</p>
                           </div>
                         ) : (
                           <div className="overflow-x-auto">
                             <table className="w-full text-left">
                               <thead>
-                                <tr className="bg-neutral-950 border-b border-neutral-700">
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Partner</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Amount</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Method</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Details</th>
-                                  <th className="px-8 py-6 text-[10px] font-black text-neutral-400 uppercase tracking-widest text-right">Actions</th>
+                                <tr className="bg-neutral-950 border-b border-neutral-800">
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Partner</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Amount</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Method</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Details</th>
+                                  <th className="px-8 py-6 text-[10px] font-medium text-neutral-500 uppercase tracking-widest text-right">Actions</th>
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-neutral-800">
                                 {withdrawals.map((w) => (
-                                  <tr key={w.id} className="group hover:bg-neutral-800/50 transition-colors">
+                                  <tr key={w.id} className="group hover:bg-neutral-800/40 transition-colors">
                                     <td className="px-8 py-6">
                                       <div>
-                                        <div className="text-sm font-black text-neutral-200 mb-0.5">{w.affiliate_name}</div>
-                                        <div className="text-[10px] font-bold text-neutral-400">{w.affiliate_email}</div>
+                                        <div className="text-sm font-semibold text-neutral-200 mb-0.5">{w.affiliate_name}</div>
+                                        <div className="text-[10px] font-medium text-neutral-400">{w.affiliate_email}</div>
                                       </div>
                                     </td>
-                                    <td className="px-8 py-6 font-black text-neutral-200 italic">
+                                    <td className="px-8 py-6 font-semibold text-neutral-300">
                                       ${parseFloat(w.amount).toFixed(2)}
                                     </td>
                                     <td className="px-8 py-6">
-                                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-800/50 text-amber-400 text-[10px] font-black uppercase tracking-widest border border-neutral-700">
+                                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-800/50 text-amber-400 text-[10px] font-medium uppercase tracking-widest border border-neutral-700">
                                         {w.payment_method}
                                       </div>
                                     </td>
-                                    <td className="px-8 py-6 text-[10px] font-bold text-neutral-500 uppercase">
+                                    <td className="px-8 py-6 text-[10px] font-medium text-neutral-400 uppercase tracking-widest">
                                       {w.payment_details}
                                     </td>
                                     <td className="px-8 py-6 text-right">
@@ -1945,7 +1929,7 @@ const AdminPanel = ({ onBack }) => {
                                           <button 
                                             onClick={() => handleUpdateWithdrawalStatus(w.id, 'completed')}
                                             disabled={processing[w.id]}
-                                            className="px-4 py-2 bg-emerald-600 text-neutral-100 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"
+                                            className="px-4 py-2 bg-emerald-400 text-neutral-950 rounded-xl font-medium uppercase tracking-widest text-[10px] hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-400/20 inline-flex items-center justify-center"
                                           >
                                             {processing[w.id] ? <RefreshCw size={12} className="animate-spin" /> : 'Complete'}
                                           </button>
@@ -1955,14 +1939,14 @@ const AdminPanel = ({ onBack }) => {
                                               if (notes !== null) handleUpdateWithdrawalStatus(w.id, 'rejected', notes);
                                             }}
                                             disabled={processing[w.id]}
-                                            className="px-4 py-2 bg-rose-600 text-neutral-100 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-700 transition-all shadow-lg shadow-rose-600/20"
+                                            className="px-4 py-2 bg-rose-500 text-neutral-100 rounded-xl font-medium uppercase tracking-widest text-[10px] hover:bg-rose-600 transition-all shadow-lg shadow-rose-500/20 inline-flex items-center justify-center"
                                           >
                                             Reject
                                           </button>
                                         </div>
                                       ) : (
-                                        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                                          w.status === 'completed' || w.status === 'approved' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'
+                                        <span className={`px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-widest ${
+                                          w.status === 'completed' || w.status === 'approved' ? 'bg-emerald-400/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-400/20 text-rose-400 border border-rose-500/30'
                                         }`}>
                                           {w.status}
                                         </span>
@@ -1995,18 +1979,24 @@ const AdminPanel = ({ onBack }) => {
                     <div className="space-y-8 pb-20">
                       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                          <p className="text-[10px] font-black text-amber-600 uppercase tracking-[0.3em] mb-3">Infrastructure Matrix</p>
-                          <h2 className="text-4xl sm:text-5xl font-black text-neutral-950 uppercase italic tracking-tighter leading-none">
-                            Node <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">Administration</span>
+                          <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-3">Infrastructure</p>
+                          <h2 className="text-3xl sm:text-4xl font-semibold text-neutral-200">
+                            Projects
                           </h2>
+                        </div>
+                        <div className="flex gap-4">
+                          <div className="bg-neutral-900/60 px-6 py-4 rounded-2xl border border-neutral-800 shadow-sm">
+                            <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest mb-1">Total Projects</p>
+                            <p className="text-2xl font-semibold text-amber-400">{projects.length}</p>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="bg-neutral-900 rounded-[2.5rem] border border-neutral-700 shadow-sm shadow-slate-200/50 overflow-hidden">
+                      <div className="bg-neutral-900/60 rounded-2xl border border-neutral-800 shadow-sm overflow-hidden">
                         {projects.length === 0 ? (
                           <div className="p-24 text-center">
-                            <Box className="w-16 h-16 text-neutral-700 mx-auto mb-6" />
-                            <p className="text-neutral-400 font-bold uppercase tracking-widest text-xs">No Active Infrastructure</p>
+                            <Box className="w-16 h-16 text-neutral-600 mx-auto mb-6" />
+                            <p className="text-neutral-400 font-medium uppercase tracking-widest text-xs">No Projects</p>
                           </div>
                         ) : (
                           <div className="divide-y divide-neutral-800">
@@ -2014,26 +2004,26 @@ const AdminPanel = ({ onBack }) => {
                               const pUserId = project.userId || project.user_id || project.userid;
                               const projectOwner = users.find(u => String(u.id) === String(pUserId));
                               return (
-                                <div key={project.id} className="p-6 sm:p-8 hover:bg-neutral-800/50 transition-colors group">
+                                <div key={project.id} className="p-6 sm:p-8 hover:bg-neutral-800/40 transition-colors group">
                                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                                     <div className="flex items-center gap-5">
                                       <div 
                                         onClick={() => projectOwner && navigateToUser(projectOwner.id)}
-                                        className="w-14 h-14 bg-neutral-900 rounded-2xl border border-neutral-800 flex items-center justify-center text-neutral-400 font-black text-xl group-hover:bg-amber-600 group-hover:text-neutral-100 group-hover:border-amber-600 transition-all uppercase cursor-pointer"
-                                        title={projectOwner ? `Owner: ${projectOwner.email}` : 'No Owner found'}
+                                        className="w-14 h-14 bg-neutral-800/50 border border-neutral-700 rounded-2xl flex items-center justify-center text-neutral-400 font-semibold text-xl group-hover:bg-amber-400 group-hover:text-neutral-100 group-hover:border-amber-400 transition-all uppercase cursor-pointer"
+                                        title={projectOwner ? `Owner: ${projectOwner.email}` : 'No Owner'}
                                       >
                                         {project.title?.charAt(0) || 'P'}
                                       </div>
                                       <div>
                                         <div className="flex items-center gap-3 mb-1">
-                                          <h3 className="font-black text-neutral-950 text-lg uppercase tracking-tight">{project.title || 'Untitled Node'}</h3>
+                                          <h3 className="font-semibold text-neutral-200 text-lg tracking-tight">{project.title || 'Untitled Project'}</h3>
                                         </div>
-                                        <div className="flex items-center gap-4 text-neutral-500 font-bold text-xs uppercase tracking-widest">
-                                          <span className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[8px] font-black ${
-                                            project.status === 'live' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
-                                            project.status === 'requested_customization' ? 'bg-neutral-800/30 text-amber-400 border border-neutral-700' :
-                                            project.status === 'pending_payment' ? 'bg-amber-50 text-amber-600 border border-amber-100' :
-                                            'bg-neutral-800 text-neutral-500 border border-neutral-800'
+                                        <div className="flex items-center gap-4 text-neutral-500 font-medium text-xs uppercase tracking-widest">
+                                          <span className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[8px] font-medium border ${
+                                            project.status === 'live' ? 'bg-emerald-400/20 text-emerald-400 border-emerald-500/30' :
+                                            project.status === 'requested_customization' ? 'bg-amber-400/20 text-amber-400 border-amber-500/30' :
+                                            project.status === 'pending_payment' ? 'bg-amber-400/20 text-amber-400 border-amber-500/30' :
+                                            'bg-neutral-700 text-neutral-500 border-neutral-700'
                                           }`}><Globe size={10} /> {project.status?.replace('_', ' ') || 'Offline'}</span>
                                           {projectOwner && (
                                             <button 
@@ -2049,14 +2039,14 @@ const AdminPanel = ({ onBack }) => {
                                     <div className="flex items-center gap-3">
                                       <button
                                         onClick={() => toggleExpand(project.id)}
-                                        className="p-3 bg-neutral-900 border border-neutral-800 rounded-xl text-neutral-400 hover:text-amber-400 hover:border-neutral-600 transition-all flex items-center gap-2"
+                                        className="p-3 bg-neutral-800/40 border border-neutral-700 rounded-xl text-neutral-400 hover:text-amber-400 hover:border-neutral-600 transition-all flex items-center gap-2"
                                       >
-                                        <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Node Owner / Diagnostics</span>
+                                        <span className="text-[10px] font-medium uppercase tracking-widest hidden sm:inline">Owner Details</span>
                                         {expandedItems[project.id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                                       </button>
                                       <button
                                         onClick={() => setDeleteConfirm({ type: 'project', id: project.id })}
-                                        className="p-3 bg-neutral-900 border border-neutral-800 rounded-xl text-neutral-400 hover:text-rose-600 hover:border-rose-200 transition-all"
+                                        className="p-3 bg-neutral-800/40 border border-neutral-700 rounded-xl text-neutral-400 hover:text-rose-400 hover:border-rose-500/30 transition-all"
                                       >
                                         <Trash2 size={18} />
                                       </button>
@@ -2073,27 +2063,27 @@ const AdminPanel = ({ onBack }) => {
                                       >
                                         <div className="mt-8 grid lg:grid-cols-3 gap-8">
                                           {/* Owner Card */}
-                                          <div className="lg:col-span-1 p-8 bg-neutral-900 border border-neutral-800 rounded-[2.5rem] text-neutral-200 flex flex-col justify-between shadow-sm relative overflow-hidden">
+                                          <div className="lg:col-span-1 p-8 bg-neutral-900/60 border border-neutral-800 rounded-2xl text-neutral-300 flex flex-col justify-between">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/5 rounded-full blur-3xl" />
                                             <div className="relative z-10">
-                                              <p className="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-6">Business Owner</p>
+                                              <p className="text-[10px] font-medium text-amber-400 uppercase tracking-widest mb-6">Owner</p>
                                               <div className="flex items-center gap-4 mb-8">
-                                                <div className="w-14 h-14 bg-neutral-800/50 border border-neutral-700 rounded-2xl flex items-center justify-center text-amber-400 font-black text-xl shadow-sm">
+                                                <div className="w-14 h-14 bg-neutral-800/50 border border-neutral-700 rounded-2xl flex items-center justify-center text-amber-400 font-semibold text-xl shadow-sm">
                                                   {projectOwner?.email?.charAt(0).toUpperCase() || 'U'}
                                                 </div>
                                                 <div>
-                                                  <p className="text-sm font-black text-neutral-200 uppercase tracking-tight truncate max-w-[150px]">{projectOwner?.email || 'Anonymous Node'}</p>
-                                                  <p className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">ID: {projectOwner?.id || 'Root'}</p>
+                                                  <p className="text-sm font-semibold text-neutral-200 uppercase tracking-tight truncate max-w-[150px]">{projectOwner?.email || 'Anonymous'}</p>
+                                                  <p className="text-[9px] font-medium text-neutral-400 uppercase tracking-widest">ID: {projectOwner?.id || 'Root'}</p>
                                                 </div>
                                               </div>
                                               <div className="space-y-3">
-                                                <div className="flex justify-between text-[9px] font-black uppercase tracking-widest">
-                                                  <span className="text-neutral-400">Tier:</span>
+                                                <div className="flex justify-between text-[9px] font-medium uppercase tracking-widest">
+                                                  <span className="text-neutral-500">Tier</span>
                                                   <span className="text-amber-400">{projectOwner?.membership_tier || 'FREE'}</span>
                                                 </div>
-                                                <div className="flex justify-between text-[9px] font-black uppercase tracking-widest">
-                                                  <span className="text-neutral-400">Subscription:</span>
-                                                  <span className={projectOwner?.subscription_status === 'active' ? 'text-emerald-600' : 'text-rose-600'}>
+                                                <div className="flex justify-between text-[9px] font-medium uppercase tracking-widest">
+                                                  <span className="text-neutral-500">Subscription</span>
+                                                  <span className={projectOwner?.subscription_status === 'active' ? 'text-emerald-400' : 'text-rose-400'}>
                                                     {projectOwner?.subscription_status?.toUpperCase() || 'INACTIVE'}
                                                   </span>
                                                 </div>
@@ -2101,18 +2091,18 @@ const AdminPanel = ({ onBack }) => {
                                             </div>
                                             <button 
                                               onClick={() => projectOwner && navigateToUser(projectOwner.id)}
-                                              className="mt-10 w-full py-4 bg-neutral-800 hover:bg-black text-neutral-100 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-slate-900/10"
+                                              className="mt-10 w-full py-4 bg-neutral-800/40 hover:bg-neutral-700 text-neutral-200 rounded-2xl text-[10px] font-medium uppercase tracking-widest transition-all active:scale-95 shadow-lg"
                                             >
-                                              Deep Core Audit
+                                              View User Profile
                                             </button>
                                           </div>
 
                                           {/* Update Functions */}
-                                          <div className="lg:col-span-2 bg-neutral-950 p-8 rounded-[2.5rem] border border-neutral-700 space-y-6">
+                                          <div className="lg:col-span-2 bg-neutral-950 p-8 rounded-2xl border border-neutral-800 space-y-6">
                                             <div className="grid md:grid-cols-2 gap-6">
                                               <div className="space-y-4">
                                                 <div>
-                                                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-3 ml-1">Transmission Progress</p>
+                                                  <p className="text-[9px] font-medium text-neutral-500 uppercase tracking-widest mb-3 ml-1">Progress</p>
                                                   <input 
                                                     type="text"
                                                     placeholder="e.g. 95% Complete"
@@ -2121,11 +2111,11 @@ const AdminPanel = ({ onBack }) => {
                                                       ...prev,
                                                       [project.id]: { ...prev[project.id], progress_status: e.target.value }
                                                     }))}
-                                                    className="w-full px-5 py-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-amber-400 transition-all"
+                                                    className="w-full px-5 py-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs font-semibold text-neutral-200 outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                                                   />
                                                 </div>
                                                 <div>
-                                                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-3 ml-1">Latest Update Log</p>
+                                                  <p className="text-[9px] font-medium text-neutral-500 uppercase tracking-widest mb-3 ml-1">Update Log</p>
                                                   <textarea 
                                                     rows="3"
                                                     placeholder="System patches deployed..."
@@ -2134,16 +2124,16 @@ const AdminPanel = ({ onBack }) => {
                                                       ...prev,
                                                       [project.id]: { ...prev[project.id], latest_update: e.target.value }
                                                     }))}
-                                                    className="w-full px-5 py-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-amber-400 transition-all resize-none"
+                                                    className="w-full px-5 py-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs font-semibold text-neutral-200 outline-none focus:ring-2 focus:ring-amber-400 transition-all resize-none"
                                                   />
                                                 </div>
                                               </div>
 
                                               <div className="space-y-4">
                                                 <div>
-                                                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-3 ml-1">Asset Valuation (Price)</p>
+                                                  <p className="text-[9px] font-medium text-neutral-500 uppercase tracking-widest mb-3 ml-1">Asset Valuation (Price)</p>
                                                   <div className="relative">
-                                                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-neutral-400 font-bold text-xs">$</span>
+                                                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-neutral-400 font-semibold text-xs">$</span>
                                                     <input 
                                                       type="number"
                                                       placeholder="e.g. 1500"
@@ -2152,12 +2142,12 @@ const AdminPanel = ({ onBack }) => {
                                                         ...prev,
                                                         [project.id]: { ...prev[project.id], price: e.target.value }
                                                       }))}
-                                                      className="w-full pl-10 pr-5 py-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-amber-400 transition-all"
+                                                      className="w-full pl-10 pr-5 py-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs font-semibold text-neutral-200 outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                                                     />
                                                   </div>
                                                 </div>
                                                 <div>
-                                                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-3 ml-1">Recommended Upgrades (Comma Separated)</p>
+                                                  <p className="text-[9px] font-medium text-neutral-500 uppercase tracking-widest mb-3 ml-1">Recommended Upgrades</p>
                                                   <input 
                                                     type="text"
                                                     placeholder="AI CORE, SEO, EDGE"
@@ -2166,7 +2156,7 @@ const AdminPanel = ({ onBack }) => {
                                                       ...prev,
                                                       [project.id]: { ...prev[project.id], recommended_modules_str: e.target.value }
                                                     }))}
-                                                    className="w-full px-5 py-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs font-bold text-neutral-950 outline-none focus:ring-2 focus:ring-amber-400 transition-all"
+                                                    className="w-full px-5 py-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs font-semibold text-neutral-200 outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                                                   />
                                                 </div>
                                                 <button
@@ -2179,17 +2169,17 @@ const AdminPanel = ({ onBack }) => {
                                                     }
                                                     handleEditProject(project.id, data);
                                                   }}
-                                                  className={`w-full py-4 bg-amber-500 text-neutral-950 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all ${
+                                                  className={`w-full py-4 bg-amber-400 text-neutral-950 rounded-2xl font-medium uppercase tracking-widest text-[10px] transition-all ${
                                                     processing[project.id] ? 'opacity-50 cursor-not-allowed' : 'hover:bg-amber-300 active:scale-95 shadow-lg shadow-amber-400/30'
                                                   }`}
                                                 >
                                                   {processing[project.id] ? (
                                                     <div className="flex items-center justify-center gap-2">
                                                       <Loader size={12} className="animate-spin" />
-                                                      Synchronizing...
+                                                      Saving...
                                                     </div>
                                                   ) : (
-                                                    'Synchronize Diagnostic Data'
+                                                    'Save Changes'
                                                   )}
                                                 </button>
                                               </div>
@@ -2214,7 +2204,7 @@ const AdminPanel = ({ onBack }) => {
         </main>
       </div>
 
-      {/* Modals */}
+      {/* Delete Confirmation Modal */}
       <AnimatePresence>
         {deleteConfirm && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
@@ -2229,14 +2219,14 @@ const AdminPanel = ({ onBack }) => {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="bg-neutral-900 p-10 rounded-[3rem] border border-neutral-800 shadow-2xl max-w-md w-full relative z-10"
+              className="bg-neutral-900 p-10 rounded-2xl border border-neutral-800 shadow-2xl max-w-md w-full relative z-10"
             >
-              <div className="w-16 h-16 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mb-8">
+              <div className="w-16 h-16 bg-rose-500/10 text-rose-400 rounded-2xl flex items-center justify-center mb-8">
                 <Trash2 size={32} />
               </div>
-              <h3 className="text-2xl font-black text-neutral-950 uppercase italic tracking-tight mb-4 text-center">Terminate Node?</h3>
+              <h3 className="text-2xl font-semibold text-neutral-200 mb-4 text-center">Confirm Deletion</h3>
               <p className="text-neutral-500 font-medium text-center leading-relaxed mb-10">
-                You are about to permanently decommission this infrastructure node. This action is irreversible and will purge all associated data.
+                You are about to permanently delete this item. This action cannot be undone and will remove all associated data.
               </p>
               <div className="flex flex-col gap-4">
                 <button
@@ -2250,26 +2240,26 @@ const AdminPanel = ({ onBack }) => {
                       handleDeleteProject(deleteConfirm.id)
                     }
                   }}
-                  className={`w-full px-8 py-4 bg-rose-600 text-neutral-100 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-lg ${
+                  className={`w-full px-8 py-4 bg-rose-500 text-neutral-100 rounded-2xl font-medium uppercase tracking-widest text-[10px] transition-all shadow-lg ${
                     processing[deleteConfirm.id] 
                       ? 'opacity-50 cursor-not-allowed' 
-                      : 'hover:bg-rose-700 shadow-rose-200'
+                      : 'hover:bg-rose-600'
                   }`}
                 >
                   {processing[deleteConfirm.id] ? (
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Decommissioning...
+                      Deleting...
                     </div>
                   ) : (
-                    'Confirm Termination'
+                    'Confirm Delete'
                   )}
                 </button>
                 <button
                   onClick={() => setDeleteConfirm(null)}
-                  className="w-full px-8 py-4 bg-neutral-800 text-neutral-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-neutral-700 transition-all"
+                  className="w-full px-8 py-4 bg-neutral-800/40 text-neutral-400 rounded-2xl font-medium uppercase tracking-widest text-[10px] hover:bg-neutral-800 transition-all"
                 >
-                  Abnormal Operation (Cancel)
+                  Cancel
                 </button>
               </div>
             </motion.div>

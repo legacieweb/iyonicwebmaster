@@ -10,6 +10,9 @@ import { useAuth } from './contexts/AuthContext'
 // Pages
 import LandingPage from './pages/LandingPage'
 import BusinessesPage from './pages/BusinessesPage'
+import IyonicWebPage from './pages/IyonicWebPage'
+import IyonicPayPage from './pages/IyonicPayPage'
+import IyonicBotsPage from './pages/IyonicBotsPage'
 import DashboardPage from './pages/DashboardPage'
 import AdminPage from './pages/AdminPage'
 import AffiliatePage from './pages/AffiliatePage'
@@ -144,7 +147,7 @@ function AppContent({ isAuthModalOpen, authModalMode, toggleAuthModal, closeAuth
       <Routes>
         {/* Routes WITH Navbar and Footer */}
         <Route element={<MainLayout onLoginClick={(mode) => toggleAuthModal(mode)} />}>
-          <Route path="/" element={<LandingPage onLoginClick={(mode) => toggleAuthModal(mode)} />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<About onBack={() => {}} />} />
           <Route path="/partnership" element={<PartnershipDetail onBack={() => {}} />} />
           <Route path="/shopright" element={<ShopRightDetails onBack={() => {}} />} />
@@ -156,6 +159,10 @@ function AppContent({ isAuthModalOpen, authModalMode, toggleAuthModal, closeAuth
           <Route path="/cookie-policy" element={<CookiePolicy onBack={() => {}} />} />
            <Route path="/careers" element={<Careers onBack={() => {}} />} />
             <Route path="/businesses" element={<BusinessesPage />} />
+            <Route path="/iyonicweb" element={<IyonicWebPage />} />
+            <Route path="/iyonicpay" element={<IyonicPayPage />} />
+            <Route path="/iyonicbots" element={<IyonicBotsPage />} />
+            
            
            {/* Dynamic Routes */}
            <Route path="/business/:businessId" element={<BusinessDetail onBack={() => {}} />} />

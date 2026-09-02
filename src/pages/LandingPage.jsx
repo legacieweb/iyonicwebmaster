@@ -3,16 +3,16 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Hero from '../components/Hero'
 import ThreePaths from '../components/ThreePaths'
 import IyoniBusinesses from '../components/IyoniBusinesses'
-import Pricing from '../components/Pricing'
 import IyonicWebSection from '../components/IyonicWebSection'
 import IyonicPaySection from '../components/IyonicPaySection'
 import IyonicBotsSection from '../components/IyonicBotsSection'
 import HowIyoniBuilds from '../components/HowIyoniBuilds'
 import TechEcosystem from '../components/TechEcosystem'
+import WhyChooseUs from '../components/WhyChooseUs'
 import FinalCTA from '../components/FinalCTA'
 import Contact from '../components/Contact'
 
-const LandingPage = ({ onLoginClick }) => {
+const LandingPage = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -44,12 +44,12 @@ const LandingPage = ({ onLoginClick }) => {
       />
       <ThreePaths />
       <IyoniBusinesses />
-      <Pricing onLoginClick={onLoginClick} />
       <IyonicWebSection />
       <IyonicPaySection />
       <IyonicBotsSection />
       <HowIyoniBuilds />
       <TechEcosystem />
+      <WhyChooseUs />
       <FinalCTA
         onExploreBusinesses={() => {
           const el = document.getElementById('businesses')

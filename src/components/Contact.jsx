@@ -109,7 +109,7 @@ const Contact = () => {
                     required
                     rows="4"
                     className="w-full px-6 py-4 bg-neutral-950 border border-neutral-700 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-400/5 focus:border-amber-400 transition-all text-neutral-200 placeholder-neutral-500 resize-none"
-                    placeholder="Describe your acquisition interest, target sector, or investment parameters..."
+                     placeholder="Describe your project, partnership interest, or target sector..."
                   />
                 </div>
 
@@ -129,7 +129,7 @@ const Contact = () => {
                   disabled={loading}
                   className="w-full py-5 bg-amber-400 text-neutral-950 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-amber-300 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50 group shadow-xl shadow-amber-400/20"
                 >
-                  {loading ? 'Sending...' : 'Request Acquisition Brief'}
+                  {loading ? 'Sending...' : 'Send Message'}
                   {!loading && <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
                 </button>
               </form>

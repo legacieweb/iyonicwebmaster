@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Menu as MenuIcon, X, LogOut, LayoutDashboard, ArrowRight, Sparkles, ChevronDown, User, Users } from 'lucide-react'
+import { Menu as MenuIcon, X, LogOut, LayoutDashboard, ArrowRight, Sparkles, ChevronDown, User, Users, Globe, CreditCard, Bot, ExternalLink } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -10,16 +10,27 @@ const Navbar = ({ onLoginClick }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [userDropdownOpen, setUserDropdownOpen] = useState(false)
-  const dropdownRef = useRef(null)
+  const [activeDropdown, setActiveDropdown] = useState(null)
+  const navRef = useRef(null)
+  const userDropdownRef = useRef(null)
   const { currentUser, logout, isAuthenticated } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
 
   const navItems = [
     { label: 'Businesses', href: '/#businesses' },
-    { label: 'IyonicWeb', href: '/#iyonicweb' },
-    { label: 'IyonicPay', href: '/#iyonicpay' },
-    { label: 'IyonicBots', href: '/#iyonicbots' },
+  ]
+
+  const productLinks = [
+    { label: 'IyonicWeb', to: '/iyonicweb', icon: Globe },
+    { label: 'IyonicPay', to: '/iyonicpay', icon: CreditCard },
+    { label: 'IyonicBots', to: '/iyonicbots', icon: Bot },
+  ]
+
+  const developerLinks = [
+    { label: 'IyonicPay API', href: 'https://pay.iyonicorp.com', icon: CreditCard },
+    { label: 'IyonicBots API', href: 'https://iyonicbots.iyonicorp.com', icon: Bot },
+    { label: 'IyonicWeb API', href: 'https://web.iyonicorp.com', icon: Globe },
   ]
 
   const secondaryLinks = [
@@ -29,7 +40,10 @@ const Navbar = ({ onLoginClick }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setActiveDropdown(null)
+      }
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
         setUserDropdownOpen(false)
       }
     }
@@ -54,6 +68,7 @@ const Navbar = ({ onLoginClick }) => {
   const handleNavigate = (path, e) => {
     if (e) e.preventDefault()
     setIsOpen(false)
+    closeDropdowns()
     
     if (path.startsWith('/#')) {
       const id = path.substring(2)
@@ -72,8 +87,13 @@ const Navbar = ({ onLoginClick }) => {
     }
   }
 
-  const handleResetFilters = () => {
-    // Filter functionality removed
+  const toggleDropdown = (name) => {
+    setActiveDropdown(activeDropdown === name ? null : name)
+  }
+
+  const closeDropdowns = () => {
+    setActiveDropdown(null)
+    setUserDropdownOpen(false)
   }
 
   return (
@@ -99,8 +119,8 @@ const Navbar = ({ onLoginClick }) => {
           </motion.a>
 
           {/* Styled Navigation Items */}
-          <div className="hidden lg:flex items-center bg-neutral-900/30 p-1.5 rounded-full border border-neutral-800 backdrop-blur-md">
-           
+          <div className="hidden lg:flex items-center bg-neutral-900/30 p-1.5 rounded-full border border-neutral-800 backdrop-blur-md" ref={navRef}>
+            
             {navItems.map((item, i) => (
               <motion.a
                 initial={{ opacity: 0, y: -10 }}
@@ -118,11 +138,100 @@ const Navbar = ({ onLoginClick }) => {
                 />
               </motion.a>
             ))}
+
+            {/* Products Dropdown */}
+            <div className="relative">
+              <motion.button
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navItems.length * 0.1 }}
+                onClick={() => toggleDropdown('products')}
+                className="px-6 py-2 text-xs font-black text-neutral-400 hover:text-amber-400 transition-all relative group uppercase tracking-widest flex items-center gap-1"
+              >
+                <span className="relative z-10 border-b-2 border-transparent group-hover:border-amber-400/40 transition-colors duration-200">Products</span>
+                <ChevronDown size={12} className={`text-neutral-500 transition-transform ${activeDropdown === 'products' ? 'rotate-180' : ''}`} />
+              </motion.button>
+
+              <AnimatePresence>
+                {activeDropdown === 'products' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute left-0 top-full mt-3 w-64 bg-neutral-950 border border-neutral-800 rounded-3xl shadow-2xl p-3 z-[60]"
+                  >
+                    {productLinks.map((link) => {
+                      const Icon = link.icon
+                      return (
+                        <motion.a
+                          key={link.label}
+                          href={link.to}
+                          onClick={(e) => handleNavigate(link.to, e)}
+                          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-black text-neutral-300 hover:text-amber-400 hover:bg-amber-50/5 transition-all group"
+                        >
+                          <span className="w-8 h-8 rounded-xl bg-neutral-800 flex items-center justify-center text-amber-400 border border-neutral-700">
+                            <Icon size={15} />
+                          </span>
+                          {link.label}
+                        </motion.a>
+                      )
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Developers / API Dropdown */}
+            <div className="relative">
+              <motion.button
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: (navItems.length + 1) * 0.1 }}
+                onClick={() => toggleDropdown('developers')}
+                className="px-6 py-2 text-xs font-black text-neutral-400 hover:text-amber-400 transition-all relative group uppercase tracking-widest flex items-center gap-1"
+              >
+                <span className="relative z-10 border-b-2 border-transparent group-hover:border-amber-400/40 transition-colors duration-200">Developers</span>
+                <ChevronDown size={12} className={`text-neutral-500 transition-transform ${activeDropdown === 'developers' ? 'rotate-180' : ''}`} />
+              </motion.button>
+
+              <AnimatePresence>
+                {activeDropdown === 'developers' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 top-full mt-3 w-60 bg-neutral-950 border border-neutral-800 rounded-3xl shadow-2xl p-3 z-[60]"
+                  >
+                    {developerLinks.map((link) => {
+                      const Icon = link.icon
+                      return (
+                        <motion.a
+                          key={link.label}
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-black text-neutral-300 hover:text-amber-400 hover:bg-amber-50/5 transition-all group"
+                        >
+                          <span className="w-8 h-8 rounded-xl bg-neutral-800 flex items-center justify-center text-amber-400 border border-neutral-700">
+                            <Icon size={15} />
+                          </span>
+                          {link.label}
+                          <ExternalLink size={12} className="ml-auto text-neutral-500 group-hover:text-amber-400" />
+                        </motion.a>
+                      )
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             {secondaryLinks.map((item, i) => (
               <motion.a
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: (navItems.length + i) * 0.1 }}
+                transition={{ delay: (navItems.length + 2 + i) * 0.1 }}
                 key={item.label}
                 href={item.href}
                 onClick={(e) => handleNavigate(item.href, e)}
@@ -136,8 +245,8 @@ const Navbar = ({ onLoginClick }) => {
           {/* Action Section */}
           <div className="hidden lg:flex items-center gap-4">
             {isAuthenticated ? (
-              <div className="relative" ref={dropdownRef}>
-            <motion.button
+              <div className="relative" ref={userDropdownRef}>
+                <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
@@ -165,7 +274,7 @@ const Navbar = ({ onLoginClick }) => {
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       className="absolute right-0 mt-3 w-56 bg-neutral-950 border border-neutral-800 rounded-3xl shadow-2xl p-2 z-[60]"
                     >
-                <button
+                  <button
                           onClick={() => {
                             setUserDropdownOpen(false)
                             handleNavigate('/dashboard')
@@ -228,7 +337,7 @@ const Navbar = ({ onLoginClick }) => {
         </div>
       </div>
 
-      {/* Modern Mobile Menu */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
@@ -248,6 +357,40 @@ const Navbar = ({ onLoginClick }) => {
                    {item.label}
                  </a>
                ))}
+
+               <div className="pt-2 pb-1 text-xs font-black text-neutral-500 uppercase tracking-widest">Products</div>
+               {productLinks.map((item) => {
+                 const Icon = item.icon
+                 return (
+                   <a
+                     key={item.label}
+                     href={item.to}
+                     className="flex items-center gap-3 block text-xl font-black text-neutral-300 hover:text-amber-400 transition-colors tracking-tight"
+                     onClick={(e) => handleNavigate(item.to, e)}
+                   >
+                     <Icon size={20} />
+                     {item.label}
+                   </a>
+                 )
+               })}
+
+               <div className="pt-2 pb-1 text-xs font-black text-neutral-500 uppercase tracking-widest">Developers / API</div>
+               {developerLinks.map((item) => {
+                 const Icon = item.icon
+                 return (
+                   <a
+                     key={item.label}
+                     href={item.href}
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     className="flex items-center gap-3 block text-xl font-black text-neutral-300 hover:text-amber-400 transition-colors tracking-tight"
+                   >
+                     <Icon size={20} />
+                     {item.label}
+                     <ExternalLink size={16} className="ml-auto text-neutral-500" />
+                   </a>
+                 )
+               })}
 
                {secondaryLinks.map((item) => (
                  <a
@@ -270,15 +413,15 @@ const Navbar = ({ onLoginClick }) => {
                         <LayoutDashboard size={18} />
                         Dashboard
                       </button>
-                    {currentUser?.is_affiliate && (
-                      <button
-                        onClick={() => handleNavigate('/affiliate')}
-                        className="w-full py-5 bg-amber-50/10 text-amber-400 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3"
-                      >
-                        <Users size={18} />
-                        Affiliate Portal
-                      </button>
-                    )}
+                      {currentUser?.is_affiliate && (
+                        <button
+                          onClick={() => handleNavigate('/affiliate')}
+                          className="w-full py-5 bg-amber-50/10 text-amber-400 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3"
+                        >
+                          <Users size={18} />
+                          Affiliate Portal
+                        </button>
+                      )}
                     <button
                       onClick={handleLogout}
                       className="w-full py-5 bg-rose-50/10 text-rose-400 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3"
