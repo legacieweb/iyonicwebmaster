@@ -7,7 +7,6 @@ import IyonicWebSection from '../components/IyonicWebSection'
 import IyonicPaySection from '../components/IyonicPaySection'
 import IyonicBotsSection from '../components/IyonicBotsSection'
 import HowIyoniBuilds from '../components/HowIyoniBuilds'
-import TechEcosystem from '../components/TechEcosystem'
 import WhyChooseUs from '../components/WhyChooseUs'
 import FinalCTA from '../components/FinalCTA'
 import Contact from '../components/Contact'
@@ -48,7 +47,6 @@ const LandingPage = () => {
       <IyonicPaySection />
       <IyonicBotsSection />
       <HowIyoniBuilds />
-      <TechEcosystem />
       <WhyChooseUs />
       <FinalCTA
         onExploreBusinesses={() => {
@@ -65,3 +63,5 @@ const LandingPage = () => {
 }
 
 export default LandingPage
+
+

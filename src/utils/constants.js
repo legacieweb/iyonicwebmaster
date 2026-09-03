@@ -52,7 +52,7 @@ export const HOW_IT_WORKS_STEPS = [
 export const WHY_CHOOSE_US_CONTENT = {
   subtitle: 'Why Iyoni Corp',
   title: 'Build. Own. Grow.',
-  description: 'Iyoni Corp creates digital businesses and technology products that help entrepreneurs build, operate, and grow online businesses.'
+  description: 'Iyoni Corp builds complete, revenue-ready digital businesses on a single integrated platform — IyonicWeb commerce, IyonicPay checkout, and IyonicBots AI automation — so entrepreneurs own end-to-end systems, not isolated websites.'
 }
 
 export const WHY_CHOOSE_US_FEATURES = [
@@ -1090,22 +1090,22 @@ export const HOW_IYONI_BUILDS = [
   { title: 'OWN / OPERATE / SELL', description: 'Businesses are available for acquisition, partnership, or investment.' }
 ]
 
-export const HOW_IYONI_BUILDS_DESCRIPTION = 'Iyoni Corp creates digital businesses and technology products that help entrepreneurs build, operate, and grow online.'
+export const HOW_IYONI_BUILDS_DESCRIPTION = 'Iyoni Corp launches businesses on a unified platform — IyonicPay checkout & subscriptions plus IyonicBots AI automation — so entrepreneurs get complete, revenue-ready companies, not just websites.'
 
 export const TECH_ECOSYSTEM = [
   {
     name: 'IyonicWeb',
-    description: 'Business Platform',
+    description: 'Central business platform',
     href: 'https://web.iyonicorp.com'
   },
   {
     name: 'IyonicPay',
-    description: 'Payments',
+    description: 'Payments layer',
     href: 'https://pay.iyonicorp.com'
   },
   {
     name: 'IyonicBots',
-    description: 'AI & Automation',
+    description: 'AI & automation layer',
     href: 'https://iyonicbots.iyonicorp.com'
   }
 ]
@@ -1190,11 +1190,16 @@ export const getBusinessStatus = (item) => {
   return item.price && item.price > 0 ? 'Available' : 'Coming Soon'
 }
 
+const DIGITAL_ASSET_TYPES = ['Saas', 'AI & Automation', 'Streaming', 'Social Platforms', 'Ebooks', 'Blogs']
+
 export const getBusinessClassification = (item) => {
   if (!item) return 'Digital Product'
   if (item.classification) return item.classification
   if (EXCLUDED_BUSINESS_IDS.includes(item.id)) return 'Software Business'
   if (!item.price || item.price <= 0) return 'Coming Soon'
+  if (DIGITAL_ASSET_TYPES.includes(item.type)) return 'Digital Product'
+  if ((item.minTier === 'basic' || !item.minTier) && item.price < 1500) return 'Website Asset'
+  if (item.url) return 'Operating Business'
   return 'Ready-to-Launch Business'
 }
 
@@ -1254,27 +1259,28 @@ export const getBusinessFilters = () => {
 export const IYONICWEB_PRODUCT = {
   name: 'IyonicWeb',
   tagline: 'Business Platform',
-  description: 'IyonicWeb is a business platform designed to help entrepreneurs launch and operate online businesses from one place.',
+  description: 'IyonicWeb is the central platform where businesses launch, sell, and automate. It connects IyonicPay for checkout, subscriptions, and payouts, and IyonicBots for AI-driven customer interaction and workflow automation, so every business runs on a single integrated stack.',
   features: [
     'Multi-tenant commerce & storefronts',
     'Order & customer management',
     'Product catalog & inventory',
-    'IyonicPay checkout integration',
-    'IyonicBots AI & automation',
+    'IyonicPay checkout & subscription billing',
+    'IyonicBots AI assistants & business automation',
     'Analytics & SEO'
   ],
-  externalHref: 'https://web.iyoniccorp.com'
+  externalHref: 'https://web.iyonicorp.com'
 }
 
 export const IYONICPAY_PRODUCT = {
   name: 'IyonicPay',
   tagline: 'Payments',
-  description: 'IyonicPay is Iyoni Corp\'s payment technology, designed to connect business transactions with the Iyonic ecosystem.',
+  description: 'IyonicPay is Iyoni Corp\'s payment technology built for the IyonicWeb platform. It powers checkout, invoices, subscriptions, and payouts for every IyonicWeb business, with native integration to IyonicBots automation and the broader Iyonic ecosystem.',
   features: [
-    'Checkout & invoicing',
-    'Subscription billing',
-    'Encrypted processing',
-    'Ecosystem Integration (IyonicWeb + IyonicBots)'
+    'Checkout & Subscriptions',
+    'Invoicing & Payouts',
+    'Encrypted Processing',
+    'IyonicWeb Integration',
+    'IyonicBots Automation Hooks'
   ],
   externalHref: 'https://pay.iyonicorp.com'
 }
@@ -1282,15 +1288,15 @@ export const IYONICPAY_PRODUCT = {
 export const IYONICBOTS_PRODUCT = {
   name: 'IyonicBots',
   tagline: 'AI & Automation',
-  description: 'IyonicBots brings AI-powered customer interaction and business automation into the Iyonic ecosystem.',
+  description: 'IyonicBots is the AI layer of the IyonicWeb platform. It deploys AI assistants, chatbots, and workflow automation across every IyonicWeb business, connecting directly to IyonicPay checkout and customer data for smarter commerce.',
   features: [
     'AI Conversations',
     'Product Questions',
     'AI Sales Bots',
     'AI Voice Assistants',
     'Customer Support',
-    'Business Automation',
-    'API access'
+    'Workflow Automation',
+    'API Access'
   ],
   externalHref: 'https://iyonicbots.iyonicorp.com'
 }

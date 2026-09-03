@@ -24,7 +24,7 @@ const IyonicWebSection = () => {
               transition={{ delay: 0.1 }}
               className="text-lg text-neutral-400 max-w-xl leading-relaxed mb-10"
             >
-              Launch your online business with a unified platform for businesses, commerce, payments, automation, and growth.
+              Launch your business on IyoniWeb - the unified platform that connects IyoniPay checkout, subscriptions and payouts with IyoniBots AI automation.
             </motion.p>
 
             <motion.div
@@ -135,3 +135,4 @@ const IyonicWebSection = () => {
 }
 
 export default IyonicWebSection
+

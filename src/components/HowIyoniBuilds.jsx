@@ -29,9 +29,7 @@ const HowIyoniBuilds = () => {
             Our Process
           </motion.div>
 
-          <h2 className="text-5xl sm:text-6xl md:text-7xl font-medium text-neutral-100 tracking-tight leading-[0.95] mb-6">
-            How Iyoni Builds
-          </h2>
+          <h2 className="text-5xl sm:text-6xl md:text-7xl font-medium text-neutral-100 tracking-tight leading-[0.95] mb-6">How Iyoni Creates Digital Businesses</h2>
           <p className="text-neutral-400 text-lg font-medium max-w-2xl mx-auto leading-relaxed">
             {HOW_IYONI_BUILDS_DESCRIPTION}
           </p>
@@ -140,3 +138,4 @@ const HowIyoniBuilds = () => {
 }
 
 export default HowIyoniBuilds
+
