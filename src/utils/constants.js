@@ -4,7 +4,7 @@
   Award, Target, CheckCircle, Clock, Users, Headphones, HeartHandshake, ShieldCheck,
   Phone, MapPin, Building2, Briefcase, TrendingUp, BarChart3, PieChart,
   FileSpreadsheet, ShieldCheck as ShieldIcon, Banknote, Wallet,
-  Gavel, Factory, Globe as GlobeIcon, Scale, RefreshCw
+  Gavel, Factory, Globe as GlobeIcon, Scale, RefreshCw, CreditCard, Bot
 } from 'lucide-react'
 
 export const COMPANY_CONTENT = {
@@ -50,39 +50,65 @@ export const HOW_IT_WORKS_STEPS = [
 ]
 
 export const WHY_CHOOSE_US_CONTENT = {
-  subtitle: 'Why Iyoni Corp',
-  title: 'Build. Own. Grow.',
-  description: 'Iyoni Corp builds complete, revenue-ready digital businesses on a single integrated platform — IyonicWeb commerce, IyonicPay checkout, and IyonicBots AI automation — so entrepreneurs own end-to-end systems, not isolated websites.'
+  subtitle: 'Business Lifecycle',
+  title: 'Launch. Operate. Scale. Exit.',
+  description: 'Every Iyoni Corp business moves through a proven lifecycle — launched on the integrated Iyonic platform, operated with centralized infrastructure, scaled with data-driven systems, and prepared for acquisition with full institutional transparency.'
 }
 
 export const WHY_CHOOSE_US_FEATURES = [
   {
-    icon: Lightbulb,
-    title: 'BUILD',
-    description: 'We create businesses and technology products from the ground up — code, infrastructure, and go-to-market systems included.',
+    icon: Rocket,
+    title: 'LAUNCH',
+    description: 'Each business is built on the integrated IyonicWeb platform with commerce, payments, and AI automation ready from day one.',
     color: 'blue'
   },
   {
-    icon: Wallet,
-    title: 'OWN',
-    description: 'We build digital assets designed to be owned and operated. Every business is delivered with full source access and transferable IP.',
+    icon: Package,
+    title: 'OPERATE',
+    description: 'Businesses run on centralized infrastructure with IyonicPay processing and IyonicBots automation handling customer interactions and workflows.',
     color: 'purple'
   },
   {
-    icon: Globe,
-    title: 'CONNECT',
-    description: 'We connect commerce, payments, and AI into one ecosystem so each business is never isolated from the tools it needs.',
-    color: 'indigo'
+    icon: TrendingUp,
+    title: 'SCALE',
+    description: 'Data-driven analytics, SEO optimization, and growth automation scale businesses to institutional-grade performance.',
+    color: 'emerald'
   },
   {
-    icon: TrendingUp,
-    title: 'GROW',
-    description: 'We focus on business infrastructure that helps companies move forward — analytics, automation, and scalable operations.',
-    color: 'emerald'
+    icon: Briefcase,
+    title: 'EXIT',
+    description: 'Each holding is prepared for acquisition with full operational transparency, documented systems, and institutional due diligence reports.',
+    color: 'amber'
   }
 ]
 
 export const WHY_CHOOSE_US_METRICS = []
+
+export const WHY_IYONI_CONTENT = {
+  subtitle: 'Why Iyoni',
+  title: 'One Platform. Three Layers.',
+  description: 'IyonicWeb, IyonicPay, and IyonicBots work as one integrated layer — website, payments, and AI automation — so businesses launch complete from day one, with no integration gaps or data silos.',
+  layers: [
+    {
+      icon: Globe,
+      name: 'IyonicWeb',
+      tagline: 'Website & Commerce',
+      description: 'Multi-tenant business platform with storefronts, product catalogs, and order management.'
+    },
+    {
+      icon: CreditCard,
+      name: 'IyonicPay',
+      tagline: 'Payments',
+      description: 'Native checkout, subscriptions, invoicing, and payouts — built into every IyonicWeb business.'
+    },
+    {
+      icon: Bot,
+      name: 'IyonicBots',
+      tagline: 'AI & Automation',
+      description: 'AI assistants and workflow automation that connect to business data and payment flows.'
+    }
+  ]
+}
 
 export const PARTNERSHIP_CONTENT = {
   subtitle: 'Investor Relations',
@@ -126,8 +152,8 @@ export const SHOPRIGHT_FEATURES = [
 
 export const CONTACT_CONTENT = {
   subtitle: 'Work With Iyoni',
-  title: "Let's build something together",
-  description: "Launching a business, partnering on technology, or acquiring a digital asset? Share your goals and we'll connect you with the right team."
+  title: 'Launch or Acquire With Iyoni',
+  description: "Ready to acquire a revenue-generating business, launch your own on IyonicWeb, or partner on custom technology? Share your goals and we'll connect you with the right team."
 }
 
 export const CONTACT_INFO = [
@@ -1274,7 +1300,7 @@ export const IYONICWEB_PRODUCT = {
 export const IYONICPAY_PRODUCT = {
   name: 'IyonicPay',
   tagline: 'Payments',
-  description: 'IyonicPay is Iyoni Corp\'s payment technology built for the IyonicWeb platform. It powers checkout, invoices, subscriptions, and payouts for every IyonicWeb business, with native integration to IyonicBots automation and the broader Iyonic ecosystem.',
+  description: 'IyonicPay is Iyoni Corp\'s payment infrastructure, built natively into the IyonicWeb platform. It powers checkout, subscriptions, invoicing, and payouts — with IyonicBots AI automation handling churn recovery, retries, and upsells. Every transaction flows back into the business dashboard, where owners track revenue in real time.',
   features: [
     'Checkout & Subscriptions',
     'Invoicing & Payouts',

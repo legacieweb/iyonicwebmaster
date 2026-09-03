@@ -6,6 +6,7 @@ import IyoniBusinesses from '../components/IyoniBusinesses'
 import IyonicWebSection from '../components/IyonicWebSection'
 import IyonicPaySection from '../components/IyonicPaySection'
 import IyonicBotsSection from '../components/IyonicBotsSection'
+import WhyIyoni from '../components/WhyIyoni'
 import HowIyoniBuilds from '../components/HowIyoniBuilds'
 import WhyChooseUs from '../components/WhyChooseUs'
 import FinalCTA from '../components/FinalCTA'
@@ -46,6 +47,7 @@ const LandingPage = () => {
       <IyonicWebSection />
       <IyonicPaySection />
       <IyonicBotsSection />
+      <WhyIyoni />
       <HowIyoniBuilds />
       <WhyChooseUs />
       <FinalCTA
