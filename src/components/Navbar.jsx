@@ -396,16 +396,20 @@ const Navbar = ({ onLoginClick }) => {
                  )
                })}
 
-               {secondaryLinks.map((item) => (
-                 <a
-                   key={item.label}
-                   href={item.href}
-                   className="block text-lg font-medium text-neutral-400 hover:text-neutral-200 transition-colors tracking-tight"
-                   onClick={(e) => handleNavigate(item.href, e)}
-                 >
-                   {item.label}
-                 </a>
-               ))}
+                {secondaryLinks.map((item) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className={
+                      item.prominent
+                        ? "block text-lg font-black text-neutral-300 hover:text-amber-400 transition-colors tracking-tight border border-neutral-800 rounded-full px-4 py-2 hover:border-amber-400/30"
+                        : "block text-lg font-medium text-neutral-400 hover:text-neutral-200 transition-colors tracking-tight"
+                    }
+                    onClick={(e) => handleNavigate(item.href, e)}
+                  >
+                    {item.label}
+                  </a>
+                ))}
 
               <div className="pt-8 border-t border-neutral-800 flex flex-col gap-4">
                 {isAuthenticated ? (
