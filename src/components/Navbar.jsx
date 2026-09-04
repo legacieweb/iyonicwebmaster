@@ -34,7 +34,7 @@ const Navbar = ({ onLoginClick }) => {
   ]
 
   const secondaryLinks = [
-    { label: 'Work With Iyoni', href: '/#contact' },
+    { label: 'Work With Iyoni', href: '/#contact', prominent: true },
     ...(currentUser?.is_affiliate ? [{ label: 'Affiliate', href: '/affiliate' }] : []),
   ]
 
@@ -235,7 +235,11 @@ const Navbar = ({ onLoginClick }) => {
                 key={item.label}
                 href={item.href}
                 onClick={(e) => handleNavigate(item.href, e)}
-                className="px-4 py-2 text-xs font-medium text-neutral-500 hover:text-neutral-300 transition-all"
+                className={
+                  item.prominent
+                    ? "px-4 py-2 text-xs font-black text-neutral-300 hover:text-amber-400 uppercase tracking-widest border border-neutral-800 rounded-full hover:border-amber-400/30 transition-all"
+                    : "px-4 py-2 text-xs font-medium text-neutral-500 hover:text-neutral-300 transition-all"
+                }
               >
                 {item.label}
               </motion.a>

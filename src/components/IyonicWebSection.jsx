@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Globe } from 'lucide-react'
-import { TECH_ECOSYSTEM } from '../utils/constants'
+import { ArrowRight, Globe, CreditCard, Bot } from 'lucide-react'
+import { TECH_ECOSYSTEM, IYONICWEB_PRODUCT } from '../utils/constants'
 
 const IyonicWebSection = () => {
   return (
@@ -24,7 +24,7 @@ const IyonicWebSection = () => {
               transition={{ delay: 0.1 }}
               className="text-lg text-neutral-400 max-w-xl leading-relaxed mb-10"
             >
-              Launch your business on IyoniWeb - the unified platform that connects IyoniPay checkout, subscriptions and payouts with IyoniBots AI automation.
+              {IYONICWEB_PRODUCT.description}
             </motion.p>
 
             <motion.div
@@ -53,24 +53,35 @@ const IyonicWebSection = () => {
               className="mt-12 flex items-center gap-8"
             >
               <div className="flex items-center gap-4">
-                {TECH_ECOSYSTEM.map((tech, i) => (
-                  <div key={tech.name} className="flex flex-col items-center">
-                    <div
-                      className={`w-14 h-14 rounded-2xl flex items-center justify-center text-neutral-950 ${
-                        i === 0
-                          ? 'bg-amber-400'
-                          : i === 1
-                          ? 'bg-neutral-800 text-neutral-300 border border-neutral-700'
-                          : 'bg-neutral-800 text-neutral-300 border border-neutral-700'
-                      }`}
-                    >
-                      <Globe size={24} />
+                {TECH_ECOSYSTEM.map((tech, i) => {
+                  const icons = [Globe, CreditCard, Bot]
+                  const Icon = icons[i] || Globe
+                  const isPrimary = i === 0
+                  return (
+                    <div key={tech.name} className="flex flex-col items-center">
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.3 + i * 0.1, type: 'spring', stiffness: 300 }}
+                        className={`rounded-2xl flex items-center justify-center transition-all ${
+                          isPrimary
+                            ? 'w-18 h-18 bg-amber-400 text-neutral-950 shadow-2xl shadow-amber-400/30 border-2 border-amber-400/20'
+                            : 'w-14 h-14 bg-neutral-800 text-neutral-300 border border-neutral-700'
+                        }`}
+                      >
+                        <Icon size={isPrimary ? 28 : 20} />
+                      </motion.div>
+                      <span className={`text-[10px] font-medium uppercase tracking-wider mt-2 ${
+                        isPrimary ? 'text-neutral-200' : 'text-neutral-500'
+                      }`}>
+                        {tech.name}
+                      </span>
+                      <span className="text-[9px] text-neutral-600">
+                        {tech.description}
+                      </span>
                     </div>
-                    <span className="text-[10px] font-medium text-neutral-500 uppercase tracking-wider mt-2">
-                      {tech.name}
-                    </span>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
 
               <div className="hidden sm:block w-16 h-px bg-neutral-800" />
@@ -93,35 +104,73 @@ const IyonicWebSection = () => {
                 <div className="aspect-[4/3] bg-gradient-to-br from-neutral-900 via-neutral-950 to-neutral-900 rounded-[24px] flex items-center justify-center overflow-hidden relative">
                   <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(rgba(161,161,170,0.3)_1px,transparent_1px)] [background-size:24px_24px]" />
 
-                  <div className="relative z-10 flex items-center justify-center gap-12">
+                  <div className="relative z-10 w-full max-w-sm text-center">
                     <motion.div
-                      animate={{ y: [0, -4, 0] }}
-                      transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                      className="flex flex-col items-center"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="space-y-8"
                     >
-                      <div className="w-16 h-16 rounded-2xl bg-amber-400 flex items-center justify-center text-neutral-950 shadow-2xl shadow-amber-400/20 mb-3">
-                        <Globe size={28} />
-                      </div>
-                      <span className="text-sm font-medium text-neutral-200">IyonicWeb</span>
-                      <span className="text-[10px] text-neutral-500 uppercase tracking-wider">
-                        Business Platform
-                      </span>
-                    </motion.div>
+                      {/* IyonicWeb — dominant central platform */}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.5, type: 'spring', stiffness: 300 }}
+                        className="relative mx-auto"
+                      >
+                        <div className="relative w-56 h-56 mx-auto bg-gradient-to-br from-amber-400/10 via-neutral-900 to-neutral-950 border-2 border-amber-400/30 rounded-[28px] flex flex-col items-center justify-center shadow-2xl shadow-amber-400/10">
+                          <div className="absolute -inset-1 bg-gradient-to-r from-amber-400/10 to-transparent rounded-[30px] blur-xl -z-10" />
+                          <div className="w-24 h-24 rounded-3xl bg-amber-400 flex items-center justify-center text-neutral-950 shadow-2xl shadow-amber-400/30 mb-4">
+                            <Globe size={40} />
+                          </div>
+                          <div className="text-2xl font-black text-neutral-200">IyonicWeb</div>
+                          <div className="text-[10px] text-amber-400 uppercase tracking-widest mt-1">
+                            Central Business Platform
+                          </div>
+                        </div>
 
-                    <ArrowRight size={20} className="text-neutral-600" />
+                        {/* Connected layers — smaller, orbiting */}
+                        <div className="absolute -bottom-6 left-0 right-0 flex justify-center gap-16">
+                          <motion.div
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6 }}
+                            className="flex flex-col items-center"
+                          >
+                            <div className="w-14 h-14 rounded-xl bg-neutral-800/50 border border-neutral-700 flex items-center justify-center text-amber-400">
+                              <CreditCard size={20} />
+                            </div>
+                            <span className="text-[10px] font-medium text-neutral-500 uppercase tracking-wider mt-2">
+                              IyonicPay
+                            </span>
+                            <span className="text-[9px] text-neutral-600">Payments</span>
+                          </motion.div>
 
-                    <motion.div
-                      animate={{ y: [0, 4, 0] }}
-                      transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                      className="flex flex-col items-center"
-                    >
-                      <div className="w-16 h-16 rounded-2xl bg-neutral-800 border border-neutral-700 flex items-center justify-center text-neutral-300 shadow-xl mb-3">
-                        <Globe size={28} />
-                      </div>
-                      <span className="text-sm font-medium text-neutral-200">IyonicBots</span>
-                      <span className="text-[10px] text-neutral-500 uppercase tracking-wider">
-                        AI & Automation
-                      </span>
+                          <motion.div
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.7 }}
+                            className="flex flex-col items-center"
+                          >
+                            <div className="w-14 h-14 rounded-xl bg-neutral-800/50 border border-neutral-700 flex items-center justify-center text-amber-400">
+                              <Bot size={20} />
+                            </div>
+                            <span className="text-[10px] font-medium text-neutral-500 uppercase tracking-wider mt-2">
+                              IyonicBots
+                            </span>
+                            <span className="text-[9px] text-neutral-600">AI & Automation</span>
+                          </motion.div>
+                        </div>
+                      </motion.div>
+
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.8 }}
+                        className="text-[11px] text-neutral-500"
+                      >
+                        Built by Iyoni Corp
+                      </motion.div>
                     </motion.div>
                   </div>
                 </div>
@@ -130,9 +179,8 @@ const IyonicWebSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  )
-}
-
+      </section>
+    )
+  }
 export default IyonicWebSection
 

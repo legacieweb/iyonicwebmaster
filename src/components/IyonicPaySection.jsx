@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, CreditCard, Shield, Globe } from 'lucide-react'
+import { ArrowRight, CreditCard, Shield, Globe, DollarSign, TrendingUp } from 'lucide-react'
+import { IYONICPAY_PRODUCT } from '../utils/constants'
 
 const IyonicPaySection = () => {
   return (
@@ -23,7 +24,7 @@ const IyonicPaySection = () => {
               transition={{ delay: 0.1 }}
               className="text-lg text-neutral-400 max-w-xl leading-relaxed mb-10"
             >
-              IyonicPay provides payment infrastructure for businesses built on the Iyonic platform. It integrates with IyonicWeb stores, subscriptions, and IyonicBots automation to handle checkout, invoicing, and payouts.
+              {IYONICPAY_PRODUCT.description}
             </motion.p>
 
             <motion.div
@@ -34,7 +35,7 @@ const IyonicPaySection = () => {
               className="flex flex-col sm:flex-row gap-4 mb-12"
             >
               <a
-                href="https://pay.iyonicorp.com"
+                href={IYONICPAY_PRODUCT.externalHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center justify-center gap-3 px-10 py-4 bg-amber-400 text-neutral-950 rounded-2xl font-black text-xs uppercase tracking-wider transition-all duration-200 hover:bg-amber-300 hover:shadow-[0_20px_50px_rgba(245,158,11,0.3)]"
@@ -96,36 +97,64 @@ const IyonicPaySection = () => {
                   <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(rgba(161,161,170,0.3)_1px,transparent_1px)] [background-size:24px_24px]" />
 
                   <div className="relative z-10 w-full max-w-sm">
-                    <div className="space-y-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-amber-400/10 flex items-center justify-center text-amber-400 border border-neutral-700">
-                          <CreditCard size={24} />
+                    <div className="bg-neutral-950/60 border border-neutral-800 rounded-[20px] p-6 space-y-5">
+                      {/* Header */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-amber-400/10 flex items-center justify-center text-amber-400 border border-neutral-700">
+                            <CreditCard size={20} />
+                          </div>
+                          <div className="text-left">
+                            <div className="text-sm font-medium text-neutral-200">IyonicPay</div>
+                            <div className="text-[10px] text-neutral-500 uppercase tracking-wider">Payment Dashboard</div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="text-lg font-medium text-neutral-200">IyonicPay</div>
-                          <div className="text-xs text-neutral-500 uppercase tracking-wider">Payment Infrastructure</div>
+                        <div className="text-[10px] text-neutral-500 uppercase tracking-wider">
+                          Real-time
                         </div>
                       </div>
 
-                      <div className="space-y-4 pt-2">
-                        <div className="h-px bg-neutral-800" />
-                        <div className="flex justify-between">
+                      {/* Balance */}
+                      <div className="bg-neutral-900/40 border border-neutral-800 rounded-[16px] p-4">
+                        <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">
+                          Total Balance
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <div className="text-2xl font-black text-neutral-200">$42,890.74</div>
+                          <div className="flex items-center gap-1 text-amber-400 text-xs">
+                            <TrendingUp size={10} />
+                            +12%
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Features list */}
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center py-2 border-b border-neutral-800">
                           <span className="text-xs text-neutral-500">Checkout</span>
-                          <span className="text-xs text-neutral-400">Ready</span>
+                          <span className="text-xs text-neutral-400">Live</span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between items-center py-2 border-b border-neutral-800">
                           <span className="text-xs text-neutral-500">Subscriptions</span>
-                          <span className="text-xs text-neutral-400">Ready</span>
+                          <span className="text-xs text-neutral-400">Live</span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between items-center py-2 border-b border-neutral-800">
                           <span className="text-xs text-neutral-500">Invoicing</span>
-                          <span className="text-xs text-neutral-400">Ready</span>
+                          <span className="text-xs text-neutral-400">Live</span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between items-center py-2">
                           <span className="text-xs text-neutral-500">Payouts</span>
                           <span className="text-xs text-neutral-400">Coming soon</span>
                         </div>
-                        <div className="h-px bg-neutral-800" />
+                      </div>
+
+                      {/* Quick action */}
+                      <div className="flex items-center justify-between pt-2">
+                        <div className="flex items-center gap-2 text-xs text-neutral-500">
+                          <DollarSign size={12} />
+                          <span>Connected to IyonicWeb</span>
+                        </div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                       </div>
                     </div>
                   </div>

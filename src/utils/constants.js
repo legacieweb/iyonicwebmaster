@@ -4,7 +4,7 @@
   Award, Target, CheckCircle, Clock, Users, Headphones, HeartHandshake, ShieldCheck,
   Phone, MapPin, Building2, Briefcase, TrendingUp, BarChart3, PieChart,
   FileSpreadsheet, ShieldCheck as ShieldIcon, Banknote, Wallet,
-  Gavel, Factory, Globe as GlobeIcon, Scale, RefreshCw, CreditCard, Bot
+  Gavel, Factory, Globe as GlobeIcon, Scale, RefreshCw, CreditCard, Bot, Package
 } from 'lucide-react'
 
 export const COMPANY_CONTENT = {

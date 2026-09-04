@@ -219,17 +219,11 @@ const Hero = ({ onExploreBusinesses, onExploreIyonicWeb }) => {
                  </div>
                </div>
              </div>
-           </motion.div>
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
-            </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      </div>
-    </section>
-  )
-}
+        </div>
+      </section>
+    )
+  }
 
-export default Hero
+  export default Hero
